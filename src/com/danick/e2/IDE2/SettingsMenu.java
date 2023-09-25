@@ -1,4 +1,4 @@
-package cam.danick.e2.IDE2;
+package com.danick.e2.IDE2;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
@@ -115,7 +115,7 @@ public class SettingsMenu extends JFrame {
 					    JOptionPane.WARNING_MESSAGE);
 		        IDEWindow.frame.setVisible(false);
 		        IDEWindow.frame = new IDEWindow(IDEWindow.gc);
-		        IDEWindow.gc.createBuffer();
+		        //IDEWindow.gc.createBuffer();
 		        IDEWindow.frame.setVisible(true);
 		        IDEWindow.settingsMenu.setVisible(false);
 		    }

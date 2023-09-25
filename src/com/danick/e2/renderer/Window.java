@@ -100,6 +100,11 @@ public class Window {
 	public void scale(float scale) {
 		frame.setSize((int)(frame.getWidth() * scale), (int)(frame.getHeight() * scale));
 	}
+
+	public void hide() {
+		// TODO Auto-generated method stub
+		this.frame.setVisible(false);
+	}
 	
 	
 }

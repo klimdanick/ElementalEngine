@@ -12,9 +12,9 @@ import com.danick.e2.renderer.Graphic;
 public class IDEGameContainer extends GameContainer{
 
 	public IDEGameContainer() {
-		super(new Designer(), 400, 400, 1f, "Elemental Engine");
-		this.window.frame.setVisible(true);
-		//this.window = new IDEWindow(this);
+		super(new GamePreview(), 800, 800, 1f, "Elemental Engine");
+		this.window.frame.setVisible(false);
+		this.window = new IDEWindow(this);
 
 		input = new Input(this);
 		AspectRatio = (float)height / (float)width;

@@ -9,6 +9,7 @@ import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -18,6 +19,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -34,6 +36,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.event.ListSelectionEvent;
@@ -41,6 +44,8 @@ import javax.swing.event.ListSelectionListener;
 
 import com.danick.e2.main.GameContainer;
 import com.danick.e2.renderer.Window;
+
+import com.danick.e2.main.AbstractGame;
 
 public class IDEWindow extends Window{
 	
@@ -81,11 +86,11 @@ public class IDEWindow extends Window{
 		play.setForeground(new Color(0xFF262626));
 		stop.setForeground(new Color(0xFF262626));
 		
-		play.setOpaque(true);
-		play.setBorderPainted(false);
+		//play.setOpaque(true);
+		//play.setBorderPainted(false);
 		
-		stop.setOpaque(true);
-		stop.setBorderPainted(false);
+		//stop.setOpaque(true);
+		//stop.setBorderPainted(false);
 		
 		play.addActionListener(new PlayListener());
 		play.addActionListener(new StopListener());
@@ -143,17 +148,17 @@ public class IDEWindow extends Window{
 		list.setCellRenderer(new MyCellRenderer());
 		list.setPreferredSize(new Dimension(100, 80));
 		list.setName("displayList");
-		list.setSelectionBackground(new Color(0xFF004A7F));
-		list.setBackground(new Color(0xFF262626));
-		list.setForeground(Color.white);
-		list.setSelectionForeground(Color.white);
+		//list.setSelectionBackground(new Color(0xFF004A7F));
+		//list.setBackground(new Color(0xFF262626));
+		//list.setForeground(Color.white);
+		//list.setSelectionForeground(Color.white);
 		
-		LeftBox.setBackground(new Color(0xFF262626));
-		BottomBox.setBackground(new Color(0xFF262626));
-		TopBox.setBackground(new Color(0xFF262626).darker());
-		console.setBackground(new Color(0xFF262626).darker());
-		console.setForeground(Color.white);
-		scroll.setBorder(null);
+		//LeftBox.setBackground(new Color(0xFF262626));
+		//BottomBox.setBackground(new Color(0xFF262626));
+		//TopBox.setBackground(new Color(0xFF262626).darker());
+		//console.setBackground(new Color(0xFF262626).darker());
+		//console.setForeground(Color.white);
+		//scroll.setBorder(null);
 
 		list.addListSelectionListener(new ListSelectionListener() {
 			public void valueChanged(ListSelectionEvent evt) {
@@ -165,6 +170,38 @@ public class IDEWindow extends Window{
 		
 		list.addMouseListener(new MouseAdapter() {
 		    public void mouseClicked(MouseEvent evt) {
+		    	if (evt.getButton() == 3) {
+		    		JList List = (JList)evt.getSource();
+		    		var value = List.getSelectedValue();
+		        	if (value instanceof File) {
+						File file = (File) value;
+			            // Double-click detected
+						if (!file.isDirectory()) {
+							JPopupMenu m = new JPopupMenu();
+				    		JButton b = new JButton("Set as main abstract game");
+				    		m.add(b);
+				    		b.addActionListener(new ActionListener() {
+								public void actionPerformed(ActionEvent e) {
+									try {
+										Object o;
+										o = Class.forName("").getConstructor().newInstance();
+										if (o instanceof AbstractGame) {
+											AbstractGame game = (AbstractGame) o;
+											gc.changeScene(game);
+										}
+									} catch (Exception e1) {
+										// TODO Auto-generated catch block
+										e1.printStackTrace();
+									} 
+								}
+				    			
+				    		});
+							m.add(new JButton("Edit"));
+							m.show(list, 50, 10);
+							return;
+						}
+					}
+		    	}
 		        JList List = (JList)evt.getSource();
 		        if (evt.getClickCount() == 2) {
 		        	//console.append(evt.toString());
@@ -240,26 +277,33 @@ public class IDEWindow extends Window{
 		var FileMenu = new JMenu("File");
 		var EditMenu = new JMenu("Edit");
 		var HelpMenu = new JMenu("Help");
+		var SettingsMenu = new JMenu("Settings");
 		
 		var About = new JMenuItem(new MenuActionListener());
 		var Docs = new JMenuItem(new MenuActionListener());
 		
+		var Preferences = new JMenuItem(new MenuActionListener());
+		
 		About.setLabel("About E2");
 		Docs.setLabel("Documentation");
+		Preferences.setLabel("Preferences");
 		
 		HelpMenu.add(About);
 		HelpMenu.add(Docs);
 		
+		SettingsMenu.add(Preferences);
+		
 		MenuBar.add(FileMenu);
 		MenuBar.add(EditMenu);
+		MenuBar.add(SettingsMenu);
 		MenuBar.add(HelpMenu);
 		
-		MenuBar.setBackground(new Color(0xFF262626).darker().darker());
-		MenuBar.setBorderPainted(false);
+		//MenuBar.setBackground(new Color(0xFF262626).darker().darker());
+		//MenuBar.setBorderPainted(false);
 		
-		HelpMenu.setForeground(Color.white);
-		EditMenu.setForeground(Color.white);
-		FileMenu.setForeground(Color.white);
+		//HelpMenu.setForeground(Color.white);
+		//EditMenu.setForeground(Color.white);
+		//FileMenu.setForeground(Color.white);
 		
 		frame.setJMenuBar(MenuBar);
 		
@@ -338,9 +382,9 @@ public class IDEWindow extends Window{
 				aboutFrame.add(Text, BorderLayout.CENTER);
 				aboutFrame.setPreferredSize(new Dimension(800, 600));
 				
-				aboutFrame.setBackground(new Color(0xFF262626).darker().darker());
-				Text.setBackground(new Color(0xFF262626).darker().darker());
-				Text.setForeground(Color.white);
+				//aboutFrame.setBackground(new Color(0xFF262626).darker().darker());
+				//Text.setBackground(new Color(0xFF262626).darker().darker());
+				//Text.setForeground(Color.white);
 				BufferedImage myPicture = null;
 				try {
 					myPicture = ImageIO.read(IDEWindow.class.getResourceAsStream("/E2Banner.png"));
@@ -349,13 +393,14 @@ public class IDEWindow extends Window{
 					e1.printStackTrace();
 				}
 				JLabel picLabel = new JLabel(new ImageIcon(myPicture));
-				picLabel.setOpaque(true);
+				picLabel.setOpaque(false);
 				picLabel.setBorder(null);
-				picLabel.setBackground(new Color(0xFF262626).darker().darker());
+				//picLabel.setBackground(new Color(0xFF262626).darker().darker());
 				aboutFrame.add(picLabel, BorderLayout.WEST);
 				aboutFrame.pack();
 				aboutFrame.setVisible(true);
 			}
+			
 			if (e.getActionCommand() == "Documentation") {
 				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
 				    try {
@@ -364,6 +409,23 @@ public class IDEWindow extends Window{
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
+				}
+			}
+			
+			if (e.getActionCommand() == "Preferences") {
+				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+					JFrame preferences = new JFrame("Preferences");
+					preferences.setIconImage(img);
+					 
+					JPopupMenu themeSelector = new JPopupMenu();
+					JMenuItem light = new JMenuItem("Light");
+					JMenuItem dark = new JMenuItem("Dark");
+					themeSelector.add(light); themeSelector.add(dark);
+					preferences.add(themeSelector);
+					
+					preferences.setPreferredSize(new Dimension(300, 200));
+					preferences.pack();
+					preferences.setVisible(true);
 				}
 			}
 		}

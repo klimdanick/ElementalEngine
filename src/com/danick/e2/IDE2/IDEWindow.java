@@ -1,4 +1,4 @@
-package cam.danick.e2.IDE2;
+package com.danick.e2.IDE2;
 import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Color;
@@ -28,7 +28,6 @@ import com.danick.e2.IDE.GamePreview;
 import com.danick.e2.main.GameContainer;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
-import com.formdev.flatlaf.themes.FlatMacLightLaf;
 
 public class IDEWindow extends JFrame {
 
@@ -136,7 +135,7 @@ public class IDEWindow extends JFrame {
 		
 		Canvas canvas = new Canvas();
 		canvas.setMinimumSize(new Dimension(100, 400));
-		panel_1.add(gc.window.canvas);
+		panel_1.add(canvas);
 		panel_1.setTitleAt(0, "Game Preview");
 		Canvas canvas2 = new Canvas();
 		canvas2.setMinimumSize(new Dimension(100, 400));
@@ -146,7 +145,7 @@ public class IDEWindow extends JFrame {
 		JScrollPane scrollPane = new JScrollPane();
 		splitPane.setLeftComponent(scrollPane);
 		
-		File dir = new File("C:/Users/Lenovo/Elemental-Workspace");
+		File dir = new File("C:/Users/Danick/Elemental-Workspace");
 		JTree tree = new JTree((addNodes(null, dir)));
 		scrollPane.setViewportView(tree);
 	}

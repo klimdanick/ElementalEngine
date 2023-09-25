@@ -13,7 +13,7 @@ import com.danick.e2.renderer.Renderer2D;
 
 public class GameContainer extends Thread{
 	
-	public static String version = "3.1.0 | ";
+	public static String version = "3.0.5 | ";
 	
 	private boolean running;
 	public int updateRate = 60;
@@ -55,6 +55,9 @@ public class GameContainer extends Thread{
 		//System.out.println(AspectRatio);
 		window.frame.setVisible(true);
 		window.scale(scale);
+	}
+	
+	public GameContainer() {
 	}
 	
 	public void changeScene(AbstractGame scene) {

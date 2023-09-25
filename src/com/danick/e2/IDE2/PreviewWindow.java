@@ -1,4 +1,4 @@
-package cam.danick.e2.IDE2;
+package com.danick.e2.IDE2;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;

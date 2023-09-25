@@ -1,4 +1,4 @@
-package cam.danick.e2.IDE2;
+package com.danick.e2.IDE2;
 
 import com.danick.e2.main.AbstractGame;
 import com.danick.e2.main.GameContainer;
