@@ -265,11 +265,11 @@ public void drawText(String text, double offX, double offY, Color color) {
 		offY += y;
 	}
 	
-	public void drawCircle(double x, double y, double r, Color value, boolean fill, double thinkness) {
-		for (int X = (int) (x - r); X < x+r; X++) {
-			for (int Y = (int) (y - r); Y < y+r; Y++) {
+	public void drawCircle(double x, double y, double radius, Color value, boolean fill, double thinkness) {
+		for (int X = (int) (x - radius); X < x+radius; X++) {
+			for (int Y = (int) (y - radius); Y < y+radius; Y++) {
 				double dist = (X-x)*(X-x)+(Y-y)*(Y-y);
-				if (dist < r*r && (dist > (r-thinkness)*(r-thinkness) || fill)) setPixel(X, Y, value);
+				if (dist < radius*radius && (dist > (radius-thinkness)*(radius-thinkness) || fill)) setPixel(X, Y, value);
 			}
 		}
 	}
@@ -335,7 +335,7 @@ public void drawText(String text, double offX, double offY, Color color) {
 		}
 	}
 	
-	public void drawPoly(int[][] points2, Color c, int X, int Y) {
+	public void drawPoly(int[][] points2, Color c, int x, int y) {
 		int[][] points = new int[points2.length+1][2];
 		  for (int i = 0; i < points2.length; i++) {
 		    points[i] = points2[i];
@@ -343,11 +343,11 @@ public void drawText(String text, double offX, double offY, Color color) {
 		  points[points2.length] = points[0];
 		  
 		  for (int i = 0; i < 4; i++) {
-			  this.drawLine(points[i][0]+X, points[i][1]+Y, points[i+1][0]+X, points[i+1][1]+Y, c);
+			  this.drawLine(points[i][0]+x, points[i][1]+y, points[i+1][0]+x, points[i+1][1]+y, c);
 		  }
 	}
 	
-	public void fillPoly(int[][] points2, Color c, int X, int Y) {
+	public void fillPoly(int[][] points2, Color c, int x, int y) {
 		int minX=0, minY=0, maxX=0, maxY=0;
 		int[][] points = new int[points2.length+1][2];
 		  for (int i = 0; i < points2.length; i++) {
@@ -384,8 +384,6 @@ public void drawText(String text, double offX, double offY, Color color) {
 		  }
 		  
 		  for (int x = 0; x < w-0; x++) {
-			  int toggleAmmount = 0;
-			  
 			  for (int l = 0; l < 2; l++) {
 				  boolean drawing = false;
 				  int t = 2;
@@ -393,18 +391,16 @@ public void drawText(String text, double offX, double offY, Color color) {
 					  if (togglePoints[x][y]) {
 						  if (t > 1) {
 							  drawing = !drawing;
-							  if (l == 0) toggleAmmount++;
 						  }
 						  t = 0;
-						  if (l == 1) toggleAmmount--;
 					  }
-					  if (drawing && l == 1) setPixel(x+X-(0-minX), y+Y-(0-minY), c);
-					  if (togglePoints[x][y]) setPixel(x+X-(0-minX), y+Y-(0-minY), c);
+					  if (drawing && l == 1) setPixel(x+x-(0-minX), y+y-(0-minY), c);
+					  if (togglePoints[x][y]) setPixel(x+x-(0-minX), y+y-(0-minY), c);
 					  t++;
 				  }
 			  }
 		  }
-		  drawPoly(points2, c, X, Y);
+		  drawPoly(points2, c, x, y);
 	}
 	
 	public void drawCurve(int[][] controlPoints, int numSteps, Color color) {
