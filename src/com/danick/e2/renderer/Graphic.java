@@ -80,7 +80,7 @@ public class Graphic extends Thread{
 	
 	public void background() {
 		for (int x = offX; x < pW+offX; x++) for (int y = offY; y < pH+offY; y++) {
-			if ((int)Math.abs(Math.round(y/(float)(chackerPattrnHeight)))%2 == (int)Math.abs(Math.round(x/(float)(chackerPattrnWidth)))%2) setPixel(x, y, bgColor);
+			if (Math.abs(Math.round(y/(float)(chackerPattrnHeight)))%2 == Math.abs(Math.round(x/(float)(chackerPattrnWidth)))%2) setPixel(x, y, bgColor);
 			else setPixel(x, y, bgColor.darker());
 		} 
 	}
