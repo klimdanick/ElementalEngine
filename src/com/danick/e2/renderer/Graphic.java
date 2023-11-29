@@ -417,9 +417,9 @@ public void drawText(String text, double offX, double offY, Color color) {
             double y2 = controlPoints[i + 1][1];
 
             a[i] = y1;
-            b[i] = (y2 - y1) / (double)(x2 - x1) - (2 * x1 + x2) * c[i] / 6.0 - (x1 + x2) * d[i] / 2.0;
+            b[i] = (y2 - y1) / (x2 - x1) - (2 * x1 + x2) * c[i] / 6.0 - (x1 + x2) * d[i] / 2.0;
             c[i] = (x1 + x2) * d[i] / 2.0;
-            d[i] = (y2 - y1) / (double)(x2 - x1) - (y1 + y2) * c[i] / (2.0 * (x2 - x1));
+            d[i] = (y2 - y1) / (x2 - x1) - (y1 + y2) * c[i] / (2.0 * (x2 - x1));
         }
 
         // Calculate the points on the curve
@@ -444,18 +444,18 @@ public void drawText(String text, double offX, double offY, Color color) {
 	
 	
 	public Graphic flip(boolean xAxis, boolean yAxis) {
-		Graphic newGraphic = new Graphic((int)(pW), (int)(pH));
-		for (int x = 0; x < newGraphic.pW; x++) for (int y = 0; y < newGraphic.pH; y++) {
-			int X = pW-x-1, Y = pH-y-1;
-			if (!xAxis) X = x;
-			if (!yAxis) Y = y;
-			newGraphic.setPixel(x, y, getPixel(X, Y));
+		Graphic newGraphic = new Graphic((pW), (pH));
+		for (int flipedX = 0; flipedX < newGraphic.pW; flipedX++) for (int flipedY = 0; flipedY < newGraphic.pH; flipedY++) {
+			int x = pW-flipedX-1, y = pH-flipedY-1;
+			if (!xAxis) x = flipedX;
+			if (!yAxis) y = flipedY;
+			newGraphic.setPixel(flipedX, flipedY, getPixel(x, y));
 		}
 		return newGraphic;
 	} 
 	
 	public Graphic rotate(double angle) {
-		Graphic newGraphic = new Graphic((int)(pW), (int)(pH));
+		Graphic newGraphic = new Graphic((pW), (pH));
 		for(double x = 0; x < pW; x++) for(double y = 0; y < pH; y++) {
 			double x1 = x-pW/2.0;
 			double y1 = y-pH/2.0;
