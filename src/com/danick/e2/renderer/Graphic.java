@@ -203,30 +203,30 @@ public void drawText(String text, double offX, double offY, Color color) {
 		this.Font = Font;
 	}
 
-	private boolean isOutOfBounds(Graphic r){
+	private boolean isOutOfBounds(Graphic r, double offX, double offY){
 		return (offX + this.offX < -r.pW || offY + this.offY < -r.pH || offX + this.offX >= pW || offY + this.offY >= pH);
 	}
 	
-	public void drawGraphic(Graphic r) {
-		if (r == null) {
+	public void drawGraphic(Graphic renderer) {
+		if (renderer == null) {
 			System.err.append("The graphic is null!\n");
 			return;
 		}
-		double offX = r.locationX;
-		double offY = r.locationY;
+		double offX = renderer.locationX;
+		double offY = renderer.locationY;
 
-		if (isOutOfBounds(r)) return;
+		if (isOutOfBounds(renderer, offX, offY)) return;
 		
-		for (int y = 0; y < r.pH; y++) {
-			for (int x = 0; x < r.pW; x++) {
-				if (!(r.p[x + y * r.pW] == 0xffff00ff)) setPixel((x) + offX, (y) + offY, r.p[x + y * r.pW]);
+		for (int y = 0; y < renderer.pH; y++) {
+			for (int x = 0; x < renderer.pW; x++) {
+				if (!(renderer.p[x + y * renderer.pW] == 0xffff00ff)) setPixel((x) + offX, (y) + offY, renderer.p[x + y * renderer.pW]);
 			}
 		}
 	}
 	
 	public void drawGraphic(Graphic renderer, double offX, double offY) {
 
-		if (isOutOfBounds(renderer)) return;
+		if (isOutOfBounds(renderer, offX, offY)) return;
 		
 		for (int y = 0; y < renderer.pH; y++) {
 			for (int x = 0; x < renderer.pW; x++) {
@@ -339,7 +339,7 @@ public void drawText(String text, double offX, double offY, Color color) {
 		  }
 	}
 	
-	public void fillPoly(int[][] points2, Color c, int x, int y) {
+	public void fillPoly(int[][] points2, Color c, int X, int Y) {
 		int minX=0, minY=0, maxX=0, maxY=0;
 		int[][] points = new int[points2.length+1][2];
 		  for (int i = 0; i < points2.length; i++) {
@@ -386,13 +386,13 @@ public void drawText(String text, double offX, double offY, Color color) {
 						  }
 						  t = 0;
 					  }
-					  if (drawing && l == 1) setPixel(x+x-(0-minX), y+y-(0-minY), c);
-					  if (togglePoints[x][y]) setPixel(x+x-(0-minX), y+y-(0-minY), c);
+					  if (drawing && l == 1) setPixel(x+X-(0-minX), y+Y-(0-minY), c);
+					  if (togglePoints[x][y]) setPixel(x+X-(0-minX), y+Y-(0-minY), c);
 					  t++;
 				  }
 			  }
 		  }
-		  drawPoly(points2, c, x, y);
+		  drawPoly(points2, c, X, Y);
 	}
 	
 	public void drawCurve(int[][] controlPoints, int numSteps, Color color) {
@@ -436,7 +436,7 @@ public void drawText(String text, double offX, double offY, Color color) {
 	
 	
 	public Graphic flip(boolean xAxis, boolean yAxis) {
-		Graphic newGraphic = new Graphic((pW), (pH));
+		Graphic newGraphic = new Graphic(pW, pH);
 		for (int flipedX = 0; flipedX < newGraphic.pW; flipedX++) for (int flipedY = 0; flipedY < newGraphic.pH; flipedY++) {
 			int x = pW-flipedX-1, y = pH-flipedY-1;
 			if (!xAxis) x = flipedX;
@@ -447,7 +447,7 @@ public void drawText(String text, double offX, double offY, Color color) {
 	} 
 	
 	public Graphic rotate(double angle) {
-		Graphic newGraphic = new Graphic((pW), (pH));
+		Graphic newGraphic = new Graphic(pW, pH);
 		for(double x = 0; x < pW; x++) for(double y = 0; y < pH; y++) {
 			double x1 = x-pW/2.0;
 			double y1 = y-pH/2.0;
