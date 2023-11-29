@@ -1,4 +1,4 @@
-package com.danick.e2.IDE;
+package com.danick.e2.IDE2;
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;

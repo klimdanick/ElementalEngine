@@ -125,15 +125,7 @@ public class Graphic extends Thread{
 	}
 	
 	public Color getPixel(double X, double Y) {
-		int x = (int) Math.round(X);
-		int y = (int) Math.round(Y);
-		if((x - offX < 0 || x - offX >= pW || y - offY < 0 || y - offY >= pH)) {
-				System.err.print("Unvallid pixel co�rdinate! returning black pixel! | Invalid location: ");
-				System.err.print(x +", " + y);
-				System.err.println(" for canvas sie: " + pW + ", " + pH);
-			return new Color(0);
-		}
-		return new Color(p[(x - offX) + (y - offY) * pW]);
+		return getPixel(X, Y, false);
 	}
 	
 	public Color getPixel(double X, double Y, boolean noError) {

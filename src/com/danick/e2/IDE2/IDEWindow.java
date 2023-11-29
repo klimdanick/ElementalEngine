@@ -24,7 +24,6 @@ import javax.swing.JTree;
 import javax.swing.border.EmptyBorder;
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import com.danick.e2.IDE.GamePreview;
 import com.danick.e2.main.GameContainer;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.themes.FlatMacDarkLaf;
@@ -122,11 +121,11 @@ public class IDEWindow extends JFrame {
 		JPanel panel = new JPanel();
 		splitPane_2.setLeftComponent(panel);
 		
-		JButton btnNewButton_2 = new JButton("▶");
+		JButton btnNewButton_2 = new JButton("â–¶");
 		btnNewButton_2.setBackground(new Color(0xff009A42));		
 		panel.add(btnNewButton_2);
 		
-		JButton btnNewButton_1 = new JButton("⏹");
+		JButton btnNewButton_1 = new JButton("â�¹");
 		btnNewButton_1.setBackground(new Color(0xffDB0029));	
 		panel.add(btnNewButton_1);
 		

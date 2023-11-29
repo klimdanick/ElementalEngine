@@ -2,22 +2,13 @@ package com.danick.e2.renderer;
 
 import java.awt.BorderLayout;
 import java.awt.Canvas;
-import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.ComponentListener;
-import java.awt.event.ContainerEvent;
-import java.awt.event.ContainerListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
-import javax.swing.JButton;
 import javax.swing.JFrame;
 
-import com.danick.e2.IDE.IDEGameContainer;
 import com.danick.e2.main.GameContainer;
 
 public class Window {
