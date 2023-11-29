@@ -55,17 +55,18 @@ public class Graphic extends Thread{
 			e.printStackTrace();
 		}
 		
-		Graphic i = new Graphic(image.getWidth(), image.getHeight());
+		Graphic graphic = new Graphic(image.getWidth(), image.getHeight());
+		int alphaBitMask = 24;
 
-	      for (int row = 0; row < i.pH; row++) {
-	         for (int col = 0; col < i.pW; col++) {
-	            if ((image.getRGB(col, row) >>24) == 0x00) i.p[col + row * i.pW] = 0xffff00ff;
-	            else i.p[col + row * i.pW] = image.getRGB(col, row);
+	      for (int row = 0; row < graphic.pH; row++) {
+	         for (int col = 0; col < graphic.pW; col++) {
+	            if ((image.getRGB(col, row) >> alphaBitMask) == 0x00) graphic.p[col + row * graphic.pW] = 0xffff00ff;
+	            else graphic.p[col + row * graphic.pW] = image.getRGB(col, row);
 	         }
 	      }
 		
 		image.flush();
-		return i;
+		return graphic;
 	}
 
 	public void run() {}
@@ -131,7 +132,7 @@ public class Graphic extends Thread{
 		int x = (int) Math.round(X);
 		int y = (int) Math.round(Y);
 		if((x - offX < 0 || x - offX >= pW || y - offY < 0 || y - offY >= pH)) {
-				System.err.print("Unvallid pixel coördinate! returning black pixel! | Invalid location: ");
+				System.err.print("Unvallid pixel coï¿½rdinate! returning black pixel! | Invalid location: ");
 				System.err.print(x +", " + y);
 				System.err.println(" for canvas sie: " + pW + ", " + pH);
 			return new Color(0);
@@ -144,7 +145,7 @@ public class Graphic extends Thread{
 		int y = (int) Math.round(Y);
 		if((x + offX < 0 || x + offX >= pW || y + offY < 0 || y + offY >= pH)) {
 			if (!noError) {
-				System.err.print("Unvallid pixel coördinate! returning black pixel! | Invalid location: ");
+				System.err.print("Unvallid pixel coï¿½rdinate! returning black pixel! | Invalid location: ");
 				System.err.print(x +", " + y);
 				System.err.println(" for canvas sie: " + pW + ", " + pH);
 			}
