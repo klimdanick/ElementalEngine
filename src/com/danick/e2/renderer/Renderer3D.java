@@ -1,8 +1,6 @@
 package com.danick.e2.renderer;
 
-import java.awt.Color;
 import java.awt.image.DataBufferInt;
-import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
 
 import com.danick.e2.main.GameContainer;

@@ -1,11 +1,8 @@
 package com.danick.e2.IDE2;
 
-import java.awt.BorderLayout;
 import java.awt.Canvas;
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
-
-import javax.swing.JFrame;
 
 import com.danick.e2.main.GameContainer;
 import com.danick.e2.renderer.Window;
