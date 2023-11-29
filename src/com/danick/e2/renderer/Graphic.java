@@ -1,17 +1,12 @@
 package com.danick.e2.renderer;
 
 import java.awt.Color;
-import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 
 import javax.imageio.ImageIO;
 
 import com.danick.e2.main.GameContainer;
-import com.danick.e2.objects.GameObject;
 
 public class Graphic extends Thread{
 	/*
@@ -34,8 +29,9 @@ public class Graphic extends Thread{
 	public Color bgColor = new Color(0xFF004A7F);
 	
 	public static int transparent = 0xffff00ff;
-	public int chackerPattrnWidth = 10;
-	public int chackerPattrnHeight = 10;
+	public int checkerPatternWidth = 10;
+	public int checkerPatternHeight = 10;
+	public int toUpperCase = 32;
 	
 	
 	
@@ -80,7 +76,7 @@ public class Graphic extends Thread{
 	
 	public void background() {
 		for (int x = offX; x < pW+offX; x++) for (int y = offY; y < pH+offY; y++) {
-			if (Math.abs(Math.round(y/(float)(chackerPattrnHeight)))%2 == Math.abs(Math.round(x/(float)(chackerPattrnWidth)))%2) setPixel(x, y, bgColor);
+			if (Math.abs(Math.round(y/(float)(checkerPatternHeight)))%2 == Math.abs(Math.round(x/(float)(checkerPatternWidth)))%2) setPixel(x, y, bgColor);
 			else setPixel(x, y, bgColor.darker());
 		} 
 	}
@@ -147,7 +143,7 @@ public class Graphic extends Thread{
 			if (!noError) {
 				System.err.print("Unvallid pixel co�rdinate! returning black pixel! | Invalid location: ");
 				System.err.print(x +", " + y);
-				System.err.println(" for canvas sie: " + pW + ", " + pH);
+				System.err.println(" for canvas size: " + pW + ", " + pH);
 			}
 			return new Color(0);
 		}
@@ -162,14 +158,14 @@ public class Graphic extends Thread{
 		int offset = 0;
 		
 		for(int i = 0; i < text.length(); i++) {
-			int unicode = text.codePointAt(i) - 32;
+			int unicode = text.codePointAt(i) - toUpperCase;
 			offset += Font.getWidths()[unicode];
 		}
 		offX-=offset/2;
 		offY-=Font.getHeight()/2;
 		offset = 0;
 		for(int i = 0; i < text.length(); i++) {
-			int unicode = text.codePointAt(i) - 32;
+			int unicode = text.codePointAt(i) - toUpperCase;
 			
 			for (int y = 0; y < fontImage.pH; y++) {
 				for (int x = 0; x < Font.getWidths()[unicode]; x++) {
@@ -190,7 +186,7 @@ public void drawText(String text, double offX, double offY, Color color) {
 		int offset = 0;
 		
 		for(int i = 0; i < text.length(); i++) {
-			int unicode = text.codePointAt(i) - 32;
+			int unicode = text.codePointAt(i) - toUpperCase;
 			offset += Font.getWidths()[unicode];
 		}
 		offX-=offset/2;
@@ -198,7 +194,7 @@ public void drawText(String text, double offX, double offY, Color color) {
 		offset = 0;
 		
 		for(int i = 0; i < text.length(); i++) {
-			int unicode = text.codePointAt(i) - 32;
+			int unicode = text.codePointAt(i) - toUpperCase;
 			
 			for (int y = 0; y < fontImage.pH; y++) {
 				for (int x = 0; x < Font.getWidths()[unicode]; x++) {
@@ -214,6 +210,10 @@ public void drawText(String text, double offX, double offY, Color color) {
 	public void setFont(Font Font) {
 		this.Font = Font;
 	}
+
+	private boolean isOutOfBounds(Graphic r){
+		return (offX + this.offX < -r.pW || offY + this.offY < -r.pH || offX + this.offX >= pW || offY + this.offY >= pH);
+	}
 	
 	public void drawGraphic(Graphic r) {
 		if (r == null) {
@@ -223,7 +223,7 @@ public void drawText(String text, double offX, double offY, Color color) {
 		double offX = r.locationX;
 		double offY = r.locationY;
 
-		if (offX + this.offX < -r.pW || offY + this.offY < -r.pH || offX + this.offX >= pW || offY + this.offY >= pH) return;
+		if (isOutOfBounds(r)) return;
 		
 		for (int y = 0; y < r.pH; y++) {
 			for (int x = 0; x < r.pW; x++) {
@@ -232,18 +232,18 @@ public void drawText(String text, double offX, double offY, Color color) {
 		}
 	}
 	
-	public void drawGraphic(Graphic r, double offX, double offY) {
+	public void drawGraphic(Graphic renderer, double offX, double offY) {
 
-		if (offX + this.offX < -r.pW || offY + this.offY < -r.pH || offX + this.offX >= pW || offY + this.offY >= pH) return;
+		if (isOutOfBounds(renderer)) return;
 		
-		for (int y = 0; y < r.pH; y++) {
-			for (int x = 0; x < r.pW; x++) {
-				if (!(r.p[x + y * r.pW] == 0xffff00ff)) setPixel((x) + offX, (y) + offY, r.p[x + y * r.pW]);
+		for (int y = 0; y < renderer.pH; y++) {
+			for (int x = 0; x < renderer.pW; x++) {
+				if (!(renderer.p[x + y * renderer.pW] == 0xffff00ff)) setPixel((x) + offX, (y) + offY, renderer.p[x + y * renderer.pW]);
 			}
 		}
 	}
 
-	
+
 	public void drawRectangle(double x1, double y1, double x2, double y2, Color value) {
 		for (double x = x1; x < x2; x++) {
 			for (double y = y1; y < y2; y++) {

@@ -1,21 +1,11 @@
 package com.danick.e2.renderer;
 
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferInt;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
 
-import javax.imageio.ImageIO;
-
-import com.danick.e2.main.GameContainer;
 import com.danick.e2.math.Math;
-import com.danick.e2.math.OrthographicProjection;
 import com.danick.e2.math.PerspectiveProjection;
 import com.danick.e2.math.Projection;
-import com.danick.e2.objects.GameObject;
 
 public class Graphic3D extends Graphic{
 	/*
@@ -231,7 +221,7 @@ public class Graphic3D extends Graphic{
 	
 	public void background() {
 		for (int x = offX; x < pW+offX; x++) for (int y = offY; y < pH+offY; y++) {
-			if ((int)java.lang.Math.abs(java.lang.Math.round(y/(float)(chackerPattrnHeight)))%2 == (int)java.lang.Math.abs(java.lang.Math.round(x/(float)(chackerPattrnWidth)))%2) setPixel(x, y, bgColor);
+			if ((int)java.lang.Math.abs(java.lang.Math.round(y/(float)(checkerPatternHeight)))%2 == (int)java.lang.Math.abs(java.lang.Math.round(x/(float)(checkerPatternWidth)))%2) setPixel(x, y, bgColor);
 			else setPixel(x, y, bgColor.darker());
 		} 
 	}
