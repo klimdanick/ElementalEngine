@@ -95,6 +95,21 @@ public class Graphic3D extends Graphic{
 			TransformationMatrix = Math.MatriMath.multiplyMatrix(rotationZ, TransformationMatrix);
 		}
 		
+		public static Model3D plane(int scale) {
+			ArrayList<Point3D> verts = new ArrayList<>();
+			for (int z = -1; z <= 1; z+=2) for (int y = -1; y <= 1; y+=2) for (int x = -1; x <= 1; x+=2) {
+				verts.add(new Point3D(x*scale/2, y*scale/2, z*scale/2));
+			}
+			ArrayList<Face3D> faces = new ArrayList<>();
+			ArrayList<Point3D> pointsTop = new ArrayList<>();
+			pointsTop.add(verts.get(0));
+			pointsTop.add(verts.get(1));
+			pointsTop.add(verts.get(3));
+			pointsTop.add(verts.get(2));
+			faces.add(new Face3D(pointsTop));
+			return new Model3D(faces);
+		}
+		
 		public static Model3D cube(int scale) {
 			ArrayList<Point3D> verts = new ArrayList<>();
 			for (int z = -1; z <= 1; z+=2) for (int y = -1; y <= 1; y+=2) for (int x = -1; x <= 1; x+=2) {
