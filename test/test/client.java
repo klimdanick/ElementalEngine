@@ -31,7 +31,7 @@ public class client {
 							e.printStackTrace();
 						}
 					
-					byte[] buffer = new byte[20];
+					byte[] buffer = new byte[100];
 					buffer[0] = msg.id;
 					buffer[1] = msg.part;
 					buffer[2] = msg.type;
