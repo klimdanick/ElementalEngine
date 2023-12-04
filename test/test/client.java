@@ -31,13 +31,14 @@ public class client {
 							e.printStackTrace();
 						}
 					
-					byte[] buffer = new byte[100];
+					byte[] buffer = new byte[Message.MAX_BUFFER_SIZE+Message.HEADER_SIZE];
 					buffer[0] = msg.id;
 					buffer[1] = msg.part;
 					buffer[2] = msg.type;
+					buffer[3] = (byte) (msg.data.length / (buffer.length-4)+1);
 					int startPos = msg.index;
-					for (; msg.index-startPos < buffer.length-10 && msg.index < msg.data.length; msg.index++) {
-						buffer[msg.index+3-startPos] = msg.data[msg.index];
+					for (; msg.index-startPos < buffer.length-Message.HEADER_SIZE && msg.index < msg.data.length; msg.index++) {
+						buffer[msg.index+Message.HEADER_SIZE-startPos] = msg.data[msg.index];
 					}
 					
 					
