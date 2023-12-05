@@ -110,6 +110,23 @@ public class Graphic3D extends Graphic{
 			return new Model3D(faces);
 		}
 		
+		public static Model3D hexagon(int scale) {
+			ArrayList<Point3D> verts = new ArrayList<>();
+			for (double a = 0; a <= 2*java.lang.Math.PI; a+=java.lang.Math.PI/3) {
+				verts.add(new Point3D(java.lang.Math.cos(a)*scale/2, java.lang.Math.sin(a)*scale/2, 0));
+			}
+			ArrayList<Face3D> faces = new ArrayList<>();
+			ArrayList<Point3D> pointsTop = new ArrayList<>();
+			pointsTop.add(verts.get(0));
+			pointsTop.add(verts.get(1));
+			pointsTop.add(verts.get(2));
+			pointsTop.add(verts.get(3));
+			pointsTop.add(verts.get(4));
+			pointsTop.add(verts.get(5));
+			faces.add(new Face3D(pointsTop));
+			return new Model3D(faces);
+		}
+		
 		public static Model3D cube(int scale) {
 			ArrayList<Point3D> verts = new ArrayList<>();
 			for (int z = -1; z <= 1; z+=2) for (int y = -1; y <= 1; y+=2) for (int x = -1; x <= 1; x+=2) {

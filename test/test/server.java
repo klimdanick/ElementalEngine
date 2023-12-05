@@ -42,7 +42,7 @@ public class server {
 			return null;
 		Message m = msgs.get(a[0]);
 		if (m == null) {
-			System.out.println("NEW MESSAGE!");
+			//System.out.println("NEW MESSAGE!");
 			m = new Message(a[0]);
 			msgs.put(a[0], m);
 			m.part = a[1];
@@ -52,8 +52,7 @@ public class server {
 		}
 		m.part = a[1];
 		for (int i = 0; i < Message.MAX_BUFFER_SIZE && i < a.length; i++) {
-			m.data[i+((m.part-1) * Message.MAX_BUFFER_SIZE)] = 
-					a[i+Message.HEADER_SIZE];
+			m.data[i+((m.part-1) * Message.MAX_BUFFER_SIZE)] = a[i+Message.HEADER_SIZE];
 		}
 		if (m.part == a[3]) msgs.put(a[0], null);
 		return m;

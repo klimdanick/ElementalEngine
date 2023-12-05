@@ -22,7 +22,7 @@ public class Message {
 	}
 	
 	public String toString() {
-		String s = "id: ";
+		String s = "";/*"id: ";
 		s+=id;
 		s+="\ntype ";
 		s+=type;
@@ -30,7 +30,7 @@ public class Message {
 		s+=part;
 		s+="\nsize ";
 		s+=data.length;
-		s+="\ndata ";
+		s+="\ndata ";*/
 		for (int i = 0; i < data.length; i++) s+=(char)data[i];
 		return s;
 	}

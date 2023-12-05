@@ -17,20 +17,22 @@ public class test extends AbstractGame{
 	ArrayList<Model3D> cubes = new ArrayList<>();
 	
 	public static void main(String[] args) {
-		GameContainer gc = new GameContainer(new test(), 150, 100, 1, "test");
+		GameContainer gc = new GameContainer(new test(), 600, 400, 1, "test");
 		gc.start();
 	}
 
 	public void init(GameContainer gc, Graphic r) {
 		r3d=new Renderer3D(gc);
 		gc.changeRenderer(r3d);
-		int size = 10;
-		for (int x = -10; x < 11; x++) for (int y = -10; y < 11; y++) {
-			Model3D c = Model3D.plane(size);
-			c.TranslateVerts(x*size, y*size, 0);
+		int size = 50;
+		for (double x = -14; x < 15; x++) for (double y = -14; y < 15; y++) {
+			Model3D c = Model3D.hexagon(size+6);
+			double offset = x%2==0 ? 0 : 0.5;
+			c.TranslateVerts((5.0/6.0)*x*size, y*size+offset*size, 0);
 			c.RotateOrigin(0.95, 0, 0);
 			cubes.add(c);
 		}
+		
 	}
 	
 	public void update(GameContainer gc, long dt) {
@@ -45,6 +47,8 @@ public class test extends AbstractGame{
 		
 		if (gc.input.isKey(KeyEvent.VK_E)) for (Model3D cube : cubes) cube.RotateOrigin(0, 0, Math.PI/80);
 		if (gc.input.isKey(KeyEvent.VK_Q)) for (Model3D cube : cubes) cube.RotateOrigin(0, 0, -Math.PI/80);
+		//if (gc.input.isKey(KeyEvent.VK_R)) for (Model3D cube : cubes) cube.RotateOrigin(Math.PI/160, 0, 0);
+		//if (gc.input.isKey(KeyEvent.VK_F)) for (Model3D cube : cubes) cube.RotateOrigin(-Math.PI/160, 0, 0);
 	}
 
 }
