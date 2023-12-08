@@ -24,6 +24,7 @@ hs_err_pid*
 /bin/
 
 # Test package #
+/res/tileSet/
 
 .classpath
 .project
