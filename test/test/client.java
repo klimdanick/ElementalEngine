@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.SocketException;
-import java.net.UnknownHostException;
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 public class client {
@@ -15,7 +15,7 @@ public class client {
 	Thread senThread;
 	Thread recThread;
 	
-	Message msg = null; 
+	Queue<Message> msgs = new LinkedList<>(); 
 	
 	public client(String ip, int port) throws IOException {
 		ds = new DatagramSocket();
@@ -24,7 +24,8 @@ public class client {
 		this.senThread = new Thread() {
 			public void run() {
 				while(true) {
-					while (msg == null)
+					Message msg;
+					while ((msg = msgs.poll()) == null)
 						try {
 							Thread.sleep(10);
 						} catch (InterruptedException e) {
@@ -67,28 +68,31 @@ public class client {
 		recThread.start();
 	}
 	
+	public Message sendMessage(int type, byte[] data) {
+		Message m = new Message((byte)type, data);
+		msgs.add(m);
+		return m;
+	}
+	
+	public static client connect(String ip, int port) {
+		client c = null;
+		while (c == null) try {
+			c = new client(ip, port);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return c;
+	}
+	
 	
 	public static void main(String[] args) throws IOException {
 		Thread t = new Thread() {
 			public void run() {
 				Scanner sc = new Scanner(System.in); 
-				client c = null;
-				while (c == null) try {
-					c = new client("localhost", 1234);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				client c = client.connect("localhost", 1234);
 				while(true) {
-					while (c.msg != null) try {
-						Thread.sleep(10);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					System.out.println("msg send!");
 					String s = sc.nextLine();
-					Message m = new Message((byte)1, s.getBytes());
-					c.msg = m;
-					System.out.println("msg sending");
+					c.sendMessage((byte)1, s.getBytes());
 				}
 			}
 		};
