@@ -34,7 +34,7 @@ public class Renderer3D extends Graphic3D{
 					if (obj.sprite instanceof Animation) {
 						((Animation) obj.sprite).update();
 					}
-					this.drawGraphic(obj.sprite, obj.x, obj.y);
+					this.drawGraphic(obj.sprite, obj.x, obj.y, obj.z);
 				}
 			} catch (ConcurrentModificationException e) {
 				System.err.println(e.getClass() + "in the render tread! \n Are you using GameObjects.remove() or GameObjects.add()?\nUse GameContainer.addObject() or GameContainer.removeObject() instead!");

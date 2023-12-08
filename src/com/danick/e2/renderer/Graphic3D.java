@@ -38,8 +38,9 @@ public class Graphic3D extends Graphic{
 			  double[][] P = com.danick.e2.math.Math.MatriMath.multiplyMatrix(p, model.TransformationMatrix);
 			  Point3D proj = projection.project(new Point3D((int)P[0][0], (int)P[0][1], (int)P[0][2]));
 			  //this.drawCircle(proj.x+this.pW/2, proj.y+this.pH/2, 10, Color.red, true, 100000);
-			  this.drawLine(proj.x+this.pixelWidth/2, proj.y+this.pixelHeight/2, prevPoint.x+this.pixelWidth/2, prevPoint.y+this.pixelHeight/2, Color.white);
+			  this.drawLine(proj.x+this.pixelWidth/2, proj.y+this.pixelHeight/2, prevPoint.x+this.pixelWidth/2, prevPoint.y+this.pixelHeight/2, (int)((P[0][2] + Pr[0][2]) / 2), Color.white);
 			  prevPoint = proj;
+			  Pr = P;
 		  }
 		}
 	}
@@ -253,8 +254,9 @@ public class Graphic3D extends Graphic{
 	
 	public void background() {
 		for (int x = transX; x < pixelWidth+transX; x++) for (int y = transY; y < pixelHeight+transY; y++) {
-			if ((int)java.lang.Math.abs(java.lang.Math.round(y/(float)(checkerPatternHeight)))%2 == (int)java.lang.Math.abs(java.lang.Math.round(x/(float)(checkerPatternWidth)))%2) setPixel(x, y, bgColor);
-			else setPixel(x, y, bgColor.darker());
+			zBuffer[x + y * pixelWidth] = Integer.MAX_VALUE;
+			if ((int)java.lang.Math.abs(java.lang.Math.round(y/(float)(checkerPatternHeight)))%2 == (int)java.lang.Math.abs(java.lang.Math.round(x/(float)(checkerPatternWidth)))%2) setPixel(x, y, Integer.MAX_VALUE, bgColor);
+			else setPixel(x, y, Integer.MAX_VALUE, bgColor.darker());
 		} 
 	}
 	
