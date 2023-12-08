@@ -73,9 +73,9 @@ public class Designer extends AbstractGame{
 		VP3D[1].drawModel(pyramid);
 		VP3D[0].drawModel(cube2);
 		VP3D[1].drawModel(pyramid2);
-		for (int i = 0; i < 4; i++) r.drawGraphic(VP3D[i], (i%2)*gc.width/2, Math.floor(i/2)*gc.height/2);
-		r.drawLine(0, gc.height/2, gc.width, gc.height/2, Color.black);
-		r.drawLine(gc.width/2, 0, gc.width/2, gc.height, Color.black);
+		for (int i = 0; i < 4; i++) r.drawGraphic(VP3D[i], (i%2)*gc.width/2, Math.floor(i/2)*gc.height/2, 0);
+		r.drawLine(0, gc.height/2, gc.width, gc.height/2, 0, Color.black);
+		r.drawLine(gc.width/2, 0, gc.width/2, gc.height, 0, Color.black);
 	}
 
 	@Override

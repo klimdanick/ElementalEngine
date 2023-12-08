@@ -27,8 +27,8 @@ public class GamePreview extends AbstractGame {
 	public void render(GameContainer gc, Graphic r) {
 		// TODO Auto-generated method stub
 		r.clear();
-		r.drawCircle(30+Math.sin(x), 30, 20, Color.white, false, 3);
-		r.drawCircle(30, 80+Math.sin(x), 20, Color.white, false, 3);
+		r.drawCircle(30+Math.sin(x), 30, 0, 20, Color.white, false, 3);
+		r.drawCircle(30, 80+Math.sin(x), 0, 20, Color.white, false, 3);
 		x+=0.1;
 	}
 
