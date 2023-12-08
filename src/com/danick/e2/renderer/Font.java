@@ -16,12 +16,12 @@ public class Font {
 		
 		int unicode = 0;
 		
-		for(int i = 0; i < fontImage.pW; i++) {
-			if (fontImage.p[i] == 0xff0000ff) {
+		for(int i = 0; i < fontImage.pixelWidth; i++) {
+			if (fontImage.pBuffer[i] == 0xff0000ff) {
 				offsets[unicode] = i;
 			}
 			
-			if (fontImage.p[i] == 0xffffff00) {
+			if (fontImage.pBuffer[i] == 0xffffff00) {
 				widths[unicode] = i - offsets[unicode];
 				unicode++;
 			}
@@ -53,6 +53,6 @@ public class Font {
 	}
 
 	public int getHeight() {
-		return fontImage.pW;
+		return fontImage.pixelWidth;
 	}
 }

@@ -14,14 +14,14 @@ public class Renderer2D extends Graphic{
 	public Renderer2D(GameContainer gc) {
 		super(gc.width, gc.height);
 		this.gc = gc;
-		p = ((DataBufferInt)gc.window.image.getRaster().getDataBuffer()).getData();
+		pBuffer = ((DataBufferInt)gc.window.image.getRaster().getDataBuffer()).getData();
 		this.setName("Render Thread");
 		clear();
 	}
 
 	public void run() {
-		pW = gc.window.image.getWidth();
-		pH = gc.window.image.getHeight();
+		pixelWidth = gc.window.image.getWidth();
+		pixelHeight = gc.window.image.getHeight();
 		long prevTime = System.currentTimeMillis();
 		long newTime = System.currentTimeMillis();
 		long dt = newTime - prevTime;
@@ -37,7 +37,7 @@ public class Renderer2D extends Graphic{
 					if (obj.sprite instanceof Animation) {
 						((Animation) obj.sprite).update();
 					}
-					this.drawGraphic(obj.sprite, obj.x, obj.y);
+					this.drawGraphic(obj.sprite, obj.x, obj.y, obj.z);
 				}
 			} catch (ConcurrentModificationException e) {
 				System.err.println(e.getClass() + "in the render tread! \n Are you using GameObjects.remove() or GameObjects.add()?\nUse GameContainer.addObject() or GameContainer.removeObject() instead!");

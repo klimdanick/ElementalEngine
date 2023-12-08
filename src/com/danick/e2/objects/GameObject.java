@@ -13,6 +13,7 @@ public abstract class GameObject {
 	public boolean collidable = true;
 	public Graphic sprite;
 	public double oX = 0, oY = 0;
+	public double z = Integer.MAX_VALUE;
 	
 	public GameObject(int x, int y, int width, int height) {
 		this.x = x;

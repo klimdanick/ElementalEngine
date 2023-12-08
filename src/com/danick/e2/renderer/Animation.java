@@ -33,23 +33,23 @@ public class Animation extends com.danick.e2.renderer.Graphic {
 			e.printStackTrace();
 		}
 		
-		pW = animationImage.getWidth();
-		pH = animationImage.getHeight();
-		p = animationImage.getRGB(0, 0, pW, pH, null, 0, pW);
+		pixelWidth = animationImage.getWidth();
+		pixelHeight = animationImage.getHeight();
+		pBuffer = animationImage.getRGB(0, 0, pixelWidth, pixelHeight, null, 0, pixelWidth);
 		
-		frameCount = pW / pH;
+		frameCount = pixelWidth / pixelHeight;
 		
 		frames = new Graphic[frameCount];
 		
 		for(int i = 0; i < frames.length; i++) {
-			int[] pix = new int[pH * pH];
-			for (int x = 0; x < pH; x++) {
-				for (int y = 0; y < pH; y++) {
-					pix[x + y * pH] = p[(x + (pH * i)) + y * pW];
+			int[] pix = new int[pixelHeight * pixelHeight];
+			for (int x = 0; x < pixelHeight; x++) {
+				for (int y = 0; y < pixelHeight; y++) {
+					pix[x + y * pixelHeight] = pBuffer[(x + (pixelHeight * i)) + y * pixelWidth];
 				}
 			}
-			frames[i] = new Graphic(pH, pH);
-			frames[i].p = pix;
+			frames[i] = new Graphic(pixelHeight, pixelHeight);
+			frames[i].pBuffer = pix;
 		}
 		
 		animationImage.flush();
@@ -66,21 +66,21 @@ public class Animation extends com.danick.e2.renderer.Graphic {
 			e.printStackTrace();
 		}
 		
-		pW = animationImage.getWidth();
-		pH = animationImage.getHeight();
-		p = animationImage.getRGB(0, 0, pW, pH, null, 0, pW);
+		pixelWidth = animationImage.getWidth();
+		pixelHeight = animationImage.getHeight();
+		pBuffer = animationImage.getRGB(0, 0, pixelWidth, pixelHeight, null, 0, pixelWidth);
 		
 		frames = new Graphic[frameCount];
 		
 		for(int i = 0; i < frames.length; i++) {
-			int[] pix = new int[pW/frameCount * pH];
-			for (int x = 0; x < pW/frameCount; x++) {
-				for (int y = 0; y < pH; y++) {
-					pix[x + y * pH] = p[(x + (int)(Math.floor(pW/frameCount) * i)) + y * pW];
+			int[] pix = new int[pixelWidth/frameCount * pixelHeight];
+			for (int x = 0; x < pixelWidth/frameCount; x++) {
+				for (int y = 0; y < pixelHeight; y++) {
+					pix[x + y * pixelHeight] = pBuffer[(x + (int)(Math.floor(pixelWidth/frameCount) * i)) + y * pixelWidth];
 				}
 			}
-			frames[i] = new Graphic(pW/frameCount, pH);
-			frames[i].p = pix;
+			frames[i] = new Graphic(pixelWidth/frameCount, pixelHeight);
+			frames[i].pBuffer = pix;
 		}
 		
 		animationImage.flush();
@@ -98,13 +98,13 @@ public class Animation extends com.danick.e2.renderer.Graphic {
 				frame++;
 				//System.out.println(frame + " " + frameCount);
 				if (frame >= frameCount) frame = 0;
-				p = frames[frame].p;
+				pBuffer = frames[frame].pBuffer;
 			}
 		}
 	}
 	
 	public Animation scale(float scale) {
-		Animation newAni = new Animation(frameCount, (int)(pW*scale), (int)(pH*scale));
+		Animation newAni = new Animation(frameCount, (int)(pixelWidth*scale), (int)(pixelHeight*scale));
 		for (int i = 0; i < frameCount; i++) {
 			newAni.frames[i] = frames[i].scale(scale);
 		}
@@ -118,7 +118,7 @@ public class Animation extends com.danick.e2.renderer.Graphic {
 	
 	public Animation flip(boolean xAxis, boolean yAxis) {
 		
-		Animation newAni = new Animation(frameCount, (int)(pW), (int)(pH));
+		Animation newAni = new Animation(frameCount, (int)(pixelWidth), (int)(pixelHeight));
 		
 		for (int i = 0; i < frameCount; i++) {
 			newAni.frames[i] = frames[i].flip(xAxis, yAxis);

@@ -11,14 +11,14 @@ public class Renderer3D extends Graphic3D{
 	public Renderer3D(GameContainer gc) {
 		super(gc.width, gc.height);
 		this.gc = gc;
-		p = ((DataBufferInt)gc.window.image.getRaster().getDataBuffer()).getData();
+		pBuffer = ((DataBufferInt)gc.window.image.getRaster().getDataBuffer()).getData();
 		this.setName("3DRender Thread");
 		clear();
 	}
 
 	public void run() {
-		pW = gc.window.image.getWidth();
-		pH = gc.window.image.getHeight();
+		pixelWidth = gc.window.image.getWidth();
+		pixelHeight = gc.window.image.getHeight();
 		long prevTime = System.currentTimeMillis();
 		long newTime = System.currentTimeMillis();
 		long dt = newTime - prevTime;
