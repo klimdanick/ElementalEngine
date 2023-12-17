@@ -1,5 +1,7 @@
 package test;
 
+import java.net.InetAddress;
+
 public class Message {
 	
 	public static byte HEADER_SIZE = 4;
@@ -10,6 +12,10 @@ public class Message {
 	byte[] data;
 	byte part = 1;
 	int index = 0;
+	InetAddress destAdress = null;
+	int destPort;
+	InetAddress sendAdress = null;
+	int sendPort;
 	
 	public Message(byte type, byte[] data) {
 		this.id = (byte) (Math.random()*Byte.MAX_VALUE);

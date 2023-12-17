@@ -11,8 +11,7 @@ import java.util.Queue;
 import java.util.Scanner;
 
 public class client {
-	DatagramSocket recDS;
-	DatagramSocket senDS;
+	DatagramSocket DS;
 	InetAddress adress;
 	byte buf[] = new byte[900];
 	Thread senThread;
@@ -20,12 +19,15 @@ public class client {
 	
 	public static HashMap<Byte, Message> recMsgs = new HashMap<>();
 	Queue<Message> senMsgs = new LinkedList<>(); 
-	public client(String ip, int recPort, int senPort) throws IOException {
-		this(recPort, senPort);
+	
+	HashMap<Byte, messageReceiveEvent> MREs = new HashMap<>();
+	
+	public client(String ip, int port) throws IOException {
+		this(port);
 		this.adress = InetAddress.getByName(ip);
 	}
-	public client(int recPort, int senPort) throws IOException {
-		senDS = new DatagramSocket();
+	public client(int port) throws IOException {
+		DS = new DatagramSocket(port);
 		this.senThread = new Thread() {
 			public void run() {
 				while(true) {
@@ -48,10 +50,12 @@ public class client {
 					}
 					
 					
-					DatagramPacket DpSend = new DatagramPacket(buffer, buffer.length, adress, senPort); 
+					DatagramPacket DpSend;
+					if (msg.destAdress != null) DpSend = new DatagramPacket(buffer, buffer.length, msg.destAdress, msg.destPort); 
+					else DpSend = new DatagramPacket(buffer, buffer.length, adress, senPort);
 
 					try {
-						senDS.send(DpSend);
+						DS.send(DpSend);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -69,7 +73,6 @@ public class client {
 		this.recThread = new Thread() {
 			public void run() {
 				try {
-					recDS = new DatagramSocket(recPort);
 					byte[] receive = new byte[65535];
 	
 					DatagramPacket DpReceive = null;
@@ -80,9 +83,12 @@ public class client {
 	
 						// Step 3 : revieve the data in byte buffer.
 						try {
-							recDS.receive(DpReceive);
+							DS.receive(DpReceive);
 							Message m = data(receive);
+							m.sendAdress = DpReceive.getAddress();
+							m.sendPort = DpReceive.getPort();
 							if (m.part == receive[3]) System.out.println("RESC: " + m);
+							if (MREs.containsKey(m.type)) MREs.get(m.type).onMessage(m);
 						} catch (IOException e) {
 							e.printStackTrace();
 						}
@@ -108,6 +114,14 @@ public class client {
 		return m;
 	}
 	
+	public Message sendMessage(int type, byte[] data, InetAddress adress, int port) {
+		Message m = new Message((byte)type, data);
+		m.destAdress = adress;
+		m.destPort = port;
+		senMsgs.add(m);
+		return m;
+	}
+	
 	public static client startClient(String ip, int senPort, int recPort) {
 		client c = null;
 		while (c == null) try {
@@ -119,10 +133,10 @@ public class client {
 		return c;
 	}
 	
-	public static client startServer(int senPort, int recPort) {
+	public static client startServer(int recPort) {
 		client c = null;
 		while (c == null) try {
-			c = new client(senPort, recPort);
+			c = new client(0, recPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -151,15 +165,25 @@ public class client {
 		return m;
 		
 	}
+
+	public void addReceiveEvent(messageReceiveEvent mre, byte type) {
+		MREs.put(type, mre);
+	}
 	
 	public static void main(String[] args) throws IOException {
 		Thread t = new Thread() {
 			public void run() {
 				Scanner sc = new Scanner(System.in); 
-				client c = client.startClient("localhost", 1233, 1234);
+				////client c = client.startClient("localhost", 1233, 1234);
+				client c = client.startServer(1233);
+				c.addReceiveEvent(new messageReceiveEvent() {
+					public void onMessage(Message msg) {
+						c.sendMessage((byte) 1, msg.data, msg.sendAdress, msg.sendPort);
+					}
+				}, (byte)1);
 				while(true) {
-					String s = sc.nextLine();
-					c.sendMessage((byte)1, s.getBytes());
+					///String s = sc.nextLine();
+					///c.sendMessage((byte)1, s.getBytes());
 				}
 			}
 		};
