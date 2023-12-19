@@ -13,6 +13,8 @@ import java.util.Scanner;
 public class client {
 	DatagramSocket DS;
 	InetAddress adress;
+	int sendPort = 0;
+	int port;
 	byte buf[] = new byte[900];
 	Thread senThread;
 	Thread recThread;
@@ -23,10 +25,13 @@ public class client {
 	HashMap<Byte, messageReceiveEvent> MREs = new HashMap<>();
 	
 	public client(String ip, int port) throws IOException {
-		this(port);
+		this(0);
+		this.sendPort = port;
 		this.adress = InetAddress.getByName(ip);
 	}
 	public client(int port) throws IOException {
+		if (port == 0) port = (int)(Math.random()*(65535-49152)) + 49152;
+		this.port = port;
 		DS = new DatagramSocket(port);
 		this.senThread = new Thread() {
 			public void run() {
@@ -43,7 +48,9 @@ public class client {
 					buffer[0] = msg.id;
 					buffer[1] = msg.part;
 					buffer[2] = msg.type;
-					buffer[3] = (byte) (msg.data.length / (buffer.length-4)+1);
+					buffer[3] = (byte) (msg.data.length / (buffer.length-Message.HEADER_SIZE)+1);
+					System.out.println(msg.data.length + " | " + (buffer.length-Message.HEADER_SIZE));
+					System.out.println(buffer[3]);
 					int startPos = msg.index;
 					for (; msg.index-startPos < buffer.length-Message.HEADER_SIZE && msg.index < msg.data.length; msg.index++) {
 						buffer[msg.index+Message.HEADER_SIZE-startPos] = msg.data[msg.index];
@@ -52,7 +59,7 @@ public class client {
 					
 					DatagramPacket DpSend;
 					if (msg.destAdress != null) DpSend = new DatagramPacket(buffer, buffer.length, msg.destAdress, msg.destPort); 
-					else DpSend = new DatagramPacket(buffer, buffer.length, adress, senPort);
+					else DpSend = new DatagramPacket(buffer, buffer.length, adress, sendPort);
 
 					try {
 						DS.send(DpSend);
@@ -61,7 +68,8 @@ public class client {
 					}
 					
 					if (msg.index >= msg.data.length) {
-						System.out.println("SEND: " + new String(msg.data));
+						System.out.println("sending " + buffer[3] + " parts");
+						System.out.println("SEND to port "+DpSend.getPort()+": " + new String(msg.data));
 						msg = null;
 					}
 					else msg.part++;
@@ -72,32 +80,29 @@ public class client {
 		
 		this.recThread = new Thread() {
 			public void run() {
-				try {
-					byte[] receive = new byte[65535];
-	
-					DatagramPacket DpReceive = null;
-					while(true) {
-	
-						// Step 2 : create a DatgramPacket to receive the data.
-						DpReceive = new DatagramPacket(receive, receive.length);
-	
-						// Step 3 : revieve the data in byte buffer.
-						try {
-							DS.receive(DpReceive);
-							Message m = data(receive);
-							m.sendAdress = DpReceive.getAddress();
-							m.sendPort = DpReceive.getPort();
-							if (m.part == receive[3]) System.out.println("RESC: " + m);
-							if (MREs.containsKey(m.type)) MREs.get(m.type).onMessage(m);
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
-	
-						// Clear the buffer after every message.
-						receive = new byte[65535];
+				byte[] receive = new byte[65535];
+
+				DatagramPacket DpReceive = null;
+				while(true) {
+					System.out.println("test");
+					// Step 2 : create a DatgramPacket to receive the data.
+					DpReceive = new DatagramPacket(receive, receive.length);
+
+					// Step 3 : revieve the data in byte buffer.
+					try {
+						DS.receive(DpReceive);
+						Message m = data(receive);
+						m.sendAdress = DpReceive.getAddress();
+						m.sendPort = DpReceive.getPort();
+						System.out.println("part "+m.part+"/"+receive[3]);
+						if (m.part == receive[3]) System.out.println("RESC from port "+m.sendPort+": " + m);
+						if (MREs.containsKey(m.type)) MREs.get(m.type).onMessage(m);
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-				} catch (SocketException e) {
-					e.printStackTrace();
+
+					// Clear the buffer after every message.
+					receive = new byte[65535];
 				}
 			}
 		};
@@ -122,25 +127,27 @@ public class client {
 		return m;
 	}
 	
-	public static client startClient(String ip, int senPort, int recPort) {
+	public static client startClient(String ip, int senPort) {
 		client c = null;
 		while (c == null) try {
-			c = new client(ip, senPort, recPort);
+			c = new client(ip, senPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		c.start();
+		System.out.println("Started client on port: " + c.port + "\n connected to: " + c.sendPort);
 		return c;
 	}
 	
 	public static client startServer(int recPort) {
 		client c = null;
 		while (c == null) try {
-			c = new client(0, recPort);
+			c = new client(recPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		c.start();
+		System.out.println("Started server on port: " + c.port + "\n connected to: " + c.sendPort);
 		return c;
 	}
 	
@@ -174,16 +181,16 @@ public class client {
 		Thread t = new Thread() {
 			public void run() {
 				Scanner sc = new Scanner(System.in); 
-				////client c = client.startClient("localhost", 1233, 1234);
-				client c = client.startServer(1233);
+				client c = client.startClient("localhost", 1233);
+				/*client c = client.startServer(1233);
 				c.addReceiveEvent(new messageReceiveEvent() {
 					public void onMessage(Message msg) {
 						c.sendMessage((byte) 1, msg.data, msg.sendAdress, msg.sendPort);
 					}
-				}, (byte)1);
+				}, (byte)1);*/
 				while(true) {
-					///String s = sc.nextLine();
-					///c.sendMessage((byte)1, s.getBytes());
+					String s = sc.nextLine();
+					c.sendMessage((byte)1, s.getBytes());
 				}
 			}
 		};
