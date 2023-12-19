@@ -25,7 +25,6 @@ hs_err_pid*
 # Test package #
 /res/tileSet/
 
-.classpath
 .project
 .settings
 /.idea/
