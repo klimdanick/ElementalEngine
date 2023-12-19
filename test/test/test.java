@@ -35,22 +35,23 @@ public class test extends AbstractGame{
 		r.clear();
 		double z = Math.sin((double)x/2) + Math.sin((double)y/2)+1;
 		int[] uv = project(x, y, z);
-		r.drawCircle(uv[0], uv[1], y-x-z, 20, Color.red, true, 100);
-		Graphic[] tiles = new Graphic[] {Graphic.fromImage("tileSet/grass_half.png")};
+		
+		Graphic[] tiles = new Graphic[] {Graphic.fromImage("tileSet/grass.png")};
 		for (int i = -50; i < 40; i++) for (int j = 40; j >= -50; j--) {
 			z = Math.sin((double)i/2) + Math.sin((double)j/2);
 			uv = project(i, j, z);
 			r.drawGraphic(tiles[0], uv[0]-tiles[0].pixelWidth/2, uv[1]-tiles[0].pixelHeight/2, j-i-z);
 		}
+		r.drawCircle(uv[0], uv[1], y-x-z, 20, Color.red, true, 1);
 		r.drawGraphic(r.getZBuffer(), 0, 0, Integer.MIN_VALUE);
 	}
 
 	public int[] project(double x, double y, double z) {
 		int u, v;
-		u = (int) Math.round(16 * x + 16 * y);
-		v = (int) Math.round(8 * x - 8 * y - 16 * z);
+		u = (int) Math.round(8 * x + 8 * y);
+		v = (int) Math.round(4 * x - 4 * y - 8 * z);
 		u += gc.width / 2;
-		v += gc.height;
+		v += gc.height-100;
 		return new int[] { u, v };
 	}
 }

@@ -51,7 +51,7 @@ public class SettingsMenu extends JFrame {
 		JPanel panel = new JPanel();
 		tabbedPane.addTab("Appearance", null, panel, null);
 		panel.setLayout(new BorderLayout(0, 0));
-		//tijmen is dom
+		
 		JList list = new JList();
 		panel.add(list, BorderLayout.WEST);
 		
