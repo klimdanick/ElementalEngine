@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class client {
+public class Client {
 	DatagramSocket DS;
 	InetAddress adress;
 	int sendPort = 0;
@@ -24,12 +24,12 @@ public class client {
 	
 	HashMap<Byte, messageReceiveEvent> MREs = new HashMap<>();
 	
-	public client(String ip, int port) throws IOException {
+	public Client(String ip, int port) throws IOException {
 		this(0);
 		this.sendPort = port;
 		this.adress = InetAddress.getByName(ip);
 	}
-	public client(int port) throws IOException {
+	public Client(int port) throws IOException {
 		if (port == 0) port = (int)(Math.random()*(65535-49152)) + 49152;
 		this.port = port;
 		DS = new DatagramSocket(port);
@@ -37,7 +37,7 @@ public class client {
 			public void run() {
 				while(true) {
 					Message msg;
-					while ((msg = senMsgs.poll()) == null)
+					while ((msg = senMsgs.peek()) == null)
 						try {
 							Thread.sleep(10);
 						} catch (InterruptedException e) {
@@ -48,9 +48,9 @@ public class client {
 					buffer[0] = msg.id;
 					buffer[1] = msg.part;
 					buffer[2] = msg.type;
-					buffer[3] = (byte) (msg.data.length / (buffer.length-Message.HEADER_SIZE)+1);
-					System.out.println(msg.data.length + " | " + (buffer.length-Message.HEADER_SIZE));
-					System.out.println(buffer[3]);
+					buffer[3] = (byte) Math.ceil((double)msg.data.length / (double)(buffer.length-Message.HEADER_SIZE));
+					//System.out.println(msg.data.length + " | " + (buffer.length-Message.HEADER_SIZE));
+					//System.out.println(buffer[3]);
 					int startPos = msg.index;
 					for (; msg.index-startPos < buffer.length-Message.HEADER_SIZE && msg.index < msg.data.length; msg.index++) {
 						buffer[msg.index+Message.HEADER_SIZE-startPos] = msg.data[msg.index];
@@ -68,11 +68,14 @@ public class client {
 					}
 					
 					if (msg.index >= msg.data.length) {
-						System.out.println("sending " + buffer[3] + " parts");
+						//System.out.println("sending " + buffer[3] + " parts");
 						System.out.println("SEND to port "+DpSend.getPort()+": " + new String(msg.data));
+						senMsgs.poll();
 						msg = null;
 					}
-					else msg.part++;
+					else {
+						msg.part++;
+					}
 				}
 			}
 		};
@@ -84,7 +87,7 @@ public class client {
 
 				DatagramPacket DpReceive = null;
 				while(true) {
-					System.out.println("test");
+					//System.out.println("test");
 					// Step 2 : create a DatgramPacket to receive the data.
 					DpReceive = new DatagramPacket(receive, receive.length);
 
@@ -94,9 +97,11 @@ public class client {
 						Message m = data(receive);
 						m.sendAdress = DpReceive.getAddress();
 						m.sendPort = DpReceive.getPort();
-						System.out.println("part "+m.part+"/"+receive[3]);
-						if (m.part == receive[3]) System.out.println("RESC from port "+m.sendPort+": " + m);
-						if (MREs.containsKey(m.type)) MREs.get(m.type).onMessage(m);
+						//System.out.println("part "+m.part+"/"+receive[3]);
+						if (m.part == receive[3]) {
+							System.out.println("RESC from port "+m.sendPort+": " + m);
+							if (MREs.containsKey(m.type)) MREs.get(m.type).onMessage(m);
+						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -127,10 +132,10 @@ public class client {
 		return m;
 	}
 	
-	public static client startClient(String ip, int senPort) {
-		client c = null;
+	public static Client startClient(String ip, int senPort) {
+		Client c = null;
 		while (c == null) try {
-			c = new client(ip, senPort);
+			c = new Client(ip, senPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -139,10 +144,10 @@ public class client {
 		return c;
 	}
 	
-	public static client startServer(int recPort) {
-		client c = null;
+	public static Client startServer(int recPort) {
+		Client c = null;
 		while (c == null) try {
-			c = new client(recPort);
+			c = new Client(recPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -154,6 +159,7 @@ public class client {
 	public static Message data(byte[] a) {
 		if (a == null)
 			return null;
+		//System.out.println(new String(a));
 		Message m = recMsgs.get(a[0]);
 		if (m == null) {
 			//System.out.println("NEW MESSAGE!");
@@ -178,22 +184,22 @@ public class client {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Thread t = new Thread() {
-			public void run() {
-				Scanner sc = new Scanner(System.in); 
-				client c = client.startClient("localhost", 1233);
-				/*client c = client.startServer(1233);
-				c.addReceiveEvent(new messageReceiveEvent() {
-					public void onMessage(Message msg) {
-						c.sendMessage((byte) 1, msg.data, msg.sendAdress, msg.sendPort);
-					}
-				}, (byte)1);*/
-				while(true) {
-					String s = sc.nextLine();
-					c.sendMessage((byte)1, s.getBytes());
-				}
+		Scanner sc = new Scanner(System.in);
+		/*
+		Client server = Client.startServer(1233);
+		server.addReceiveEvent(new messageReceiveEvent() {
+			public void onMessage(Message msg) {
+				server.sendMessage((byte) 1, msg.data, msg.sendAdress, msg.sendPort);
 			}
-		};
-		t.start();
+		}, (byte)1);	
+		*/
+		
+		Client client = Client.startClient("localhost", 1233);
+		while(true) {
+			String s = sc.nextLine();
+			client.sendMessage((byte)1, s.getBytes());
+		}
+			
+		
 	}
 }
