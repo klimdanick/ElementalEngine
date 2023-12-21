@@ -178,22 +178,21 @@ public class client {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Thread t = new Thread() {
-			public void run() {
-				Scanner sc = new Scanner(System.in); 
-				client c = client.startClient("localhost", 1233);
-				/*client c = client.startServer(1233);
-				c.addReceiveEvent(new messageReceiveEvent() {
-					public void onMessage(Message msg) {
-						c.sendMessage((byte) 1, msg.data, msg.sendAdress, msg.sendPort);
-					}
-				}, (byte)1);*/
-				while(true) {
-					String s = sc.nextLine();
-					c.sendMessage((byte)1, s.getBytes());
-				}
+		Scanner sc = new Scanner(System.in);
+				
+				/*
+		client c = client.startClient("localhost", 1233);
+		while(true) {
+			String s = sc.nextLine();
+			c.sendMessage((byte)1, s.getBytes());
+		}
+			*/
+				
+		client c = client.startServer(1233);
+		c.addReceiveEvent(new messageReceiveEvent() {
+			public void onMessage(Message msg) {
+				c.sendMessage((byte) 1, msg.data, msg.sendAdress, msg.sendPort);
 			}
-		};
-		t.start();
+		}, (byte)1);
 	}
 }
