@@ -1,3 +1,4 @@
+package com.danick.e2.Networking;
 
 
 import java.net.InetAddress;
@@ -8,15 +9,15 @@ public class Message {
 	public static int MAX_BUFFER_SIZE = 20;
 	public static byte FOOTER_SIZE = 4;
 	
-	byte id;
-	byte type;
-	byte[] data;
-	byte part = 1;
-	int index = 0;
-	InetAddress destAdress = null;
-	int destPort;
-	InetAddress sendAdress = null;
-	int sendPort;
+	public byte id;
+	public byte type;
+	public byte[] data;
+	public byte part = 1;
+	public int index = 0;
+	public InetAddress destAdress = null;
+	public int destPort;
+	public InetAddress sendAdress = null;
+	public int sendPort;
 	
 	public Message(byte type, byte[] data) {
 		this.id = (byte) (Math.random()*Byte.MAX_VALUE);
