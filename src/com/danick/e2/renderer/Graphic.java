@@ -72,9 +72,9 @@ public class Graphic extends Thread{
 	}
 	
 	public void background() {
-		for (int x = 0; x < pixelWidth; x++) for (int y = 0; y < pixelHeight; y++) {
-			zBuffer[x+y*pixelWidth] = Integer.MAX_VALUE;
-			if (Math.abs(Math.round(y/(float)(checkerPatternHeight)))%2 == Math.abs(Math.round(x/(float)(checkerPatternWidth)))%2) setPixel(x, y, Integer.MAX_VALUE, bgColor);
+		for (int x = transX; x < pixelWidth+transX; x++) for (int y = transY; y < pixelHeight+transY; y++) {
+			if ((x-transX)+(y-transY)*pixelWidth < zBuffer.length && (x-transX)+(y-transY)*pixelWidth >= 0) zBuffer[(x-transX)+(y-transY)*pixelWidth] = Integer.MAX_VALUE;
+			if (Math.abs(Math.floor(y/(float)(checkerPatternHeight)))%2 == Math.abs(Math.floor(x/(float)(checkerPatternWidth)))%2) setPixel(x, y, Integer.MAX_VALUE, bgColor);
 			else setPixel(x, y, Integer.MAX_VALUE, bgColor.darker());
 		} 
 	}
@@ -188,7 +188,7 @@ public class Graphic extends Thread{
 	
 	public void drawGraphic(Graphic renderer, double offX, double offY, double offZ) {
 
-		if (isOutOfBounds(renderer, offX, offY)) return;
+		//if (isOutOfBounds(renderer, offX, offY)) return;
 		
 		for (int y = 0; y < renderer.pixelHeight; y++) {
 			for (int x = 0; x < renderer.pixelWidth; x++) {

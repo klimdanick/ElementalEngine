@@ -3,25 +3,27 @@ package test;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.nio.ByteBuffer;
+import java.util.HashMap;
 
 import com.danick.e2.main.AbstractGame;
 import com.danick.e2.main.GameContainer;
 import com.danick.e2.renderer.Graphic;
 
-public class MultiplayerGameTest extends AbstractGame {
+public class MultiplayerGameTest extends AbstractGame { 
 	
 	Client client;
 	int x, y;
+	HashMap<Byte, int[]> pos = new HashMap<>();
 	byte id = (byte) (Math.random()*Byte.MAX_VALUE);
 	@Override
 	public void init(GameContainer gc, Graphic r) {
-		client = Client.startClient("localhost", 1234);
+		client = Client.startClient("vps.klimdanick.nl", 1234);
 		client.addReceiveEvent(new messageReceiveEvent() {
 			public void onMessage(Message msg) {
 				
-				int x = (msg.data[1] << 8)+msg.data[2];
-				int y = (msg.data[3] << 8)+msg.data[4];
-				r.drawCircle(x, y, 1, 30, Color.green, true, 10);
+				int x = ((0xff & msg.data[1])<<8)+(0xff & msg.data[2]);
+				int y = ((0xff & msg.data[3])<<8)+(0xff & msg.data[4]);
+				pos.put(msg.data[0], new int[] {x, y});
 			}
 		}, (byte) 1);
 		client.sendMessage(0, new byte[] {id});
@@ -42,6 +44,10 @@ public class MultiplayerGameTest extends AbstractGame {
 	public void render(GameContainer gc, Graphic r) {
 		r.clear();
 		r.drawCircle(x, y, 0, 30, Color.red, true, 10);
+		for (Byte id : pos.keySet()) {
+			int[] p = pos.get(id);
+			r.drawCircle(p[0], p[1], 0, 30, Color.red, true, 10);
+		}
 	}
 
 	public static void main(String[] args) {
