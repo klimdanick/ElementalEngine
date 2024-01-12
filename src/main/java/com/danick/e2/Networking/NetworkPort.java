@@ -36,11 +36,11 @@ public class NetworkPort {
 		DS = new DatagramSocket(port);
 		this.senThread = new Thread() {
 			public void run() {
-				while(true) {
+				while(!DS.isClosed()) {
 					Message msg;
 					while ((msg = senMsgs.peek()) == null)
 						try {
-							Thread.sleep(10);
+							Thread.sleep(1);
 						} catch (InterruptedException e) {
 							e.printStackTrace();
 						}
@@ -87,7 +87,7 @@ public class NetworkPort {
 				byte[] receive = new byte[65535];
 
 				DatagramPacket DpReceive = null;
-				while(true) {
+				while(!DS.isClosed()) {
 					//System.out.println("test");
 					// Step 2 : create a DatgramPacket to receive the data.
 					DpReceive = new DatagramPacket(receive, receive.length);
@@ -182,5 +182,9 @@ public class NetworkPort {
 
 	public void addReceiveEvent(messageReceiveEvent mre, byte type) {
 		MREs.put(type, mre);
+	}
+	
+	public void close() {
+		DS.close();
 	}
 }
