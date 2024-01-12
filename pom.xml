@@ -1,0 +1,15 @@
+<project>
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>Elemental_Development</groupId>
+	<artifactId>Elemental_Engine</artifactId>
+	<version>3.1.0</version>
+	<name>E2</name>
+	<description>Java Game Engine</description>
+	<dependencies>
+		<dependency>
+			<groupId>com.formdev</groupId>
+			<artifactId>flatlaf</artifactId>
+			<version>3.3</version>
+		</dependency>
+	</dependencies>
+</project>
