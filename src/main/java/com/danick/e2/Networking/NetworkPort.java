@@ -1,3 +1,4 @@
+package com.danick.e2.Networking;
 
 
 import java.io.IOException;
@@ -10,7 +11,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Scanner;
 
-public class Client {
+public class NetworkPort {
 	DatagramSocket DS;
 	InetAddress adress;
 	int sendPort = 0;
@@ -24,12 +25,12 @@ public class Client {
 	
 	HashMap<Byte, messageReceiveEvent> MREs = new HashMap<>();
 	
-	public Client(String ip, int port) throws IOException {
+	public NetworkPort(String ip, int port) throws IOException {
 		this(0);
 		this.sendPort = port;
 		this.adress = InetAddress.getByName(ip);
 	}
-	public Client(int port) throws IOException {
+	public NetworkPort(int port) throws IOException {
 		if (port == 0) port = (int)(Math.random()*(65535-49152)) + 49152;
 		this.port = port;
 		DS = new DatagramSocket(port);
@@ -132,10 +133,10 @@ public class Client {
 		return m;
 	}
 	
-	public static Client startClient(String ip, int senPort) {
-		Client c = null;
+	public static NetworkPort startClient(String ip, int senPort) {
+		NetworkPort c = null;
 		while (c == null) try {
-			c = new Client(ip, senPort);
+			c = new NetworkPort(ip, senPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -144,10 +145,10 @@ public class Client {
 		return c;
 	}
 	
-	public static Client startServer(int recPort) {
-		Client c = null;
+	public static NetworkPort startServer(int recPort) {
+		NetworkPort c = null;
 		while (c == null) try {
-			c = new Client(recPort);
+			c = new NetworkPort(recPort);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -181,25 +182,5 @@ public class Client {
 
 	public void addReceiveEvent(messageReceiveEvent mre, byte type) {
 		MREs.put(type, mre);
-	}
-	
-	public static void main(String[] args) throws IOException {
-		Scanner sc = new Scanner(System.in);
-		/*
-		Client server = Client.startServer(1233);
-		server.addReceiveEvent(new messageReceiveEvent() {
-			public void onMessage(Message msg) {
-				server.sendMessage((byte) 1, new String("ping").getBytes(), msg.sendAdress, msg.sendPort);
-			}
-		}, (byte)1);	
-		*/
-		
-		Client client = Client.startClient("localhost", 1233);
-		while(true) {
-			String s = sc.nextLine();
-			client.sendMessage((byte)1, s.getBytes());
-		}
-			
-		
 	}
 }
