@@ -6,18 +6,12 @@ import com.danick.e2.renderer.Graphic;
 
 public class demo extends AbstractGame{
 	
-	E2Color[] primary = {new E2Color(0xFFd0b747), new E2Color(0xFF299ad0), new E2Color(0xFF05d993), new E2Color(0xFFd70e48)};
+	E2Color[] primary = {new E2Color(0xAAd0b747), new E2Color(0xAA299ad0), new E2Color(0xAA05d993), new E2Color(0xAAd70e48)};
 	
 	
 	public static void main(String[] args) {
 		GameContainer gc = new GameContainer(new demo(), 300, 200, 3, "test");
 		gc.start();
-		E2Color c = new E2Color(0x00AABBCC);
-		System.out.println(c.getAlpha());
-		c = new E2Color(0xFFAABBCC);
-		System.out.println(c.getAlpha());
-		c = new E2Color(0x9FAABBCC);
-		System.out.println(c.getAlpha());
 	}
 
 	public void init(GameContainer gc, Graphic r) {
@@ -27,7 +21,7 @@ public class demo extends AbstractGame{
 			int x2 = (int)(Math.random()*gc.width);
 			int y1 = (int)(Math.random()*gc.height);
 			int y2 = (int)(Math.random()*gc.height);
-			r.drawLine(x1, x2, y1, y2, 0, primary[i]);
+			r.drawRectangle(x1, y1, x2, y2, 0, primary[i]);
 		}
 	}
 	
