@@ -113,8 +113,19 @@ public class Graphic extends Thread{
 		if ((x - transX) + (y - transY) * pixelWidth >= pBuffer.length) return;
 		if ((x - transX) + (y - transY) * pixelWidth < 0) return;
 		if (zBuffer[(x - transX) + (y - transY) * pixelWidth] < z) return;
-		pBuffer[(x - transX) + (y - transY) * pixelWidth] = value;
-		zBuffer[(x - transX) + (y - transY) * pixelWidth] = z;
+		Color c = new E2Color(value); 
+		Color cOld = new E2Color(pBuffer[(x - transX) + (y - transY) * pixelWidth]); 
+		//System.out.println(c.getAlpha());
+		if (c.getAlpha() == 0xFF) {
+			pBuffer[(x - transX) + (y - transY) * pixelWidth] = value;
+			zBuffer[(x - transX) + (y - transY) * pixelWidth] = z;
+		} else if (c.getAlpha() > 0) {
+			double Alpha = (double)c.getAlpha()/0xFF;
+			int R = (int) (c.getRed() * Alpha + cOld.getRed() * (1-Alpha));
+			int G = (int) (c.getGreen() * Alpha + cOld.getGreen() * (1-Alpha));
+			int B = (int) (c.getBlue() * Alpha + cOld.getBlue() * (1-Alpha));
+			pBuffer[(x - transX) + (y - transY) * pixelWidth] = new Color(R, G, B).hashCode();
+		}
 	}
 	
 	public void setPixel(double X, double Y, double Z, Color value) {
@@ -223,8 +234,8 @@ public class Graphic extends Thread{
 
 
 	public void drawRectangle(double x1, double y1, double x2, double y2, double z, Color value) {
-		for (double x = x1; x < x2; x++) {
-			for (double y = y1; y < y2; y++) {
+		for (double x = Math.min(x1, x2); x < Math.max(x1, x2); x++) {
+			for (double y = Math.min(y1, y2); y < Math.max(y1, y2); y++) {
 				setPixel(x, y, z, value);
 			}
 		}
