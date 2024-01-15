@@ -11,13 +11,13 @@ import com.danick.e2.renderer.Graphic;
 import com.danick.e2.renderer.Graphic3D.Model3D;
 import com.danick.e2.renderer.Renderer3D;
 
-public class test extends AbstractGame{
+public class demo extends AbstractGame{
 	
 	Color[] primary = {new Color(0xFFd0b747), new Color(0xFF299ad0), new Color(0xFF05d993), new Color(0xFFd70e48)};
 	
 	
 	public static void main(String[] args) {
-		GameContainer gc = new GameContainer(new test(), 300, 200, 3, "test");
+		GameContainer gc = new GameContainer(new demo(), 300, 200, 3, "test");
 		gc.start();
 	}
 
