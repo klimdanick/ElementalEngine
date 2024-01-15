@@ -3,13 +3,23 @@
 	<groupId>Elemental_Development</groupId>
 	<artifactId>Elemental_Engine</artifactId>
 	<version>3.1.0</version>
-	<name>E2</name>
+    <properties>
+        <maven.compiler.source>1.21</maven.compiler.source>
+        <maven.compiler.target>1.21</maven.compiler.target>
+    </properties>
+    <name>E2</name>
 	<description>Java Game Engine</description>
 	<dependencies>
 		<dependency>
 			<groupId>com.formdev</groupId>
 			<artifactId>flatlaf</artifactId>
 			<version>3.3</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.10.1</version>
 		</dependency>
 		<dependency>
 	        <groupId>org.junit.jupiter</groupId>

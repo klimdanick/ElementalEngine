@@ -3,6 +3,7 @@ package com.danick.e2.renderer;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 
@@ -44,6 +45,12 @@ public class Graphic extends Thread{
 		try {
 			image = ImageIO.read(Graphic.class.getResourceAsStream("/" + path));
 		} catch (IOException e) {
+			System.out.println("error: "+path);
+			e.printStackTrace();
+		}
+		catch (Exception e)
+		{
+			System.out.println("error: "+path);
 			e.printStackTrace();
 		}
 		
@@ -57,6 +64,23 @@ public class Graphic extends Thread{
 	         }
 	      }
 		
+		image.flush();
+		return graphic;
+	}
+	public static Graphic fromImage(BufferedImage image) {
+		if(image == null)
+			return null;
+
+		Graphic graphic = new Graphic(image.getWidth(), image.getHeight());
+		int alphaBitMask = 24;
+
+		for (int row = 0; row < graphic.pixelHeight; row++) {
+			for (int col = 0; col < graphic.pixelWidth; col++) {
+				if ((image.getRGB(col, row) >> alphaBitMask) == 0x00) graphic.pBuffer[col + row * graphic.pixelWidth] = 0xffff00ff;
+				else graphic.pBuffer[col + row * graphic.pixelWidth] = image.getRGB(col, row);
+			}
+		}
+
 		image.flush();
 		return graphic;
 	}

@@ -2,8 +2,10 @@
 
 import java.awt.Color;
 import java.awt.event.KeyEvent;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
+import com.danick.e2.AssetLoader.AssetLoader;
 import com.danick.e2.main.AbstractGame;
 import com.danick.e2.main.GameContainer;
 import com.danick.e2.math.OrthographicProjection;
@@ -14,7 +16,8 @@ import com.danick.e2.renderer.Renderer3D;
 public class test extends AbstractGame{
 	GameContainer gc;
 	double x, y;
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
+		AssetLoader.Init();
 		GameContainer gc = new GameContainer(new test(), 600, 400, 1, "test");
 		gc.start();
 	}
@@ -35,8 +38,10 @@ public class test extends AbstractGame{
 		r.clear();
 		double z = Math.sin((double)x/2) + Math.sin((double)y/2)+1;
 		int[] uv = project(x, y, z);
-		
-		Graphic[] tiles = new Graphic[] {Graphic.fromImage("tileSet/grass.png")};
+
+		Graphic[] tiles = new Graphic[] {AssetLoader.getGraphicAsset("1")};
+		Graphic[] tiles2 = new Graphic[] {AssetLoader.getGraphicAsset("2")};
+
 		for (int i = -50; i < 40; i++) for (int j = 40; j >= -50; j--) {
 			z = Math.sin((double)i/2) + Math.sin((double)j/2);
 			uv = project(i, j, z);
