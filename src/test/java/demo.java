@@ -19,6 +19,12 @@ public class demo extends AbstractGame{
 	public static void main(String[] args) {
 		GameContainer gc = new GameContainer(new demo(), 300, 200, 3, "test");
 		gc.start();
+		Color c = new Color(0x00AABBCC);
+		System.out.println(c.getAlpha());
+		c = new Color(0xFFAABBCC);
+		System.out.println(c.getAlpha());
+		c = new Color(0x9FAABBCC);
+		System.out.println(c.getAlpha());
 	}
 
 	public void init(GameContainer gc, Graphic r) {
