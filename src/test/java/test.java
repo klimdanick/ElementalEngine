@@ -12,46 +12,30 @@ import com.danick.e2.renderer.Graphic3D.Model3D;
 import com.danick.e2.renderer.Renderer3D;
 
 public class test extends AbstractGame{
-	GameContainer gc;
-	double x, y;
+	
+	Color[] primary = {new Color(0xFFd0b747), new Color(0xFF299ad0), new Color(0xFF05d993), new Color(0xFFd70e48)};
+	
+	
 	public static void main(String[] args) {
-		GameContainer gc = new GameContainer(new test(), 600, 400, 1, "test");
+		GameContainer gc = new GameContainer(new test(), 300, 200, 3, "test");
 		gc.start();
 	}
 
 	public void init(GameContainer gc, Graphic r) {
-		r.bgColor = Color.red.darker();
-		this.gc = gc;
+		r.clear();
+		for (int i = 0; i < primary.length; i++) {
+			int x1 = (int)(Math.random()*gc.width);
+			int x2 = (int)(Math.random()*gc.width);
+			int y1 = (int)(Math.random()*gc.height);
+			int y2 = (int)(Math.random()*gc.height);
+			r.drawLine(x1, x2, y1, y2, 0, primary[i]);
+		}
 	}
 	
 	public void update(GameContainer gc, long dt) {
-		if (gc.input.isKey(KeyEvent.VK_W)) y+=0.1;
-		if (gc.input.isKey(KeyEvent.VK_S)) y-=0.1;
-		if (gc.input.isKey(KeyEvent.VK_A)) x+=0.1;
-		if (gc.input.isKey(KeyEvent.VK_D)) x-=0.1;
+		
 	}
 	
 	public void render(GameContainer gc, Graphic r) {
-		r.clear();
-		double z = Math.sin((double)x/2) + Math.sin((double)y/2)+1;
-		int[] uv = project(x, y, z);
-		
-		Graphic[] tiles = new Graphic[] {Graphic.fromImage("tileSet/grass.png")};
-		for (int i = -50; i < 40; i++) for (int j = 40; j >= -50; j--) {
-			z = Math.sin((double)i/2) + Math.sin((double)j/2);
-			uv = project(i, j, z);
-			r.drawGraphic(tiles[0], uv[0]-tiles[0].pixelWidth/2, uv[1]-tiles[0].pixelHeight/2, j-i-z);
-		}
-		r.drawCircle(uv[0], uv[1], y-x-z, 20, Color.red, true, 1);
-		r.drawGraphic(r.getZBuffer(), 0, 0, Integer.MIN_VALUE);
-	}
-
-	public int[] project(double x, double y, double z) {
-		int u, v;
-		u = (int) Math.round(8 * x + 8 * y);
-		v = (int) Math.round(4 * x - 4 * y - 8 * z);
-		u += gc.width / 2;
-		v += gc.height-100;
-		return new int[] { u, v };
 	}
 }
