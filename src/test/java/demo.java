@@ -1,29 +1,22 @@
 
-
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-
 import com.danick.e2.main.AbstractGame;
 import com.danick.e2.main.GameContainer;
-import com.danick.e2.math.OrthographicProjection;
+import com.danick.e2.renderer.E2Color;
 import com.danick.e2.renderer.Graphic;
-import com.danick.e2.renderer.Graphic3D.Model3D;
-import com.danick.e2.renderer.Renderer3D;
 
 public class demo extends AbstractGame{
 	
-	Color[] primary = {new Color(0xFFd0b747), new Color(0xFF299ad0), new Color(0xFF05d993), new Color(0xFFd70e48)};
+	E2Color[] primary = {new E2Color(0xFFd0b747), new E2Color(0xFF299ad0), new E2Color(0xFF05d993), new E2Color(0xFFd70e48)};
 	
 	
 	public static void main(String[] args) {
 		GameContainer gc = new GameContainer(new demo(), 300, 200, 3, "test");
 		gc.start();
-		Color c = new Color(0x00AABBCC);
+		E2Color c = new E2Color(0x00AABBCC);
 		System.out.println(c.getAlpha());
-		c = new Color(0xFFAABBCC);
+		c = new E2Color(0xFFAABBCC);
 		System.out.println(c.getAlpha());
-		c = new Color(0x9FAABBCC);
+		c = new E2Color(0x9FAABBCC);
 		System.out.println(c.getAlpha());
 	}
 
