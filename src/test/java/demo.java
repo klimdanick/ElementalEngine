@@ -1,19 +1,12 @@
 
-
-import java.awt.Color;
-import java.awt.event.KeyEvent;
-import java.util.ArrayList;
-
 import com.danick.e2.main.AbstractGame;
 import com.danick.e2.main.GameContainer;
-import com.danick.e2.math.OrthographicProjection;
+import com.danick.e2.renderer.E2Color;
 import com.danick.e2.renderer.Graphic;
-import com.danick.e2.renderer.Graphic3D.Model3D;
-import com.danick.e2.renderer.Renderer3D;
 
 public class demo extends AbstractGame{
 	
-	Color[] primary = {new Color(0xFFd0b747), new Color(0xFF299ad0), new Color(0xFF05d993), new Color(0xFFd70e48)};
+	E2Color[] primary = {new E2Color(0xAAd0b747), new E2Color(0xAA299ad0), new E2Color(0xAA05d993), new E2Color(0xAAd70e48)};
 	
 	
 	public static void main(String[] args) {
@@ -28,7 +21,7 @@ public class demo extends AbstractGame{
 			int x2 = (int)(Math.random()*gc.width);
 			int y1 = (int)(Math.random()*gc.height);
 			int y2 = (int)(Math.random()*gc.height);
-			r.drawLine(x1, x2, y1, y2, 0, primary[i]);
+			r.drawRectangle(x1, y1, x2, y2, 0, primary[i]);
 		}
 	}
 	
