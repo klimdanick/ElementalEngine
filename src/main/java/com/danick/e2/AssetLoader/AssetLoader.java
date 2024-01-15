@@ -3,7 +3,6 @@ package com.danick.e2.AssetLoader;
 import com.danick.e2.renderer.Graphic;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import jdk.jshell.spi.ExecutionControl;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -125,11 +124,11 @@ public class AssetLoader{
             else if(item.type.equals("Object"))
                 loadedFiles.put(item.key, new ObjectInputStream(inputStream));
             else
-                throw new ExecutionControl.NotImplementedException(item.type + " Type is not implemented" );
+                throw new Exception("Type not implemented");
         }
         catch (IOException e){
             e.printStackTrace();
-        } catch (ExecutionControl.NotImplementedException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
         return loadedFiles.get(item.key);
