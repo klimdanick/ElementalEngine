@@ -6,7 +6,12 @@ import com.danick.e2.renderer.Graphic;
 
 public class demo extends AbstractGame{
 	
-	E2Color[] primary = {new E2Color(0xAAd0b747), new E2Color(0xAA299ad0), new E2Color(0xAA05d993), new E2Color(0xAAd70e48)};
+	E2Color[] primary = {
+			E2Color.AQUA_GREEN,
+			E2Color.CURIOS_BLUE,
+			E2Color.DEBIAN_RED,
+			E2Color.TURMERIC_YELLOW
+	};
 	
 	
 	public static void main(String[] args) {

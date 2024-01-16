@@ -5,7 +5,7 @@
   "textures": [
     {
       "key": "1",
-      "filename": "grass.png",
+      "filename": "grass_full.png",
       "path": "tileSet/",
       "type": "Image",
       "init": true

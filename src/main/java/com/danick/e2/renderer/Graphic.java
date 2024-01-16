@@ -19,7 +19,7 @@ public class Graphic extends Thread{
 	public GameContainer gc;
 	private Font Font = com.danick.e2.renderer.Font.STANDARD;
 	
-	public Color bgColor = new Color(0xFF081017);
+	public Color bgColor = E2Color.CINDER_BLACK;
 	
 	public static int transparent = 0xffff00ff;
 	public int checkerPatternWidth = 10;
