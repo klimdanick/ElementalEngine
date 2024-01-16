@@ -93,7 +93,7 @@ public class AssetLoader{
         if(supList == null)
             return;
 
-        for (var item : supList) {
+        for (AssetItem item : supList) {
             LoadAsset(item);
         }
     }
