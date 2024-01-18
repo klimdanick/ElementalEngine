@@ -16,5 +16,14 @@ public class E2Color extends Color {
 	public E2Color(int rgb) {
 		super(rgb, true);
 	}
+	
+	public E2Color(int red, int green, int blue, int alpha) {
+		super(red, green, blue, alpha);
+		
+	}
+
+	public E2Color changeAlpha(int Alpha) {
+		return new E2Color(this.getRed(), this.getGreen(), this.getBlue(), Alpha);
+	}
 
 }

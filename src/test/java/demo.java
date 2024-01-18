@@ -20,18 +20,19 @@ public class demo extends AbstractGame{
 	}
 
 	public void init(GameContainer gc, Graphic r) {
+		
+	}
+	
+	public void update(GameContainer gc, long dt) {
 		r.clear();
 		for (int i = 0; i < primary.length; i++) {
+			primary[i] = primary[i].changeAlpha(0xAA);
 			int x1 = (int)(Math.random()*gc.width);
 			int x2 = (int)(Math.random()*gc.width);
 			int y1 = (int)(Math.random()*gc.height);
 			int y2 = (int)(Math.random()*gc.height);
 			r.drawRectangle(x1, y1, x2, y2, 0, primary[i]);
 		}
-	}
-	
-	public void update(GameContainer gc, long dt) {
-		
 	}
 	
 	public void render(GameContainer gc, Graphic r) {
