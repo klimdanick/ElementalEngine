@@ -28,7 +28,6 @@ hs_err_pid*
 /src/bin/
 
 .project
-.classpath
 .settings
 /.idea/
 /ElementalEngine.iml
