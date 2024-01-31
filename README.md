@@ -40,7 +40,7 @@ Detailed documentation is available under the Wiki tab on github. Here are some 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 Contact
-For questions or support, please make a new issue on github, send an email to github@klimdanick.nl or join the discord: ...
+For questions or support, please make a new issue on github, send an email to github@klimdanick.nl or join the discord: https://discord.gg/uv3bmpajYA
 
 for more information about the lead developer:
 https://klimdanick.nl
