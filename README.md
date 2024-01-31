@@ -18,7 +18,7 @@ Whenever you look at a game made with unity, you instantly know it is made with 
 
 ### Prerequisites
 
-- Java Development Kit (JDK) .. or later
+- Java Development Kit (JDK) 16 or later
 - Java IDE like Eclipse or IntelliJ.
 
 ### Installation
