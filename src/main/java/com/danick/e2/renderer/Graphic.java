@@ -218,7 +218,7 @@ public class Graphic extends Thread{
 	}
 
 	private boolean isOutOfBounds(Graphic r, double offX, double offY){
-		return (offX + this.transX < -r.pixelWidth || offY + this.transY < -r.pixelHeight || offX + this.transX >= pixelWidth || offY + this.transY >= pixelHeight);
+		return (offX - this.transX < -r.pixelWidth || offY - this.transY < -r.pixelHeight || offX - this.transX >= pixelWidth || offY - this.transY >= pixelHeight);
 	}
 	
 	public void drawGraphic(Graphic renderer, double offX, double offY, double offZ) {
