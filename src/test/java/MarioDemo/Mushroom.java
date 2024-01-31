@@ -44,7 +44,10 @@ public class Mushroom extends Item {
 	public void render(Graphic graphic) {
 		graphic.drawCircle(width/2, height/2-1, 0, width/2, new Color(0xffab1200), true, 10);
 		graphic.drawCircle(width/2, height/2+2, 0, width/2-2, Color.white, true, 10);
-		
 	}
 	
+	@Override
+	public void pickUp() {
+		gc.removeObject(this);
+	}
 }

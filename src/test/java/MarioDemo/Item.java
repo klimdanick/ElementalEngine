@@ -19,5 +19,9 @@ public class Item extends GameObject {
 	public void render(Graphic graphic) {
 
 	}
+	
+	public void pickUp() {
+		
+	}
 
 }

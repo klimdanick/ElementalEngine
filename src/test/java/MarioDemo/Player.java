@@ -26,15 +26,25 @@ public class Player extends GameObject {
 		
 		ySpd+=0.05;
 		yMove+=ySpd;
+		
+		if (collide(0, yMove) instanceof Item) ((Item)collide(0, yMove)).pickUp();
+		
 		int loop = 100;
 		while(collide(0, yMove) != null && loop-- > 0) {
 			yMove-=Math.signum(yMove)*0.1;
 			ySpd = 0;
 		}
+		
+		if (collide(xMove, 0) instanceof Item) ((Item)collide(xMove, 0)).pickUp();
+		
 		loop = 100;
 		while((collide(xMove, 0) != null || x+xMove < 0) && loop-- > 0) xMove-=Math.signum(xMove)*0.1;
 		x+=xMove;
 		y+=yMove;
+		
+		for (int i = -1; i <= 1; i++)
+			for (int j = -1; j <= 1; j++)
+				if (collide(i, j) instanceof Item) ((Item)collide(i, j)).pickUp();
 	}
 
 	@Override
