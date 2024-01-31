@@ -12,6 +12,10 @@ public class QBlock extends Block {
 		super(x, y);
 	}
 	
+	public QBlock(int x, int y, Item HoldItem) {
+		super(x, y, HoldItem);
+	}
+	
 	public void render(Graphic graphic) {
 		graphic.clear();
 		graphic.drawRectangle(0, 0, width, height, 100, new Color(0xffef9644));
@@ -21,5 +25,10 @@ public class QBlock extends Block {
 	
 	public void hit() {
 		hit = true;
+		if (HoldItem != null) {
+			gc.addObject(HoldItem);
+			HoldItem.y-=3;
+		}
+		this.HoldItem = null;
 	}
 }

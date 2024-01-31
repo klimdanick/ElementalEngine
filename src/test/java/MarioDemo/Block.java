@@ -8,8 +8,15 @@ import com.danick.e2.renderer.Graphic;
 
 public class Block extends GameObject {
 	
+	Item HoldItem;
+	
 	public Block(int x, int y) {
 		super(x*10, y*10, 10, 10);
+	}
+	
+	public Block(int x, int y, Item HoldItem) {
+		super(x*10, y*10, 10, 10);
+		this.HoldItem = HoldItem;
 	}
 
 	@Override
