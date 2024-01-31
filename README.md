@@ -29,14 +29,14 @@ Add the jar to the classpath of a new project.
 
 Run the example game:
 
-###Documentation###
+###Documentation
 Detailed documentation is available under the Wiki tab on github. Here are some key sections:
 
 ....
 ....
 ....
 
-###License###
+###License##
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 Contact
