@@ -12,8 +12,8 @@ public class Player extends GameObject {
 	
 	double ySpd = 0;
 
-	public Player(int x, int y) {
-		super(x*10, y*10, 10, 10);
+	public Player(double x, double y, int height) {
+		super((int)(x*10), (int)(y*10), 10, height*10);
 	}
 
 	@Override
@@ -38,7 +38,11 @@ public class Player extends GameObject {
 		if (collide(xMove, 0) instanceof Item) ((Item)collide(xMove, 0)).pickUp();
 		
 		loop = 100;
-		while((collide(xMove, 0) != null || x+xMove < 0) && !(collide(0, yMove) instanceof Item) && loop-- > 0) xMove-=Math.signum(xMove)*0.1;
+		while((collide(xMove, 0) != null || x+xMove < 0) && loop-- > 0) {
+			if ((collide(0, xMove) instanceof Item)) break;
+			if ((collide(0, xMove) instanceof Enemy)) break;
+			xMove-=Math.signum(xMove)*0.1;
+		}
 		x+=xMove;
 		y+=yMove;
 		

@@ -49,5 +49,8 @@ public class Mushroom extends Item {
 	@Override
 	public void pickUp() {
 		gc.removeObject(this);
+		gc.removeObject(Main.p);
+		Main.p = new Player(x/10, y/10-1, 2);
+		gc.addObject(Main.p);
 	}
 }

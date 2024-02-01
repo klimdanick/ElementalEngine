@@ -1,5 +1,6 @@
 package MarioDemo;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 
 import com.danick.e2.main.AbstractGame;
@@ -8,11 +9,12 @@ import com.danick.e2.objects.GameObject;
 import com.danick.e2.renderer.Graphic;
 
 public class Main extends AbstractGame {
-	Player p;
+	public static Player p;
 	@Override
 	public void init(GameContainer gc, Graphic r) {
+		r.bgColor = new Color(0xff6888f8);
 		for (GameObject o : gc.getObjects()) gc.removeObject(o);
-		p = new Player(1, 15);
+		p = new Player(1, 15, 1);
 		gc.addObject(p);
 		
 		gc.addObject(new Wall(-1, 17, 54, 4));
@@ -68,6 +70,12 @@ public class Main extends AbstractGame {
 		for (int y = 0; y < 8; y++) for (int x = y; x < 8; x++) gc.addObject(new Block(167+x, 16-y));
 		for (int y = 0; y < 8; y++) gc.addObject(new Block(175, 16-y));
 		gc.addObject(new Block(184, 16));
+		
+		
+		gc.addObject(new Goomba(11, 15));
+		gc.addObject(new Goomba(17, 15));
+		gc.addObject(new Goomba(35, 15));
+		gc.addObject(new Goomba(37, 15));
 	}
 
 	@Override
