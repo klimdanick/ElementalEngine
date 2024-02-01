@@ -21,15 +21,16 @@ public class Main extends AbstractGame {
 		gc.addObject(new Wall(141, 17, 50, 4));
 		gc.addObject(new Pipe(15, 15, 2));
 		gc.addObject(new Block(12, 13));
-		gc.addObject(new QBlock(11, 13, new Mushroom(11, 12)));
+		gc.addObject(new QBlock(11, 13));
 		gc.addObject(new Block(10, 13));
-		gc.addObject(new QBlock(9, 13));
+		gc.addObject(new QBlock(9, 13, new Mushroom(9, 12)));
 		gc.addObject(new Block(8, 13));
 		gc.addObject(new QBlock(5, 13));
 		gc.addObject(new QBlock(10, 9));
 		gc.addObject(new Pipe(24, 14, 3));
 		gc.addObject(new Pipe(31, 13, 4));
 		gc.addObject(new Pipe(41, 13, 4));
+		gc.addObject(new QBlock(48, 12, new OneUp(48, 11)));
 		gc.addObject(new Block(62, 13));
 		gc.addObject(new QBlock(63, 13));
 		gc.addObject(new Block(64, 13));

@@ -22,7 +22,7 @@ public class Player extends GameObject {
 		double xMove = 0;
 		if (gc.input.isKey(KeyEvent.VK_D)) xMove+=0.7;
 		if (gc.input.isKey(KeyEvent.VK_A)) xMove-=0.7;
-		if ((gc.input.isKey(KeyEvent.VK_SPACE) || gc.input.isKey(KeyEvent.VK_W)) && collide(0, 1) != null) ySpd=-2.1;
+		if ((gc.input.isKeyDown(KeyEvent.VK_SPACE) || gc.input.isKeyDown(KeyEvent.VK_W)) && collide(0, 1) != null) ySpd=-2.1;
 		
 		ySpd+=0.05;
 		yMove+=ySpd;
@@ -30,7 +30,7 @@ public class Player extends GameObject {
 		if (collide(0, yMove) instanceof Item) ((Item)collide(0, yMove)).pickUp();
 		
 		int loop = 100;
-		while(collide(0, yMove) != null && loop-- > 0) {
+		while(collide(0, yMove) != null && !(collide(0, yMove) instanceof Item) && loop-- > 0) {
 			yMove-=Math.signum(yMove)*0.1;
 			ySpd = 0;
 		}
@@ -38,7 +38,7 @@ public class Player extends GameObject {
 		if (collide(xMove, 0) instanceof Item) ((Item)collide(xMove, 0)).pickUp();
 		
 		loop = 100;
-		while((collide(xMove, 0) != null || x+xMove < 0) && loop-- > 0) xMove-=Math.signum(xMove)*0.1;
+		while((collide(xMove, 0) != null || x+xMove < 0) && !(collide(0, yMove) instanceof Item) && loop-- > 0) xMove-=Math.signum(xMove)*0.1;
 		x+=xMove;
 		y+=yMove;
 		
@@ -49,7 +49,8 @@ public class Player extends GameObject {
 
 	@Override
 	public void render(Graphic graphic) {
-		graphic.drawRectangle(0, 0, width, height, 0, new Color(0xffab1200));
+		graphic.clear();
+		graphic.drawRectangle(0, 0, width, height, 0, new E2Color(0xffab1200));
 	}
 
 }
