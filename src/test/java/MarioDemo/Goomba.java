@@ -25,13 +25,13 @@ public class Goomba extends Enemy {
 		ySpd+=0.05;
 		yMove+=ySpd;
 		
-		int loop = 100;
+		int loop = 50;
 		while(collide(0, yMove) != null && !(collide(0, yMove) instanceof Item) && loop-- > 0) {
 			yMove-=Math.signum(yMove)*0.1;
 			ySpd = 0;
 		}
 		
-		loop = 100;
+		loop = 50;
 		while((collide(xMove, 0) != null || x+xMove < 0) && loop-- > 0) {
 			if (collide(0, yMove) instanceof Item) break;
 			if (collide(1, 0) != null && (collide(1, 0) instanceof Player)) {gc.game.init(gc, gc.game.r); break;}
