@@ -97,6 +97,7 @@ public class Graphic extends Thread{
 	
 	public void background() {
 		for (int x = transX; x < pixelWidth+transX; x++) for (int y = transY; y < pixelHeight+transY; y++) {
+			if (x-transX+((y-transY)*pixelWidth) > zBuffer.length) continue;
 			zBuffer[x-transX+((y-transY)*pixelWidth)] = Integer.MAX_VALUE;
 			if (Math.abs(Math.round(y/(float)(checkerPatternHeight)))%2 == Math.abs(Math.round(x/(float)(checkerPatternWidth)))%2) setPixel(x, y, Integer.MAX_VALUE, bgColor);
 			else setPixel(x, y, Integer.MAX_VALUE, bgColor.darker());
@@ -323,7 +324,7 @@ public class Graphic extends Thread{
 		  }
 		  points[points2.length] = points[0];
 		  
-		  for (int i = 0; i < 4; i++) {
+		  for (int i = 0; i < points2.length; i++) {
 			  this.drawLine(points[i][0]+x, points[i][1]+y, points[i+1][0]+x, points[i+1][1]+y, z, c);
 		  }
 	}
