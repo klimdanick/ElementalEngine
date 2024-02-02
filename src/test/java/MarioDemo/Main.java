@@ -34,7 +34,7 @@ public class Main extends AbstractGame {
 		gc.addObject(new Pipe(41, 13, 4));
 		gc.addObject(new QBlock(48, 12, new OneUp(48, 11)));
 		gc.addObject(new Block(62, 13));
-		gc.addObject(new QBlock(63, 13, new Mushroom(63, 12)));
+		gc.addObject(new QBlock(63, 13));
 		gc.addObject(new Block(64, 13));
 		for (int x = 65; x < 73; x++) gc.addObject(new Block(x, 9));
 		for (int x = 76; x < 80; x++) gc.addObject(new Block(x, 9));
@@ -45,7 +45,7 @@ public class Main extends AbstractGame {
 		gc.addObject(new QBlock(92, 13));
 		gc.addObject(new QBlock(95, 13));
 		gc.addObject(new QBlock(98, 13));
-		gc.addObject(new QBlock(95, 9, new Mushroom(95, 8)));
+		gc.addObject(new QBlock(95, 9));
 		gc.addObject(new Block(104, 13));
 		gc.addObject(new Block(107, 9));
 		gc.addObject(new Block(108, 9));
@@ -76,8 +76,6 @@ public class Main extends AbstractGame {
 		gc.addObject(new Goomba(17, 15));
 		gc.addObject(new Goomba(35, 15));
 		gc.addObject(new Goomba(37, 15));
-		gc.addObject(new Goomba(65, 7));
-		gc.addObject(new Goomba(67, 7));
 	}
 
 	@Override
