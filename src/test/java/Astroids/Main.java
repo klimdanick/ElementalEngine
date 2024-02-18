@@ -27,7 +27,8 @@ public class Main extends AbstractGame {
 	}
 
 	public static void main(String[] args) {
-		GameContainer gc = new GameContainer(new Main(), 300, 300, 2f, "Astroid");
+		float f = 3;
+		GameContainer gc = new GameContainer(new Main(), (int)(1920/f), (int)(1040/f), f, "Astroid");
 		gc.start();
 	}
 
