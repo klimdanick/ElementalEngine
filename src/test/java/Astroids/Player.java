@@ -10,7 +10,7 @@ import com.danick.e2.renderer.Graphic;
 
 public class Player extends GameObject {
 	
-	double dir = Math.PI;
+	double dir = 0;
 
 	public Player() {
 		super(Main.gc.width/2, Main.gc.height/2, 11, 11);
@@ -20,18 +20,18 @@ public class Player extends GameObject {
 	public void update(GameContainer gc) {
 		x+=Math.cos(dir)*0.1;
 		y+=Math.sin(dir)*0.1;
-		if (gc.input.isKey(KeyEvent.VK_A)) dir-=0.1;
-		if (gc.input.isKey(KeyEvent.VK_D)) dir+=0.1;
+		if (gc.input.isKey(KeyEvent.VK_A)) dir-=0.01;
+		if (gc.input.isKey(KeyEvent.VK_D)) dir+=0.01;
 	}
 
 	@Override
 	public void render(Graphic graphic) {
 		graphic.clear();
 		int[][] shape = new int[][] {
-			{(int) (width-width/4), (int) (height/2)},
-			{(int) (width-1), (int) (height-1)},
-			{0, (int) (height/2)},
-			{(int) (width-1), 0}};
+			{(int) (width/4), (int) (height/2)},
+			{(int) (0), (int) (height-1)},
+			{(int) (width-1), (int) (height/2)},
+			{(int) (0), 0}};
 		graphic.drawPoly(rotateShape(shape, dir), E2Color.AQUA_GREEN, 0, 0, 0);
 	}
 	
