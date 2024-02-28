@@ -70,7 +70,7 @@ public class NetworkPort {
 					
 					if (msg.index >= msg.data.length) {
 						//System.out.println("sending " + buffer[3] + " parts");
-						System.out.println("SEND to port "+DpSend.getPort()+": " + new String(msg.data));
+						//System.out.println("SEND to port "+DpSend.getPort()+": " + new String(msg.data));
 						senMsgs.poll();
 						msg = null;
 					}
@@ -100,7 +100,7 @@ public class NetworkPort {
 						m.sendPort = DpReceive.getPort();
 						//System.out.println("part "+m.part+"/"+receive[3]);
 						if (m.part == receive[3]) {
-							System.out.println("RESC from port "+m.sendPort+": " + m);
+							//System.out.println("RESC from port "+m.sendPort+": " + m);
 							if (MREs.containsKey(m.type)) MREs.get(m.type).onMessage(m);
 						}
 					} catch (IOException e) {

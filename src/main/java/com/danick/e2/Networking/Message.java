@@ -6,7 +6,7 @@ import java.net.InetAddress;
 public class Message {
 	
 	public static byte HEADER_SIZE = 4;
-	public static int MAX_BUFFER_SIZE = 20;
+	public static int MAX_BUFFER_SIZE = 1000;
 	public static byte FOOTER_SIZE = 4;
 	
 	public byte id;

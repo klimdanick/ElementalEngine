@@ -1,6 +1,7 @@
 package Astroids;
 
 import java.awt.Color;
+import java.nio.ByteBuffer;
 
 import com.danick.e2.main.GameContainer;
 import com.danick.e2.objects.GameObject;
@@ -33,30 +34,31 @@ public class Astroid extends GameObject {
 	
 	int[] beginPos = null;
 	public int[] calcBeginPos() {
-		if (beginPos == null) {
+		if (beginPos == null) if (Main.gc != null) {
 			beginPos = new int[2];
 			do {
 				beginPos[0] = (int) ((Math.random()*(Main.gc.width+200))-100);
 				beginPos[1] = (int) ((Math.random()*(Main.gc.height+200))-100);
 			} while((beginPos[0] > 0 && beginPos[0] < Main.gc.width) && 
 					(beginPos[1] > 0 && beginPos[1] < Main.gc.height));
-		}
+		} else beginPos = new int[]{10, 10};
 		return beginPos;
 	}
 	
 	int[] targetPos = null;
 	public int[] calcTargetPos() {
-		if (targetPos == null) {
+		if (targetPos == null) if (Main.gc != null) {
 			targetPos = new int[2];
 			targetPos[0] = (int) ((Math.random()*Main.gc.width-20)+10);
 			targetPos[1] = (int) ((Math.random()*Main.gc.height-20)+10);
-		}
+		} else targetPos = new int[]{0, 0};
 		return targetPos;
 	}
 
 	public void update(GameContainer gc) {
 		x+=Math.cos(dir)*speed;
 		y+=Math.sin(dir)*speed;
+		if (Main.gc == null) return;
 		if (x < -100 || x > Main.gc.width+100 ||
 			y < -100 || y > Main.gc.height+100) {
 			Main.gc.removeObject(this);
@@ -76,5 +78,25 @@ public class Astroid extends GameObject {
 		}
 		points[points.length-1]=points[0];
 		return points;
+	}
+	
+	public byte[] serialize() {
+		byte[] bytes = new byte[4*radiusus.length+2*8+2*4];
+		for (int i = 0; i < radiusus.length; i++) {
+			byte[] intBytes = ByteBuffer.allocate(4).putInt(radiusus[i]).array();
+			for (int b = 0; b < 4; b++) bytes[i*4+b] = intBytes[b];
+		}
+		
+		byte[] dirBytes = ByteBuffer.allocate(8).putDouble(dir).array();
+		for (int b = 0; b < 8; b++) bytes[radiusus.length*4+b] = dirBytes[b];
+		byte[] speedBytes = ByteBuffer.allocate(8).putDouble(speed).array();
+		for (int b = 0; b < 8; b++) bytes[radiusus.length*4+8+b] = speedBytes[b];
+		
+		byte[] xBytes = ByteBuffer.allocate(4).putInt((int)x).array();
+		for (int b = 0; b < 4; b++) bytes[radiusus.length*4+8+8+b] = xBytes[b];
+		byte[] yBytes = ByteBuffer.allocate(4).putInt((int)y).array();
+		for (int b = 0; b < 4; b++) bytes[radiusus.length*4+8+8+4+b] = yBytes[b];
+		
+		return bytes;
 	}
 }
