@@ -34,23 +34,23 @@ public class Astroid extends GameObject {
 	
 	int[] beginPos = null;
 	public int[] calcBeginPos() {
-		if (beginPos == null) if (Main.gc != null) {
+		if (beginPos == null) if (Main.gameContainer != null) {
 			beginPos = new int[2];
 			do {
-				beginPos[0] = (int) ((Math.random()*(Main.gc.width+200))-100);
-				beginPos[1] = (int) ((Math.random()*(Main.gc.height+200))-100);
-			} while((beginPos[0] > 0 && beginPos[0] < Main.gc.width) && 
-					(beginPos[1] > 0 && beginPos[1] < Main.gc.height));
+				beginPos[0] = (int) ((Math.random()*(Main.gameContainer.width+200))-100);
+				beginPos[1] = (int) ((Math.random()*(Main.gameContainer.height+200))-100);
+			} while((beginPos[0] > 0 && beginPos[0] < Main.gameContainer.width) && 
+					(beginPos[1] > 0 && beginPos[1] < Main.gameContainer.height));
 		} else beginPos = new int[]{10, 10};
 		return beginPos;
 	}
 	
 	int[] targetPos = null;
 	public int[] calcTargetPos() {
-		if (targetPos == null) if (Main.gc != null) {
+		if (targetPos == null) if (Main.gameContainer != null) {
 			targetPos = new int[2];
-			targetPos[0] = (int) ((Math.random()*Main.gc.width-20)+10);
-			targetPos[1] = (int) ((Math.random()*Main.gc.height-20)+10);
+			targetPos[0] = (int) ((Math.random()*Main.gameContainer.width-20)+10);
+			targetPos[1] = (int) ((Math.random()*Main.gameContainer.height-20)+10);
 		} else targetPos = new int[]{0, 0};
 		return targetPos;
 	}
@@ -58,10 +58,10 @@ public class Astroid extends GameObject {
 	public void update(GameContainer gc) {
 		x+=Math.cos(dir)*speed;
 		y+=Math.sin(dir)*speed;
-		if (Main.gc == null) return;
-		if (x < -100 || x > Main.gc.width+100 ||
-			y < -100 || y > Main.gc.height+100) {
-			Main.gc.removeObject(this);
+		if (Main.gameContainer == null) return;
+		if (x < -100 || x > Main.gameContainer.width+100 ||
+			y < -100 || y > Main.gameContainer.height+100) {
+			Main.gameContainer.removeObject(this);
 		}
 	}
 

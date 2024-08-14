@@ -6,6 +6,8 @@ import com.danick.e2.renderer.Graphic;
 
 public class demo extends AbstractGame{
 	
+	Graphic g;
+	
 	E2Color[] primary = {
 			E2Color.AQUA_GREEN,
 			E2Color.CURIOS_BLUE,
@@ -19,22 +21,26 @@ public class demo extends AbstractGame{
 		gc.start();
 	}
 
-	public void init(GameContainer gc, Graphic r) {
-		
+	public void init(Graphic r) {
+		g = Graphic.fromImage("bed_end.png");
 	}
 	
-	public void update(GameContainer gc, long dt) {
+	public void update(long dt) {
+	}
+	int x = 0;
+	public void render(Graphic r) {
+		x++;
+		this.gameContainer.frameRate = 30;
 		r.clear();
 		for (int i = 0; i < primary.length; i++) {
-			primary[i] = primary[i].changeAlpha(0xAA);
-			int x1 = (int)(Math.random()*gc.width);
-			int x2 = (int)(Math.random()*gc.width);
-			int y1 = (int)(Math.random()*gc.height);
-			int y2 = (int)(Math.random()*gc.height);
-			r.drawRectangle(x1, y1, x2, y2, 0, primary[i]);
+			primary[i] = primary[i].setAlpha(0xAA);
+			int x1 = (int)(Math.random()*gameContainer.width);
+			int x2 = (int)(Math.random()*gameContainer.width);
+			int y1 = (int)(Math.random()*gameContainer.height);
+			int y2 = (int)(Math.random()*gameContainer.height);
+			//r.drawRectangle(x1, y1, x2, y2, 0, primary[i]);
 		}
-	}
-	
-	public void render(GameContainer gc, Graphic r) {
+		g = g.setAlpha(x%254+1);
+		r.drawGraphic(g, 0.5*gameContainer.width, 0.5*gameContainer.height, 0);
 	}
 }

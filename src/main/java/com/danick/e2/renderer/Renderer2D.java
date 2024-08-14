@@ -1,6 +1,7 @@
 package com.danick.e2.renderer;
 
 import java.awt.image.DataBufferInt;
+import java.awt.image.Raster;
 import java.util.ConcurrentModificationException;
 
 import com.danick.e2.main.GameContainer;
@@ -27,7 +28,7 @@ public class Renderer2D extends Graphic{
 		long dt = newTime - prevTime;
 		while(true) {
 			try {	
-				gc.game.render(gc, this);
+				gc.game.render(this);
 			} catch (ConcurrentModificationException e) {}
 			gc.updateObjsR = false;
 			try {
@@ -37,7 +38,7 @@ public class Renderer2D extends Graphic{
 					if (obj.sprite instanceof Animation) {
 						((Animation) obj.sprite).update();
 					}
-					this.drawGraphic(obj.sprite, obj.x, obj.y, obj.z);
+					this.drawGraphic(obj.sprite, (int)obj.x, (int)obj.y, (int)obj.z);
 				}
 			} catch (ConcurrentModificationException e) {
 				System.err.println(e.getClass() + "in the render tread! \n Are you using GameObjects.remove() or GameObjects.add()?\nUse GameContainer.addObject() or GameContainer.removeObject() instead!");
@@ -60,5 +61,6 @@ public class Renderer2D extends Graphic{
 	public void clear() {
 		background();
 	}
+	
 	
 }

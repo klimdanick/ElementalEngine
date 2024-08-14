@@ -13,6 +13,7 @@ public class Graphic extends Thread{
 	
 	volatile public int pixelWidth, pixelHeight;
 	volatile public int[] pBuffer;
+	public int[][] clearBuffer = null;
 	volatile public int[] zBuffer;
 	public int transX = 0, transY = 0;
 	public boolean isDrawing = false;
@@ -21,7 +22,7 @@ public class Graphic extends Thread{
 	
 	public Color bgColor = E2Color.CINDER_BLACK;
 	
-	public static int transparent = 0xffff00ff;
+	public static int transparent = E2Color.CINDER_BLACK.setAlpha(0).hashCode();
 	public int checkerPatternWidth = 10;
 	public int checkerPatternHeight = 10;
 	public int toUpperCase = 32;
@@ -34,14 +35,14 @@ public class Graphic extends Thread{
 		pBuffer = new int[width*height];
 		zBuffer = new int[width*height];
 		for (int i = 0; i < width*height; i++) {
-			pBuffer[i] = 0xffff00ff;
+			pBuffer[i] = 0x00ffffff;
 			zBuffer[i] = Integer.MAX_VALUE;
 		}
 	}
 	
 	public static Graphic fromImage(String path) {
 		BufferedImage image = null;
-		
+		System.out.println("[GRAPHIC] loading: "+path);
 		try {
 			image = ImageIO.read(Graphic.class.getResourceAsStream("/" + path));
 		} catch (IOException e) {
@@ -59,7 +60,7 @@ public class Graphic extends Thread{
 
 	      for (int row = 0; row < graphic.pixelHeight; row++) {
 	         for (int col = 0; col < graphic.pixelWidth; col++) {
-	            if ((image.getRGB(col, row) >> alphaBitMask) == 0x00) graphic.pBuffer[col + row * graphic.pixelWidth] = 0xffff00ff;
+	            if ((image.getRGB(col, row) >> alphaBitMask) == 0x00) graphic.pBuffer[col + row * graphic.pixelWidth] = 0x00ffffff;
 	            else graphic.pBuffer[col + row * graphic.pixelWidth] = image.getRGB(col, row);
 	         }
 	      }
@@ -68,15 +69,19 @@ public class Graphic extends Thread{
 		return graphic;
 	}
 	public static Graphic fromImage(BufferedImage image) {
-		if(image == null)
+		System.out.println("[GRAPHIC] loading buffered image");
+		if(image == null) {
+			System.out.println("[GRAPHIC] buffered image was null");
 			return null;
-
+		}
+		
+		
 		Graphic graphic = new Graphic(image.getWidth(), image.getHeight());
 		int alphaBitMask = 24;
 
 		for (int row = 0; row < graphic.pixelHeight; row++) {
 			for (int col = 0; col < graphic.pixelWidth; col++) {
-				if ((image.getRGB(col, row) >> alphaBitMask) == 0x00) graphic.pBuffer[col + row * graphic.pixelWidth] = 0xffff00ff;
+				if ((image.getRGB(col, row) >> alphaBitMask) == 0x00) graphic.pBuffer[col + row * graphic.pixelWidth] = 0x00ffffff;
 				else graphic.pBuffer[col + row * graphic.pixelWidth] = image.getRGB(col, row);
 			}
 		}
@@ -86,54 +91,67 @@ public class Graphic extends Thread{
 	}
 
 	public void run() {}
-
 	
 	public void clear() {
-		for (int i = 0; i < pixelHeight*pixelWidth; i++) {
-			pBuffer[i] = this.transparent;
-			zBuffer[i] = Integer.MAX_VALUE;
+		if (clearBuffer == null) {
+			clearBuffer = new int[2][pBuffer.length];
+			for (int i = 0; i < pixelHeight*pixelWidth; i++) {
+				clearBuffer[0][i] = E2Color.CINDER_BLACK.setAlpha(0).hashCode();
+				clearBuffer[1][i] = Integer.MAX_VALUE;
+			}
 		}
+		for (int i = 0; i < pBuffer.length; i++) {
+			pBuffer[i] = clearBuffer[0][i];
+		}
+		zBuffer = clearBuffer[1].clone();
 	}
 	
 	public void background() {
-		for (int x = transX; x < pixelWidth+transX; x++) for (int y = transY; y < pixelHeight+transY; y++) {
-			if (x-transX+((y-transY)*pixelWidth) > zBuffer.length) continue;
-			zBuffer[x-transX+((y-transY)*pixelWidth)] = Integer.MAX_VALUE;
-			if (Math.abs(Math.round(y/(float)(checkerPatternHeight)))%2 == Math.abs(Math.round(x/(float)(checkerPatternWidth)))%2) setPixel(x, y, Integer.MAX_VALUE, bgColor);
-			else setPixel(x, y, Integer.MAX_VALUE, bgColor.darker());
-		} 
+		
+		if (clearBuffer == null) {
+			clearBuffer = new int[2][pBuffer.length];
+			for (int i = 0; i < pixelHeight*pixelWidth; i++) {
+				clearBuffer[0][i] = E2Color.CINDER_BLACK.hashCode();
+				clearBuffer[1][i] = Integer.MAX_VALUE;
+			}
+		}
+		for (int i = 0; i < pBuffer.length; i++) {
+			pBuffer[i] = clearBuffer[0][i];
+		}
+		zBuffer = clearBuffer[1].clone();
 	}
 	
-	public void setPixel(double X, double Y, double Z, int value) {
+	public void setPixel(int x, int y, int z, int value) {
+		/*
 		int x = (int) Math.round(X);
 		int y = (int) Math.round(Y);
 		int z = (int) Math.round(Z);
-		if((x - transX < 0 || x - transX >= pixelWidth || y - transY < 0 || y - transY >= pixelHeight)) {
+		*/
+		if((x - transX < 0 || x - transX >= pixelWidth || y - transY < 0 || y - transY >= pixelHeight))
 			return;
-		}
 		if ((x - transX) + (y - transY) * pixelWidth >= pBuffer.length) return;
 		if ((x - transX) + (y - transY) * pixelWidth < 0) return;
 		if (zBuffer[(x - transX) + (y - transY) * pixelWidth] < z) return;
 		Color c = new E2Color(value); 
-		Color cOld = new E2Color(pBuffer[(x - transX) + (y - transY) * pixelWidth]); 
-		//System.out.println(c.getAlpha());
 		if (c.getAlpha() == 0xFF) {
 			pBuffer[(x - transX) + (y - transY) * pixelWidth] = value;
 			zBuffer[(x - transX) + (y - transY) * pixelWidth] = z;
 		} else if (c.getAlpha() > 0) {
+			Color cOld = new E2Color(pBuffer[(x - transX) + (y - transY) * pixelWidth]); 
 			double Alpha = (double)c.getAlpha()/0xFF;
 			int R = (int) (c.getRed() * Alpha + cOld.getRed() * (1-Alpha));
 			int G = (int) (c.getGreen() * Alpha + cOld.getGreen() * (1-Alpha));
 			int B = (int) (c.getBlue() * Alpha + cOld.getBlue() * (1-Alpha));
 			pBuffer[(x - transX) + (y - transY) * pixelWidth] = new Color(R, G, B).hashCode();
+			//zBuffer[(x - transX) + (y - transY) * pixelWidth] = z;
 		}
 	}
 	
-	public void setPixel(double X, double Y, double Z, Color value) {
+	public void setPixel(int X, int Y, int Z, Color value) {
 		setPixel(X, Y, Z, value.hashCode());
 	}
 	
-	public void setPixel(double X, double Y, Color value) {
+	public void setPixel(int X, int Y, Color value) {
 		setPixel(X, Y, Integer.MAX_VALUE, value.hashCode());
 	}
 	
@@ -150,9 +168,9 @@ public class Graphic extends Thread{
 				System.err.print(x +", " + y);
 				System.err.println(" for canvas size: " + pixelWidth + ", " + pixelHeight);
 			}
-			return new Color(0);
+			return new E2Color(0);
 		}
-		return new Color(pBuffer[(x + transX) + (y + transY) * pixelWidth]);
+		return new E2Color(pBuffer[(x + transX) + (y + transY) * pixelWidth]);
 	}
 	
 	public Color getDepth(double X, double Y) {
@@ -182,22 +200,23 @@ public class Graphic extends Thread{
 		return zBuf;
 	}
 
-	public void drawText(String text, double offX, double offY, Color color) {
-		drawText(text, offX, offY, Integer.MAX_VALUE, color);
+	public void drawText(String text, int offX, int offY, Color color, boolean centered) {
+		drawText(text, offX, offY, Integer.MAX_VALUE, color, centered);
 	}	
-	public void drawText(String text, double offX, double offY, double zBuf, Color color) {
+	public void drawText(String text, int offX, int offY, int zBuf, Color color, boolean centered) {
 		
 		Graphic fontImage = Font.getFontImage();
 		
 		text= text.toUpperCase();
 		int offset = 0;
-		
-		for(int i = 0; i < text.length(); i++) {
-			int unicode = text.codePointAt(i) - toUpperCase;
-			offset += Font.getWidths()[unicode];
+		if (centered) {
+			for(int i = 0; i < text.length(); i++) {
+				int unicode = text.codePointAt(i) - toUpperCase;
+				offset += Font.getWidths()[unicode];
+			}
+			offX-=offset/2;
+			offY-=Font.getFontImage().pixelHeight/2;
 		}
-		offX-=offset/2;
-		offY-=Font.getFontImage().pixelHeight/2;
 		offset = 0;
 		
 		for(int i = 0; i < text.length(); i++) {
@@ -218,25 +237,33 @@ public class Graphic extends Thread{
 		this.Font = Font;
 	}
 
-	private boolean isOutOfBounds(Graphic r, double offX, double offY){
+	private boolean isOutOfBounds(Graphic r, int offX, int offY){
 		return (offX - this.transX < -r.pixelWidth || offY - this.transY < -r.pixelHeight || offX - this.transX >= pixelWidth || offY - this.transY >= pixelHeight);
 	}
 	
-	public void drawGraphic(Graphic renderer, double offX, double offY, double offZ) {
+	public boolean isInBounds(int x, int y) {
+		return x > 0 && y > 0 && x < pixelWidth && y < pixelHeight;
+	}
+	/*
+	public void drawGraphic(LightableGraphic renderer, double offX, double offY, double offZ) {
+		drawGraphic(renderer.render(), offX, offY, offZ);
+	}*/	
+	public void drawGraphic(Graphic renderer, int offX, int offY, int offZ) {
 
 		if (isOutOfBounds(renderer, offX, offY)) return;
-		
-		for (int y = 0; y < renderer.pixelHeight; y++) {
-			for (int x = 0; x < renderer.pixelWidth; x++) {
-				if (!(renderer.pBuffer[x + y * renderer.pixelWidth] == 0xffff00ff)) setPixel((x) + offX, (y) + offY, offZ, renderer.pBuffer[x + y * renderer.pixelWidth]);
+		int height = renderer.pixelHeight;
+		int width = renderer.pixelWidth;
+		for (int y = -1; ++y < height;) {
+			for (int x = -1; ++x < width;) {
+				setPixel((x) + offX, (y) + offY, offZ, renderer.pBuffer[x + y * renderer.pixelWidth]);
 			}
 		}
 	}
 
 
-	public void drawRectangle(double x1, double y1, double x2, double y2, double z, Color value) {
-		for (double x = Math.min(x1, x2); x < Math.max(x1, x2); x++) {
-			for (double y = Math.min(y1, y2); y < Math.max(y1, y2); y++) {
+	public void drawRectangle(int x1, int y1, int x2, int y2, int z, Color value) {
+		for (int x = Math.min(x1, x2); x < Math.max(x1, x2); x++) {
+			for (int y = Math.min(y1, y2); y < Math.max(y1, y2); y++) {
 				setPixel(x, y, z, value);
 			}
 		}
@@ -247,7 +274,7 @@ public class Graphic extends Thread{
 		transY += y;
 	}
 	
-	public void drawCircle(double x, double y, double z, double radius, Color value, boolean fill, double thinkness) {
+	public void drawCircle(int x, int y, int z, int radius, Color value, boolean fill, double thinkness) {
 		for (int X = (int) (x - radius); X < x+radius; X++) {
 			for (int Y = (int) (y - radius); Y < y+radius; Y++) {
 				double dist = (X-x)*(X-x)+(Y-y)*(Y-y);
@@ -446,9 +473,47 @@ public class Graphic extends Thread{
 			double X = Math.cos(angle)*x1+Math.sin(angle)*y1;
 			double Y = -Math.sin(angle)*x1+Math.cos(angle)*y1;
 			
-			newGraphic.setPixel(Math.floor(X+pixelWidth/2.0), Math.floor(Y+pixelHeight/2.0), getPixel(x, y));
-			newGraphic.setPixel(Math.floor(X+pixelWidth/2.0+1.0), Math.floor(Y+pixelHeight/2.0), getPixel(x, y));
+			newGraphic.setPixel((int)Math.floor(X+pixelWidth/2.0), (int)Math.floor(Y+pixelHeight/2.0), getPixel(x, y));
+			newGraphic.setPixel((int)Math.floor(X+pixelWidth/2.0+1.0), (int)Math.floor(Y+pixelHeight/2.0), getPixel(x, y));
 		}
 		return newGraphic;
+	}
+	
+	public Graphic outline() {return outline(Color.white);}
+	public Graphic outline(Color c) {
+		Graphic newG = new Graphic(pixelWidth, pixelHeight);
+		
+		newG.pBuffer = this.pBuffer.clone();
+		newG.zBuffer = this.zBuffer.clone();
+		
+		for (int x = 0; x < pixelWidth; x++) {
+			for (int y = 0; y < pixelHeight; y++) {
+				int alpha = newG.getPixel(x, y).getAlpha();
+				if (alpha == 0x00) {
+					boolean edge = false;
+					for (int _x = -1; _x <= 1 && !edge; _x++) {
+						for (int _y = -1; _y <= 1 && !edge; _y++) {
+							if (!newG.isInBounds(x+_x, y+_y)) continue;
+							
+							int _a = getPixel(x+_x, y+_y).getAlpha();
+							
+							edge = _a != 0;
+						}
+					}
+					if (edge) newG.setPixel(x, y, c);
+				}
+			}
+		}
+		return newG;
+	}
+
+	public Graphic setAlpha(int alpha) {
+		Graphic ret = new Graphic(this.pixelWidth, this.pixelHeight);
+		ret.zBuffer = this.zBuffer.clone();
+		for (int i = 0; i < ret.pBuffer.length; i++) {
+			E2Color c = new E2Color(this.pBuffer[i]);
+			if (c.getAlpha() != 0) ret.pBuffer[i] = c.setAlpha(alpha).hashCode();
+		}
+		return ret;
 	}
 }

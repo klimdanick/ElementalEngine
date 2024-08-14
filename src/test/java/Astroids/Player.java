@@ -13,7 +13,7 @@ public class Player extends GameObject {
 	double dir = 0;
 
 	public Player() {
-		super(Main.gc.width/2, Main.gc.height/2, 11, 11);
+		super(Main.gameContainer.width/2, Main.gameContainer.height/2, 11, 11);
 	}
 
 	@Override

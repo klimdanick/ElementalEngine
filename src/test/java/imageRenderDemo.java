@@ -8,24 +8,20 @@ import com.danick.e2.renderer.Graphic;
 public class imageRenderDemo extends AbstractGame {
 
 	@Override
-	public void init(GameContainer gc, Graphic r) {
-		try {
-			AssetLoader.Init();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
+	public void init(Graphic r) {
+		AssetLoader.Init();
 	}
 
 	@Override
-	public void update(GameContainer gc, long dt) {
+	public void update(long dt) {
 		
 	}
 
 	@Override
-	public void render(GameContainer gc, Graphic r) {
+	public void render(Graphic r) {
 		r.clear();
 		Graphic g = AssetLoader.getGraphicAsset("1");
-		r.drawGraphic(g, gc.width/2-g.pixelWidth/2, gc.height/2-g.pixelHeight/2, 0);
+		r.drawGraphic(g, gameContainer.width/2-g.pixelWidth/2, gameContainer.height/2-g.pixelHeight/2, 0);
 	}
 
 	public static void main(String[] args) {

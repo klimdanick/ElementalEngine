@@ -24,7 +24,7 @@ public class Renderer3D extends Graphic3D{
 		long dt = newTime - prevTime;
 		while(true) {
 			try {	
-				gc.game.render(gc, this);
+				gc.game.render(this);
 			} catch (ConcurrentModificationException e) {}
 			gc.updateObjsR = false;
 			try {

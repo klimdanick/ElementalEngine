@@ -13,10 +13,11 @@ public abstract class AbstractGame {
 	public boolean initialized = false;
 	volatile public ArrayList<GameObject> GameObjects = new ArrayList<>();
 	public ArrayList<AbstractQSM> QSMs = new ArrayList<>();
+	public static GameContainer gameContainer;
 	
-	public abstract void init(GameContainer gc, Graphic r);
+	public abstract void init(Graphic r);
 	
-	public abstract void update(GameContainer gc, long dt);
+	public abstract void update(long dt);
 	
-	public abstract void render(GameContainer gc, Graphic r);
+	public abstract void render(Graphic r);
 }

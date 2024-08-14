@@ -11,11 +11,11 @@ import com.danick.e2.renderer.Renderer2D;
 public class GamePreview extends AbstractGame {
 	
 	@Override
-	public void update(GameContainer gc, long dt) {
+	public void update(long dt) {
 	}
 
 	@Override
-	public void init(GameContainer gc, Graphic r) {
+	public void init(Graphic r) {
 		// TODO Auto-generated method stub
 		r.bgColor = Color.DARK_GRAY;
 		
@@ -24,7 +24,7 @@ public class GamePreview extends AbstractGame {
 	double x = 0;
 
 	@Override
-	public void render(GameContainer gc, Graphic r) {
+	public void render(Graphic r) {
 		// TODO Auto-generated method stub
 		r.clear();
 		r.drawCircle(30+Math.sin(x), 30, 0, 20, Color.white, false, 3);

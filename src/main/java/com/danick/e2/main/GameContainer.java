@@ -16,8 +16,8 @@ public class GameContainer extends Thread{
 	public static String version = "3.0.5 | ";
 	
 	private boolean running;
-	public int updateRate = 60;
-	public int frameRate = 60;
+	public int updateRate = 120;
+	public int frameRate = 120;
 	public AbstractGame game;
 	public AbstractGame nextgame = null;
 	public int width = 1920, height = 1080;
@@ -37,7 +37,6 @@ public class GameContainer extends Thread{
 		this.title = title;
 		window = new Window(this);
 		input = new Input(this);
-		AspectRatio = (float)height / (float)width;
 		changeScene(game);
 		//System.out.println(AspectRatio);
 		window.frame.setVisible(true);
@@ -68,7 +67,7 @@ public class GameContainer extends Thread{
 		input = new Input(this);
 		if (!nextgame.initialized) {
 			nextgame.r = new Renderer2D(this);
-			nextgame.init(this, nextgame.r);
+			nextgame.init(nextgame.r);
 			nextgame.initialized = true;
 		}
 		
@@ -82,6 +81,7 @@ public class GameContainer extends Thread{
 	@SuppressWarnings("static-access")
 	@Override
 	public void run() {
+		game.gameContainer = this;
 		this.setName("Update Thread");
 		long prevTime = System.currentTimeMillis();
 		//game.r = new Renderer2D(this);
@@ -93,7 +93,7 @@ public class GameContainer extends Thread{
 			
 			for (AbstractQSM qsm : game.QSMs) qsm.update();
 			try {
-				game.update(this, dt);
+				game.update(dt);
 			} catch (ConcurrentModificationException e) {
 				System.err.print(updateObjsR);
 			}

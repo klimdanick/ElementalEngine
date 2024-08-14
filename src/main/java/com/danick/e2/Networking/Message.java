@@ -23,6 +23,11 @@ public class Message {
 		this.id = (byte) (Math.random()*Byte.MAX_VALUE);
 		this.type = type;
 		this.data = data;
+		/*
+		String sData = new String(data);
+		this.data = sData.substring(0, sData.indexOf(0)).getBytes();
+		*/
+		this.data = data; /// WRONG!
 	}
 	
 	public Message(byte id) {

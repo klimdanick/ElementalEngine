@@ -7,6 +7,12 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.awt.event.MouseWheelEvent;
 import java.awt.event.MouseWheelListener;
+import java.util.ArrayList;
+
+import net.java.games.input.Controller.Type;
+import net.java.games.input.ControllerEnvironment;
+
+
 
 public class Input implements KeyListener, MouseListener, MouseMotionListener, MouseWheelListener{
 	
@@ -24,6 +30,8 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	private boolean[] buttonsDown = new boolean[NUM_BUTTONS];
 	private boolean[] buttonsUp = new boolean[NUM_BUTTONS];
 	
+	public ArrayList<Controller> controllers = new ArrayList<>();
+	
 	private int mouseX, mouseY;
 	private int scroll;
 	
@@ -39,19 +47,17 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 		gc.window.canvas.addMouseListener(this);
 		gc.window.canvas.addMouseMotionListener(this);
 		gc.window.canvas.addMouseWheelListener(this);
+		
+		net.java.games.input.Controller[] cs = ControllerEnvironment.getDefaultEnvironment().getControllers();
+		for (int i = 0; i < cs.length; i++) {
+			if (cs[i].getType().equals(Type.GAMEPAD)) controllers.add(new Controller(cs[i]));
+		}
 	}
 	
 	public void update() {
 		scroll = 0;
-		for (int i = 0; i < NUM_KEYS; i++) {
-			keysDown[i] = false;
-			keysUp[i] = false;
-		}
 		
-		for (int i = 0; i < NUM_BUTTONS; i++) {
-			buttonsDown[i] = false;
-			buttonsUp[i] = false;
-		}
+		for (Controller c : controllers) c.update();
 	}
 	
 	public boolean isKey(int keyCode) {
@@ -59,11 +65,15 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	}
 	
 	public boolean isKeyUp(int keyCode) {
-		return keysUp[keyCode];
+		boolean r = keysUp[keyCode];
+		keysUp[keyCode] = false;
+		return r;
 	}
 	
 	public boolean isKeyDown(int keyCode) {
-		return keysDown[keyCode];
+		boolean r = keysDown[keyCode];
+		keysDown[keyCode] = false;
+		return r;
 	}
 	
 	public boolean isButton(int Button) {
@@ -71,11 +81,15 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	}
 	
 	public boolean isButtonUp(int Button) {
-		return buttonsUp[Button];
+		boolean r = buttonsUp[Button];
+		buttonsUp[Button] = false;
+		return r;
 	}
 	
 	public boolean isButtonDown(int Button) {
-		return buttonsDown[Button];
+		boolean r = buttonsDown[Button];
+		buttonsDown[Button] = false;
+		return r;
 	}
 
 	@Override
@@ -111,7 +125,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		buttonsDown[e.getButton()] = !buttons[e.getButton()];
+		buttonsDown[e.getButton()] = true;
 		buttons[e.getButton()] = true;
 	}
 
@@ -123,7 +137,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		keysDown[e.getKeyCode()] = !keys[e.getKeyCode()];
+		keysDown[e.getKeyCode()] = true;
 		keys[e.getKeyCode()] = true;
 		lastKey = e.getKeyChar();
 	}
@@ -136,7 +150,6 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		
 	}
 
 	public int getMouseX() {

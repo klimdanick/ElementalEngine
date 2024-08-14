@@ -15,6 +15,10 @@ public abstract class AbstractQSM {
 		gc.game.QSMs.add(this);
 	}
 	
+	public void start(AbstractQSMState defaultState) {
+		this.defaultState = defaultState;
+	}
+	
 	public abstract void update();
 	
 	public void stop() {

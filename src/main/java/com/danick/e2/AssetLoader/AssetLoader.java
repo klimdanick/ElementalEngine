@@ -20,13 +20,16 @@ public class AssetLoader{
     static AssetList assetList= new AssetList();
     static HashMap<String, Object> loadedFiles = new HashMap<>();
 
-    public static void Init() throws FileNotFoundException {
+    public static void Init() {
+    	if (loadedFiles.size() > 0) return;
         File assetFile = new File(assetFilePath);
 
         InputStream inputStream = AssetLoader.class.getClassLoader().getResourceAsStream(assetFilePath);
 
-        if(inputStream == null)
-            throw new FileNotFoundException();
+        if(inputStream == null) {
+            System.err.append("[ASSET LOADER] file not found: " + assetFilePath + "\n[ASSET LOADER] not able to load assets!");
+        	return;
+        }
 
         String data = "";
         try{
@@ -36,7 +39,7 @@ public class AssetLoader{
 
             }
         } catch (Exception e) {
-            System.out.println("An error occurred.");
+        	System.err.append("[ASSET LOADER] An error occurred.");
             e.printStackTrace();
         }
         parseJson(data);
@@ -59,9 +62,14 @@ public class AssetLoader{
         return (BufferedImage)LoadAsset(key);
     }
     public static Graphic getGraphicAsset(String key)  {
+    	if(loadedFiles.containsKey(key)) {
+    		Object g = loadedFiles.get(key); 
+            if (g instanceof Graphic) return (Graphic) g;
+    	}
         BufferedImage image = getImageAsset(key);
-
-        return Graphic.fromImage(image);
+        Graphic g = Graphic.fromImage(image);
+        loadedFiles.put(key, g);
+        return g;
     }
 
     private static void createAssetFile(File assetFile){

@@ -34,8 +34,8 @@ public class Goomba extends Enemy {
 		loop = 50;
 		while((collide(xMove, 0) != null || x+xMove < 0) && loop-- > 0) {
 			if (collide(0, yMove) instanceof Item) break;
-			if (collide(1, 0) != null && (collide(1, 0) instanceof Player)) {gc.game.init(gc, gc.game.r); break;}
-			if (collide(-1, 0) != null && (collide(-1, 0) instanceof Player)) {gc.game.init(gc, gc.game.r); break;}
+			if (collide(1, 0) != null && (collide(1, 0) instanceof Player)) {gc.game.init(gc.game.r); break;}
+			if (collide(-1, 0) != null && (collide(-1, 0) instanceof Player)) {gc.game.init(gc.game.r); break;}
 			xMove-=Math.signum(xMove)*0.1;
 			xSpd*=-1;
 		}

@@ -22,7 +22,7 @@ public class E2Color extends Color {
 		
 	}
 
-	public E2Color changeAlpha(int Alpha) {
+	public E2Color setAlpha(int Alpha) {
 		return new E2Color(this.getRed(), this.getGreen(), this.getBlue(), Alpha);
 	}
 

@@ -8,5 +8,6 @@ public class QueuedStateMachine extends AbstractQSM{
 		AbstractQSMState state = queue.get(0);
 		if (state.run()) remove(state);
 	}
+
 	
 }

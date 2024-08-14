@@ -29,7 +29,7 @@ public class Designer extends AbstractGame{
 	public Graphic3D.Model3D cube, pyramid, cube2, pyramid2;
 
 	@Override
-	public void init(GameContainer gc, Graphic r) {
+	public void init(Graphic r) {
 		for (int i = 0; i < 4; i++) VP3D[i] = new Graphic3D(200, 200);
 		cube = Model3D.cube(100);
 		cube2 = Model3D.cube(100);
@@ -42,7 +42,7 @@ public class Designer extends AbstractGame{
 	}
 	
 	@Override
-	public void render(GameContainer gc, Graphic r) {
+	public void render(Graphic r) {
 		//VP3D[0].projection = new PerspectiveProjection();
 		VP3D[0].bgColor = new Color(0x0066aa);
 		VP3D[2].bgColor = VP3D[1].bgColor;
@@ -79,7 +79,7 @@ public class Designer extends AbstractGame{
 	}
 
 	@Override
-	public void update(GameContainer gc, long dt) {
+	public void update(long dt) {
 		
 	}
 }
