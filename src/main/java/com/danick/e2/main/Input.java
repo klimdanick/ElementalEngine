@@ -18,13 +18,13 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 	
 	private GameContainer gc;
 	
-	private final int NUM_KEYS = 256;
+	private final int NUM_KEYS = 512;
 	private boolean[] keys = new boolean[NUM_KEYS];
 	private boolean[] keysLast = new boolean[NUM_KEYS];
 	private boolean[] keysDown = new boolean[NUM_KEYS];
 	private boolean[] keysUp = new boolean[NUM_KEYS];
 	
-	private final int NUM_BUTTONS = 5;
+	private final int NUM_BUTTONS = 10;
 	private boolean[] buttons = new boolean[NUM_BUTTONS];
 	private boolean[] buttonsLast = new boolean[NUM_BUTTONS];
 	private boolean[] buttonsDown = new boolean[NUM_BUTTONS];
@@ -52,6 +52,7 @@ public class Input implements KeyListener, MouseListener, MouseMotionListener, M
 		for (int i = 0; i < cs.length; i++) {
 			if (cs[i].getType().equals(Type.GAMEPAD)) controllers.add(new Controller(cs[i]));
 		}
+		controllers.add(new Controller());
 	}
 	
 	public void update() {
