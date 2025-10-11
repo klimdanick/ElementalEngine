@@ -1,0 +1,21 @@
+{
+  "worldFile": [
+
+  ],
+  "textures": [
+    {
+      "key": "1",
+      "filename": "grass_full.png",
+      "path": "tileSet/",
+      "type": "Image",
+      "init": true
+    },
+    {
+      "key": "2",
+      "filename": "clay_slope_e.png",
+      "path": "tileSet/",
+      "type": "Image",
+      "init": false
+    }
+  ]
+}
