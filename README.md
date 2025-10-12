@@ -21,8 +21,8 @@ Whenever you look at a game made with unity, you instantly know it is made with 
 - [x] Outlines
 
 ### 3 Colors / Transparency
-- [ ] Support tinting textures with a color multiplier
-- [ ] Set alpha per sprite for fade in/out or effects
+- [x] Support tinting textures with a color multiplier
+- [x] Set alpha per sprite for fade in/out or effects
 - [ ] Support blend modes (normal, additive, multiply)
 
 ### 4 Text / Fonts

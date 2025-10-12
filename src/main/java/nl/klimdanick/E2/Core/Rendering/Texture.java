@@ -22,6 +22,7 @@ public class Texture {
 	 private int previousBuffer;
 	 private IntBuffer previousViewport;
 	 public Quad quad;
+	 public E2Color tint = new E2Color(1.0f, 1.0f, 1.0f, 1.0f);
 	 
 	 // TODO
 	 //	Use integer scaling (e.g., scale by 2x, 3x, not 1.37x)

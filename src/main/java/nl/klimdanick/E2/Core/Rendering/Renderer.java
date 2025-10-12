@@ -89,6 +89,7 @@ public class Renderer {
         textureShader.setUniformMat4("uProjection", projection);
         textureShader.setUniform2f("uPosition", x, y);
         textureShader.setUniform2f("uScale", width, height);
+        textureShader.setUniform4f("uTint", texture.tint.r, texture.tint.g, texture.tint.b, texture.tint.a);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

@@ -54,12 +54,12 @@ public class Main extends GameLoop {
         renderer.drawTexture(tex2, x, y, 40, 40);
         renderer.drawTexture(tex3, 100, 150, 21, 23);
         
-        renderer.drawMode = DrawingMode.OUTLINE;
+        renderer.drawMode = DrawingMode.FILL;
         
         tex2.begin();
         renderer.clear(new E2Color(0f, 0f, 0f, 0f));
     	renderer.drawCircle(20, 20, 20, 50, E2Color.AQUA_GREEN);
-//        renderer.drawTexture(tex, 20, 20, 40, 40);
+        renderer.drawTexture(tex, 20, 20, 40, 40);
         tex2.end();
         
         
