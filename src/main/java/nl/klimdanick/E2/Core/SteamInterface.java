@@ -34,6 +34,10 @@ public class SteamInterface {
             @Override public void onGameRichPresenceJoinRequested(SteamID steamIDFriend, String connect) {}
 			@Override public void onGameServerChangeRequested(String server, String password) {}
         });
+       
+       // Example: set Rich Presence values
+       steamFriends.setRichPresence("status", "Developing with Elemental Engine!");
+       steamFriends.setRichPresence("steam_display", "#status");
 
         // Get the local user's SteamID
         steamUser = new SteamUser(null);

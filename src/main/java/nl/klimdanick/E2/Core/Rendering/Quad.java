@@ -11,7 +11,7 @@ import static org.lwjgl.opengl.GL30.*;
 public class Quad {
 	
 	// VBO = the actual vertex data in GPU memory
-	private static final float[] VERTICES = {
+	public float[] VERTICES = {
 	        // x, y,   u, v
 	        -0.5f,  0.5f,  0f, 0f,   // top-left
 	         0.5f,  0.5f,  1f, 0f,   // top-right
@@ -30,6 +30,34 @@ public class Quad {
     
     
     public Quad() {
+    	vertexArrayObject = glGenVertexArrays();
+        glBindVertexArray(vertexArrayObject);
+
+        vertexBufferObject = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+        FloatBuffer buffer = BufferUtils.createFloatBuffer(VERTICES.length);
+        
+        // put() writes data -> the internal cursor ends at the end.
+        // flip() sets the limit to the current position and resets position to 0 -> so OpenGL reads from the start of the buffer correctly.
+        buffer.put(VERTICES).flip();
+        glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
+
+        elementBufferObject = glGenBuffers();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, elementBufferObject);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, INDICES, GL_STATIC_DRAW);
+
+        int stride = 4 * Float.BYTES;
+        glVertexAttribPointer(0, 2, GL_FLOAT, false, stride, 0);
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(1, 2, GL_FLOAT, false, stride, 2 * Float.BYTES);
+        glEnableVertexAttribArray(1);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+    
+    public Quad(float[] verts) {
+    	this.VERTICES = verts;
     	vertexArrayObject = glGenVertexArrays();
         glBindVertexArray(vertexArrayObject);
 

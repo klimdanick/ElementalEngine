@@ -21,13 +21,14 @@ public class Texture {
 	 private Matrix4f previousProjection;
 	 private int previousBuffer;
 	 private IntBuffer previousViewport;
+	 public Quad quad;
 	 
 	 // TODO
 	 //	Use integer scaling (e.g., scale by 2x, 3x, not 1.37x)
 	 //	Snap sprite positions to whole pixels before drawing
 	 
 	 public Texture(String path) {
-		 
+		 this.quad = new Quad();
 		 // Load file from classpath
 		 ByteBuffer imageBuffer;
 		 try (InputStream in = Texture.class.getResourceAsStream(path)) {
@@ -83,6 +84,7 @@ public class Texture {
 	 }
 	 
 	 public Texture(int width, int height) {
+		 this.quad = new Quad();
 		 this.width = width;
 		 this.height = height;
 		 
@@ -102,7 +104,9 @@ public class Texture {
 		 createRenderTarget();
 	 }
 	 
-	 public Texture() {}
+	 public Texture() {
+		 quad = new Quad();
+	 }
 	 
 	 public void createRenderTarget() {
 		 fbo = glGenFramebuffers();
@@ -145,6 +149,7 @@ public class Texture {
 
 	 public void destroy() {
 		 glDeleteTextures(id);
+		 quad.destroy();
 	 }
 
 	 public int getWidth() { return width; }

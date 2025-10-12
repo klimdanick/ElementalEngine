@@ -40,7 +40,6 @@ import nl.klimdanick.E2.Core.GameLoop;
 public class Renderer {
 	
 	private Shader textureShader, shapeShader;
-    private Quad quad;
     private Matrix4f projection;
     public int screenWidth, screenHeight;
     public boolean renderingScreen = true;
@@ -57,8 +56,6 @@ public class Renderer {
         
         shapeShader = new Shader("src/main/resources/shaders/shape_vertex.glsl",
         		"src/main/resources/shaders/shape_fragment.glsl");
-        
-        quad = new Quad();
         
         // Orthographic projection: 0,0 is bottom-left; width,height is top-right
         projection = new Matrix4f().ortho2D(0, this.screenWidth, 0, this.screenHeight);
@@ -84,7 +81,7 @@ public class Renderer {
     	textureShader.use();
         glActiveTexture(GL_TEXTURE0);
         texture.bind();
-        quad.bind();
+        texture.quad.bind();
 
         textureShader.setUniformMat4("uProjection", projection);
         textureShader.setUniform2f("uPosition", x, y);
@@ -92,7 +89,7 @@ public class Renderer {
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        quad.unbind();
+        texture.quad.unbind();
         texture.unbind();
     }
     
@@ -102,6 +99,7 @@ public class Renderer {
     }
     
     public void drawRect(float x, float y, float width, float height, E2Color c) {
+    	Quad quad = new Quad();
     	shapeShader.use();
     	quad.bind();
     	
@@ -110,6 +108,7 @@ public class Renderer {
         
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         quad.unbind();
+        quad.destroy();
     }
     
     public void drawCircle(float cx, float cy, float radius, int segments, E2Color c) {
@@ -213,6 +212,5 @@ public class Renderer {
     public void destroy() {
     	textureShader.destroy();
     	shapeShader.destroy();
-        quad.destroy();
     }
 }

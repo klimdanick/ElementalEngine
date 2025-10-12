@@ -8,8 +8,8 @@ Whenever you look at a game made with unity, you instantly know it is made with 
 
 ### 1 Sprites / Textures
 - [x] Draw single image
-- [ ] Draw sub-region / sprite sheet
-- [ ] Flipping / mirroring
+- [x] Draw sub-region / sprite sheet
+- [x] Flipping / mirroring
 - [x] Rotation
 - [x] Scaling
 
