@@ -12,6 +12,7 @@ public class Window {
     private long handle;
     public int width, height, scale;
     private String title;
+    public boolean VSync;
 
     public Window(String title, int width, int height, int scale) {
         this.title = title;
@@ -33,11 +34,18 @@ public class Window {
             throw new RuntimeException("Failed to create window");
 
         glfwMakeContextCurrent(handle);
-        glfwSwapInterval(1);
+        glfwSwapInterval(0);
+        VSync = false;
         glfwShowWindow(handle);
 
         GL.createCapabilities();
         System.out.println("OpenGL: " + GL11.glGetString(GL11.GL_VERSION));
+    }
+    
+    public void toggleVSync() {
+    	if (VSync) glfwSwapInterval(0);
+    	else glfwSwapInterval(1);
+    	VSync = !VSync;
     }
 
     public void update() {

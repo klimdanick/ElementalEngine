@@ -62,30 +62,35 @@ public class Shader {
     public int getProgramId() {
     	return this.programId;
     }
-
-    public void setUniformMat4(String name, Matrix4f matrix) {
-        // Get uniform location
-        int location = glGetUniformLocation(programId, name);
-        if (location == -1) {
-            System.err.println("Uniform not found: " + name);
-            return;
-        }
-
-        // Use MemoryStack to allocate a temporary FloatBuffer
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            FloatBuffer fb = stack.mallocFloat(16); // 4x4 matrix
-            matrix.get(fb); // copy matrix data into buffer
-            glUniformMatrix4fv(location, false, fb); // send to GPU
-        }
+	
+	public void setUniform1i(String name, int value) {
+        int loc = glGetUniformLocation(programId, name);
+        if (loc != -1) glUniform1i(loc, value);
     }
 
-	public void setUniform2f(String name, float x, float y) {
-        int location = glGetUniformLocation(programId, name);
-        if (location == -1) {
-            System.err.println("Uniform not found: " + name);
-            return;
+    public void setUniform1f(String name, float value) {
+        int loc = glGetUniformLocation(programId, name);
+        if (loc != -1) glUniform1f(loc, value);
+    }
+
+    public void setUniform2f(String name, float x, float y) {
+        int loc = glGetUniformLocation(programId, name);
+        if (loc != -1) glUniform2f(loc, x, y);
+    }
+
+    public void setUniform4f(String name, float x, float y, float z, float w) {
+        int loc = glGetUniformLocation(programId, name);
+        if (loc != -1) glUniform4f(loc, x, y, z, w);
+    }
+
+    public void setUniformMat4(String name, Matrix4f matrix) {
+        int loc = glGetUniformLocation(programId, name);
+        if (loc == -1) return;
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            FloatBuffer fb = stack.mallocFloat(16);
+            matrix.get(fb);
+            glUniformMatrix4fv(loc, false, fb);
         }
-        glUniform2f(location, x, y);
     }
 
 }

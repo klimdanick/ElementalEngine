@@ -1,4 +1,4 @@
-# ElementalEngine
+# ElementalEngine V4!
 Welcome to ElementalEngine! a lightweight and extensible Java game engine designed for creating 2D games with ease.
 
 This engine is designed with the goal of making game development about programming again. A lot of modern engines use a lot of UI to create a game, To us this takes away the creative freedom of a programmer.
@@ -6,35 +6,48 @@ Whenever you look at a game made with unity, you instantly know it is made with 
 
 ## Features
 
-- **Modular Design**: The engine is built with a modular architecture, allowing developers to easily extend and customize functionality.
-- **Sprite Rendering**: Effortlessly render sprites and handle animations with the built-in rendering system.
-- **Input Handling**: Manage user input with a flexible input system supporting keyboard, mouse, and touch events.
-- **Scene Management**: Organize your game logic into scenes for better structure and navigation.
-- **Collision Detection**: Built-in collision detection system for handling object interactions in your game world.
-- **Queued State machine**: Structure the logic of your game in a statemachine (you will love the queued part of it)
-- **Isometric rendering**: There are a few features in this engine that will help you with rendering isometric worlds.
+### 1 Sprites / Textures
+- [x] Draw single image
+- [ ] Draw sub-region / sprite sheet
+- [ ] Flipping / mirroring
+- [x] Rotation
+- [x] Scaling
 
-## Getting Started
+### 2 Primitive shapes
+- [x] Rectangles (filled or outline)
+- [x] Lines
+- [x] Circles
+- [ ] Ellipses
+- [x] Polygons / triangles
+- [ ] Outlines
 
-### Prerequisites
+### 3 Colors / Transparency
+- [ ] Support tinting textures with a color multiplier
+- [ ] Set alpha per sprite for fade in/out or effects
+- [ ] Support blend modes (normal, additive, multiply)
 
-- Java Development Kit (JDK) 16 or later
-- Java IDE like Eclipse or IntelliJ.
+### 4 Text / Fonts
+- [x] Font rendering
+- [x] Draw strings with scaling, color, and alignment
+- [ ] Optional: kerning and multi-line support
 
-### Installation
+### 5 Batch Rendering
+- [ ] For performance: group multiple sprites into a single VAO/VBO draw call
 
-Download the latest release as jar file:
+### 6 Camera / View Transformations
+- [ ] Translation
+- [ ] Rotation
+- [ ] Scaling
 
-Add the jar to the classpath of a new project.
+### 7 Debug / Utility Draws
+- [ ] Draw collision boxes
+- [ ] Draw coordinate axes or grids
+- [x] Draw FPS / stats overlays
 
-Run the example game:
-
-### Documentation
-Detailed documentation is available under the Wiki tab on github. Here are some key sections:
-
-....
-....
-....
+### 8 Optional Advanced
+- [ ] Shaders: support for post-processing effects (grayscale, palette swap, CRT scanlines)
+- [ ] Layering / Z-index: draw order for overlapping sprites
+- [ ] Tilemaps: optimized grid-based rendering for backgrounds
 
 ### License
 This project is licensed under the MIT License - see the LICENSE file for details.

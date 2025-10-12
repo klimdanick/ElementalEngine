@@ -14,10 +14,10 @@ import org.lwjgl.stb.STBImage;
 import nl.klimdanick.E2.Core.GameLoop;
 
 public class Texture {
-	 private int id;
-	 private int width;
-	 private int height;
-	 private int fbo;
+	 protected int id;
+	 protected int width;
+	 protected int height;
+	 protected int fbo;
 	 private Matrix4f previousProjection;
 	 private int previousBuffer;
 	 private IntBuffer previousViewport;
@@ -101,6 +101,8 @@ public class Texture {
 		 // renderTagert allows for drawing with GPU on texture
 		 createRenderTarget();
 	 }
+	 
+	 public Texture() {}
 	 
 	 public void createRenderTarget() {
 		 fbo = glGenFramebuffers();

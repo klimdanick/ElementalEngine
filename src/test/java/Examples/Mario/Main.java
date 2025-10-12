@@ -1,12 +1,18 @@
 package Examples.Mario;
 
-import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_ESCAPE;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_S;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_V;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_W;
 
-import com.codedisaster.steamworks.SteamAPI;
+import java.awt.Font;
+
 import com.codedisaster.steamworks.SteamException;
 
 import nl.klimdanick.E2.Core.GameLoop;
-import nl.klimdanick.E2.Core.SteamInterface;
+import nl.klimdanick.E2.Core.Rendering.E2Color;
 import nl.klimdanick.E2.Core.Rendering.Texture;
 
 public class Main extends GameLoop {
@@ -14,13 +20,15 @@ public class Main extends GameLoop {
 	Texture tex, tex2;
 	int x = 40, y = 40;
 	
+	float[][] shape = new float[][] {{0, -1}, {-0.5f, 0.2f}, {-0.5f, 1}, {0, 0.4f}, {0.5f, 1}, {0.5f, 0.2f}}; 
+	
     @Override
     protected void init() {
     	tex = new Texture("/E2logo.png");
     	tex2 = new Texture(40, 40);
     	
     	tex2.begin();
-        renderer.clear(1f, 0f, 0f);
+    	renderer.drawCircle(20, 20, 20, 50, E2Color.AQUA_GREEN);
         renderer.drawTexture(tex, 20, 20, 40, 40);
         tex2.end();
         
@@ -28,8 +36,9 @@ public class Main extends GameLoop {
     }
 
     @Override
-    protected void update() {
+    protected void update(double dt) {
         if (input.isKeyDown(GLFW_KEY_ESCAPE)) window.close();
+        if (input.isKeyPressed(GLFW_KEY_V)) window.toggleVSync();
         if (input.isKeyDown(GLFW_KEY_W)) y--;
         if (input.isKeyDown(GLFW_KEY_S)) y++;
         if (input.isKeyDown(GLFW_KEY_A)) x--;
@@ -38,9 +47,13 @@ public class Main extends GameLoop {
 
     @Override
     protected void render() {
-        renderer.clear(0.2f, 0.3f, 0.4f);
+        renderer.clear(E2Color.CINDER_BLACK);
         renderer.drawTexture(tex2, x, y, 40, 40);
-        renderer.drawTexture(tex, 200, 150, 40, 40);
+        
+        renderer.drawShape(100, 100, shape, E2Color.DEBIAN_RED, 20, (float)x/100.0f);
+//        renderer.drawShape(100, 100, shape, E2Color.CINDER_BLACK, 17, (float)x/100.0f);
+        
+        renderer.drawLine(100, 100, 200, 150, E2Color.CURIOS_BLUE);
     }
 
     @Override
