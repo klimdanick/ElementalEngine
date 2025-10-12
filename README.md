@@ -17,9 +17,8 @@ Whenever you look at a game made with unity, you instantly know it is made with 
 - [x] Rectangles (filled or outline)
 - [x] Lines
 - [x] Circles
-- [ ] Ellipses
 - [x] Polygons / triangles
-- [ ] Outlines
+- [x] Outlines
 
 ### 3 Colors / Transparency
 - [ ] Support tinting textures with a color multiplier

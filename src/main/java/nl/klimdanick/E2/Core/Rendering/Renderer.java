@@ -5,6 +5,7 @@ import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
 import static org.lwjgl.opengl.GL11.GL_LINES;
+import static org.lwjgl.opengl.GL11.GL_LINE_LOOP;
 import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
@@ -32,6 +33,7 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.beans.VetoableChangeListener;
 
 import org.joml.Matrix4f;
 
@@ -43,6 +45,7 @@ public class Renderer {
     private Matrix4f projection;
     public int screenWidth, screenHeight;
     public boolean renderingScreen = true;
+    public DrawingMode drawMode = DrawingMode.FILL;
 
     public Renderer(int screenWidth, int screenHeight) {
     	this.screenHeight = screenHeight;
@@ -117,8 +120,9 @@ public class Renderer {
 
         // Generate vertices
         float[] vertices = new float[(segments + 2) * 2];
-        vertices[0] = 0;
-        vertices[1] = 0;
+	    vertices[0] = 0;
+	    vertices[1] = 0;
+
 
         for (int i = 0; i <= segments; i++) {
             double angle = 2.0 * Math.PI * i / segments;
@@ -130,14 +134,15 @@ public class Renderer {
         int[] vao_vbo = uploadVerts(vertices);
         
         // Draw as a triangle fan
-        glDrawArrays(GL_TRIANGLE_FAN, 0, segments + 2);
+        if (drawMode == DrawingMode.OUTLINE) glDrawArrays(GL_LINE_LOOP, 1, vertices.length/2-1);
+        else if (drawMode == DrawingMode.FILL) glDrawArrays(GL_TRIANGLE_FAN, 0, vertices.length/2);
 
         // Cleanup
         glDeleteBuffers(vao_vbo[1]);
         glDeleteVertexArrays(vao_vbo[0]);
     }
-    
-    public void drawShape(float cx, float cy, float[][] verts, E2Color c, float scale, float rotation) {
+
+	public void drawShape(float cx, float cy, float[][] verts, E2Color c, float scale, float rotation) {
         shapeShader.use();
         setShapeUniforms(cx, cy, scale, c, rotation);
         
@@ -152,7 +157,8 @@ public class Renderer {
         int[] vao_vbo = uploadVerts(vertices);
 
         // Draw as a triangle fan
-        glDrawArrays(GL_TRIANGLE_FAN, 0, verts.length);
+        if (drawMode == DrawingMode.OUTLINE) glDrawArrays(GL_LINE_LOOP, 0, verts.length);
+        else if (drawMode == DrawingMode.FILL) glDrawArrays(GL_TRIANGLE_FAN, 0, verts.length);
 
         // Cleanup
         glDeleteBuffers(vao_vbo[1]);
