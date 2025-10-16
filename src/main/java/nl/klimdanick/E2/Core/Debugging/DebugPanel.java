@@ -8,6 +8,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import nl.klimdanick.E2.Core.GameLoop;
+import nl.klimdanick.E2.Core.Rendering.DrawingMode;
 import nl.klimdanick.E2.Core.Rendering.E2Color;
 import nl.klimdanick.E2.Core.Rendering.Renderer;
 import nl.klimdanick.E2.Core.Rendering.TextTexture;
@@ -23,7 +24,7 @@ public class DebugPanel {
 //	drawTexture(text, x, y, (float)text.getWidth(), (float)text.getHeight());
 	
 	Texture graphTexture;
-	public HashMap<String, Object> rows = new HashMap<>();
+	public static HashMap<String, Object> rows = new HashMap<>();
 	
 	public boolean show = false;
 	
@@ -36,6 +37,8 @@ public class DebugPanel {
 		if (!show) return;
 		
 		Renderer r = GameLoop.renderer;
+		r.drawMode = DrawingMode.FILL;
+		
 		graphTexture.begin();
 		
 		r.clear(new E2Color(0, 0, 0, 0));
@@ -54,13 +57,13 @@ public class DebugPanel {
 			E2Color c = E2Color.CINDER_BLACK.clone();
 			c.a = 0.6f;
 			r.drawRect(x+text.getWidth()/2, y+text.getHeight()/2, text.getWidth()+2, text.getHeight(), c);
-			r.drawTexture(text, x+text.getWidth()/2, y+text.getHeight()/2-1, (float)text.getWidth(), (float)text.getHeight());
+			r.drawTexture(text, x+text.getWidth()/2, y+text.getHeight()/2-1, (float)text.getWidth(), (float)text.getHeight(), 0);
 			
 			i++;
 		}
 		
 		graphTexture.end();
 		
-		r.drawTexture(graphTexture, 250, 250, 500, 500);
+		r.drawTexture(graphTexture, 250, 250, 500, 500, 0);
 	}
 }

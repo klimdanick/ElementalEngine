@@ -77,8 +77,7 @@ public class Renderer {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     }
     
-    public void drawTexture(Texture texture, float x, float y, float width, float height) {
-    	
+    public void drawTexture(Texture texture, float x, float y, float width, float height, float rotation) {
     	if (!GameLoop.renderer.renderingScreen) height = -height;
     	
     	textureShader.use();
@@ -90,6 +89,7 @@ public class Renderer {
         textureShader.setUniform2f("uPosition", x, y);
         textureShader.setUniform2f("uScale", width, height);
         textureShader.setUniform4f("uTint", texture.tint.r, texture.tint.g, texture.tint.b, texture.tint.a);
+        textureShader.setUniform1f("uRotation", rotation);
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -99,7 +99,7 @@ public class Renderer {
     
     public void drawText(String s, Font font, float x, float y, E2Color c) {
     	TextTexture text = new TextTexture(s, font, new Color(c.r, c.g, c.b, c.a));
-    	drawTexture(text, x, y, (float)text.getWidth(), (float)text.getHeight());
+    	drawTexture(text, x, y, (float)text.getWidth(), (float)text.getHeight(), 0);
     }
     
     public void drawRect(float x, float y, float width, float height, E2Color c) {
@@ -110,7 +110,8 @@ public class Renderer {
     	setShapeUniforms(x, y, width, c, 0);
         shapeShader.setUniform2f("uScale", width, height);
         
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        if (drawMode == DrawingMode.OUTLINE) glDrawElements(GL_LINE_LOOP, 6, GL_UNSIGNED_INT, 0);
+        else if (drawMode == DrawingMode.FILL) glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
         quad.unbind();
         quad.destroy();
     }
@@ -168,11 +169,7 @@ public class Renderer {
     
     public void drawLine(float ax, float ay, float bx, float by, E2Color c) {
         shapeShader.use();
-        shapeShader.setUniformMat4("uProjection", projection);
-        shapeShader.setUniform2f("uPosition", 0, 0);
-        shapeShader.setUniform2f("uScale", 1, 1);
-        shapeShader.setUniform4f("uColor", c.r, c.g, c.b, c.a);
-        shapeShader.setUniform1f("uRotation", 0);
+        setShapeUniforms(0, 0, 1, c, 0);
 
         // map verts
         float[] vertices = new float[4];

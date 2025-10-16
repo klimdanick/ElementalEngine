@@ -3,15 +3,15 @@ package nl.klimdanick.E2.Core;
 import static org.lwjgl.glfw.GLFW.*;
 
 public class Input {
-    private final long window;
-    private final boolean[] keys = new boolean[GLFW_KEY_LAST];
-    private final boolean[] keysLast = new boolean[GLFW_KEY_LAST];
+    private static long window;
+    private static final boolean[] keys = new boolean[GLFW_KEY_LAST];
+    private static final boolean[] keysLast = new boolean[GLFW_KEY_LAST];
 
     public Input(Window window) {
-        this.window = window.getHandle();
+        Input.window = window.getHandle();
     }
 
-    public void update() {
+    public static void update() {
         // Copy current state to last
         System.arraycopy(keys, 0, keysLast, 0, keys.length);
 
@@ -21,15 +21,15 @@ public class Input {
         }
     }
 
-    public boolean isKeyDown(int key) {
+    public static boolean isKeyDown(int key) {
         return keys[key];
     }
 
-    public boolean isKeyPressed(int key) {
+    public static boolean isKeyPressed(int key) {
         return keys[key] && !keysLast[key];
     }
 
-    public boolean isKeyReleased(int key) {
+    public static boolean isKeyReleased(int key) {
         return !keys[key] && keysLast[key];
     }
 }

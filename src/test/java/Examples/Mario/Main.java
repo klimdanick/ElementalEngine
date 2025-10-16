@@ -51,15 +51,15 @@ public class Main extends GameLoop {
     	tex3.play();
     	
         renderer.clear(E2Color.CINDER_BLACK);
-        renderer.drawTexture(tex2, x, y, 40, 40);
-        renderer.drawTexture(tex3, 100, 150, 21, 23);
+        renderer.drawTexture(tex2, x, y, 40, 40, 0);
+        renderer.drawTexture(tex3, 100, 150, 21, 23, 1);
         
         renderer.drawMode = DrawingMode.FILL;
         
         tex2.begin();
         renderer.clear(new E2Color(0f, 0f, 0f, 0f));
     	renderer.drawCircle(20, 20, 20, 50, E2Color.AQUA_GREEN);
-        renderer.drawTexture(tex, 20, 20, 40, 40);
+        renderer.drawTexture(tex, 20, 20, 40, 40, (float) Math.PI);
         tex2.end();
         
         

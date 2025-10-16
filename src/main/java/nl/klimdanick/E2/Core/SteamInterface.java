@@ -1,5 +1,12 @@
 package nl.klimdanick.E2.Core;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
 import com.codedisaster.steamworks.SteamAPI;
 import com.codedisaster.steamworks.SteamException;
 import com.codedisaster.steamworks.SteamFriends;
@@ -8,13 +15,22 @@ import com.codedisaster.steamworks.SteamID;
 import com.codedisaster.steamworks.SteamResult;
 import com.codedisaster.steamworks.SteamUser;
 
+import nl.klimdanick.E2.Core.Debugging.DebugPanel;
+
 public class SteamInterface {
 	
 	public SteamUser steamUser;
 	public SteamFriends steamFriends;
 	private Thread callbackThread;
 
-    public SteamInterface() throws SteamException {
+    public SteamInterface() throws SteamException, IOException {
+    	System.out.println("Working directory: " + new File(".").getAbsolutePath());
+    	InputStream in = getClass().getResourceAsStream("/resources/steam_appid.txt");
+    	Files.copy(in, Paths.get("steam_appid.txt"), StandardCopyOption.REPLACE_EXISTING);
+    	
+    	System.setProperty("org.lwjgl.librarypath", new File("steamworks4j").getAbsolutePath());
+    	System.setProperty("java.library.path", new File("steamworks4j").getAbsolutePath());
+    	
     	SteamAPI.loadLibraries();
         // Initialize Steam API
     	if (!SteamAPI.init()) {
@@ -45,7 +61,7 @@ public class SteamInterface {
 
         // Fetch and print the username
         String personaName = steamFriends.getFriendPersonaName(mySteamID);
-        System.out.println("Logged in as: " + personaName);
+        DebugPanel.rows.put("Username", personaName);
         
 //        System.out.println("Logged in as: " + steamUser.getSteamID());
 

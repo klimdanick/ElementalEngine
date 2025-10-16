@@ -7,6 +7,7 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import nl.klimdanick.E2.Core.GameLoop;
+import nl.klimdanick.E2.Core.Rendering.DrawingMode;
 import nl.klimdanick.E2.Core.Rendering.E2Color;
 import nl.klimdanick.E2.Core.Rendering.Renderer;
 import nl.klimdanick.E2.Core.Rendering.Texture;
@@ -15,8 +16,8 @@ import nl.klimdanick.E2.Core.Rendering.Texture;
 public class DebugGraph {
 	
 	Texture graphTexture;
-	public HashMap<String, ConcurrentLinkedQueue<Integer>> graph = new HashMap<>();
-	public HashMap<String, E2Color> graphColor = new HashMap<>();
+	public static HashMap<String, ConcurrentLinkedQueue<Integer>> graph = new HashMap<>();
+	public static HashMap<String, E2Color> graphColor = new HashMap<>();
 	
 	public boolean show = false;
 	
@@ -30,15 +31,15 @@ public class DebugGraph {
 			
 		Renderer r = GameLoop.renderer;
 		
+		r.drawMode = DrawingMode.FILL;
 		graphTexture.begin();
 		
 		
 		Object[] keys = graph.keySet().toArray();
-		if (keys.length > 0) {
-			E2Color c = E2Color.CINDER_BLACK.clone();
-			c.a = 0.5f;
-			r.drawRect(100, 50, 200, 100, c);
-		}
+		
+		E2Color c = E2Color.CINDER_BLACK.clone();
+		c.a = 0.5f;
+		r.clear(c);
 		
 		int max = Integer.MIN_VALUE;
 		for (Object key : keys) {
@@ -74,16 +75,16 @@ public class DebugGraph {
 		
 		graphTexture.end();
 		
-		r.drawTexture(graphTexture, r.screenWidth-100, 50, 200, 100);
+		r.drawTexture(graphTexture, r.screenWidth-100, 50, 200, 100, 0);
 	}
 	
-	public void addPointToGraph(String graph, int p, E2Color c) {
-		ConcurrentLinkedQueue<Integer> g = this.graph.get(graph);
+	public static void addPointToGraph(String gr, int p, E2Color c) {
+		ConcurrentLinkedQueue<Integer> g = graph.get(gr);
 		if (g == null) {
 			g = new ConcurrentLinkedQueue<>();
-			this.graph.put(graph, g);
+			graph.put(gr, g);
 		}
-		graphColor.put(graph, c);
+		graphColor.put(gr, c);
 		g.add(p);
 		while (g.size() > 100) g.poll();
 	}

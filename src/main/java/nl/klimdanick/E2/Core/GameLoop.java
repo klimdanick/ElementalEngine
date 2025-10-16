@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL11.glViewport;
 
 import nl.klimdanick.E2.Core.Debugging.DebugGraph;
 import nl.klimdanick.E2.Core.Debugging.DebugPanel;
+import nl.klimdanick.E2.Core.Rendering.DrawingMode;
 import nl.klimdanick.E2.Core.Rendering.E2Color;
 import nl.klimdanick.E2.Core.Rendering.Renderer;
 import nl.klimdanick.E2.Core.Rendering.Texture;
@@ -22,7 +23,6 @@ public abstract class GameLoop {
     public Texture screenTexture;
     public DebugGraph debugGraph;
     public DebugPanel debugPanel;
-    public int tps = 200;
 
     public void start(String title, int width, int height, int scale) {    	
         window = new Window(title, width, height, scale);
@@ -36,16 +36,16 @@ public abstract class GameLoop {
         renderer = new Renderer(width, height);
         input = new Input(window);
 
-        try {
-            steam = new SteamInterface();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            steam = new SteamInterface();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
         
         init();
         loop();
 
-        steam.shutdown();
+//        steam.shutdown();
         cleanup();
         window.destroy();
     }
@@ -53,30 +53,31 @@ public abstract class GameLoop {
     private Thread updateThread = new Thread() {
     	public void run() {
     		long lastTime = System.nanoTime();
-    		long nsPerTick = (int) (1_000_000_000.0 / tps);
+    		long nsPerTick = (int) (1_000_000_000.0 / EngineSettings.maxTps);
     		
     		while (window.isOpen()) {
+    			nsPerTick = (int) (1_000_000_000.0 / EngineSettings.maxTps);
     			long now = System.nanoTime();
                 long dt = (now - lastTime);
                 double tps = 1_000_000_000.0 / dt;
 //                System.out.println("tps: " + tps);
-                debugPanel.rows.put("tps", (int)tps);
-                debugGraph.addPointToGraph("tps", (int)tps, E2Color.CURIOS_BLUE);
+                DebugPanel.rows.put("tps", (int)tps);
+                DebugGraph.addPointToGraph("tps", (int)tps, E2Color.CURIOS_BLUE);
                 lastTime = now;
                 
     			update(dt/1_000_000_000.0);
-    			input.update();
+    			Input.update();
     			
-    			if (input.isKeyPressed(GLFW_KEY_F11) || (input.isKeyPressed(GLFW_KEY_ENTER) && input.isKeyDown(GLFW_KEY_LEFT_ALT))) {
+    			if (Input.isKeyPressed(GLFW_KEY_F11) || (Input.isKeyPressed(GLFW_KEY_ENTER) && input.isKeyDown(GLFW_KEY_LEFT_ALT))) {
             		window.toggleFullscreen();
             	}
     			
     			
-    			if (debugPanel != null) if (input.isKeyPressed(GLFW_KEY_F3)) {
+    			if (debugPanel != null) if (Input.isKeyPressed(GLFW_KEY_F3)) {
     				debugPanel.show = !debugPanel.show;
     				if (debugGraph != null) {
 	    				if (!debugPanel.show) debugGraph.show = false;
-	    				else if (input.isKeyDown(GLFW_KEY_LEFT_CONTROL)) debugGraph.show = true;
+	    				else if (Input.isKeyDown(GLFW_KEY_LEFT_CONTROL)) debugGraph.show = true;
     				}
     			}
     			
@@ -94,21 +95,32 @@ public abstract class GameLoop {
     		}
     	}
     };
+    
+    long fpsTime0 = System.nanoTime();
+    int frames = 0;
 
     private void loop() {
         long lastTime = System.nanoTime();
+        long nsPerTick = (int) (1_000_000_000.0 / EngineSettings.maxFps);
 
         updateThread.start();
         
         while (window.isOpen()) {
+        	nsPerTick = (int) (1_000_000_000.0 / EngineSettings.maxFps);
+        	frames++;
             long now = System.nanoTime();
             long dt = (now - lastTime);
             double fps = 1_000_000_000.0 / dt;
 //            System.out.println("fps: " + fps);
-            debugPanel.rows.put("fps", (int)fps);
-            debugGraph.addPointToGraph("fps", (int)fps, E2Color.DEBIAN_RED);
+            if (now - fpsTime0 >= 1_000_000_000.0) {
+            	DebugPanel.rows.put("fps", (int)frames);
+            	fpsTime0 = now;
+            	frames=0;
+            }
+            DebugGraph.addPointToGraph("fps", (int)fps, E2Color.DEBIAN_RED);
             lastTime = now;
-
+            
+            renderer.drawMode = DrawingMode.FILL;
             renderer.clear(E2Color.CINDER_BLACK);
             screenTexture.begin();
             render();
@@ -118,8 +130,19 @@ public abstract class GameLoop {
             
             resizeCanvas();
 
-            renderer.drawTexture(screenTexture, screenTexture.getWidth()/2, screenTexture.getHeight()/2, screenTexture.getWidth(), screenTexture.getHeight());
+            renderer.drawTexture(screenTexture, screenTexture.getWidth()/2, screenTexture.getHeight()/2, screenTexture.getWidth(), screenTexture.getHeight(), 0);
             window.update();
+            
+            now = System.nanoTime();
+            dt = (now - lastTime);
+            if (nsPerTick > dt) {
+            	try {
+            		int sleepTimeMS = (int)((nsPerTick - dt)/1_000_000.0);
+					Thread.sleep(sleepTimeMS);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+            }
         }
     }
     
