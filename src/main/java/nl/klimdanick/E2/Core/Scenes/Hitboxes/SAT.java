@@ -1,101 +1,162 @@
 package nl.klimdanick.E2.Core.Scenes.Hitboxes;
 
+import java.util.ArrayList;
 //SAT.java - collision detection + MTV
 import java.util.List;
 
-import nl.klimdanick.E2.Utils.Math.Vector2;
+import org.joml.Vector2f;
 
-public final class SAT {
- private static final float EPS = 1e-6f;
- // polygon vs polygon
- public static Collision polygonPolygon(ConvexPolygon a, ConvexPolygon b) {
-     List<Vector2> axesA = a.getAxes();
-     List<Vector2> axesB = b.getAxes();
+public class SAT {
 
-     float minOverlap = Float.POSITIVE_INFINITY;
-     Vector2 smallestAxis = new Vector2(0,0);
-     // test all axes from both polygons
-     for (Vector2 axis : concat(axesA, axesB)) {
-         HtiboxProjection pa = a.projectOntoAxis(axis);
-         HtiboxProjection pb = b.projectOntoAxis(axis);
+    public static class ConvexPolygon {
+        public final List<Vector2f> localVerts = new ArrayList<>();
+        public final List<Vector2f> worldVerts = new ArrayList<>();
+        public final Vector2f position = new Vector2f();
+        public float scale = 1;
+        public float rotationDeg = 0f;
 
-         if (!pa.overlaps(pb)) {
-             return new Collision(false, new Vector2(0,0)); // separating axis found
-         } else {
-             float overlap = pa.getOverlap(pb);
-             if (overlap < minOverlap) {
-                 minOverlap = overlap;
-                 smallestAxis = axis.cpy();
-                 // ensure axis points from A to B (MTV direction)
-                 Vector2 d = Vector2.sub(b.position, a.position);
-                 if (d.dot(smallestAxis) < 0) smallestAxis.scl(-1f);
-             }
-         }
-     }
-     // If we get here, collision happened. MTV = smallestAxis * minOverlap
-     Vector2 mtv = smallestAxis.scl(minOverlap + EPS); // small epsilon to avoid touching issues
-     return new Collision(true, mtv);
- }
+        public ConvexPolygon(float[][] verts) {
+            for (float[] v : verts) {
+                localVerts.add(new Vector2f(v[0], v[1]));
+                worldVerts.add(new Vector2f(v[0], v[1]));
+            }
+            recomputeWorldVerts();
+        }
 
- // polygon vs circle
- public static Collision polygonCircle(ConvexPolygon poly, Vector2 circleCenter, float radius) {
-     List<Vector2> axes = poly.getAxes();
-     float minOverlap = Float.POSITIVE_INFINITY;
-     Vector2 smallestAxis = new Vector2(0,0);
+        public void setPosition(float x, float y) {
+            position.set(x, y);
+            recomputeWorldVerts();
+        }
 
-     // include axis from polygon edges
-     for (Vector2 axis : axes) {
-         HtiboxProjection pPoly = poly.projectOntoAxis(axis);
-         // project circle onto axis: center projection +/- radius
-         float cProj = axis.dot(circleCenter);
-         HtiboxProjection pCircle = new HtiboxProjection(cProj - radius, cProj + radius);
-         if (!pPoly.overlaps(pCircle)) return new Collision(false, new Vector2(0,0));
-         float overlap = pPoly.getOverlap(pCircle);
-         if (overlap < minOverlap) {
-             minOverlap = overlap;
-             smallestAxis = axis.cpy();
-             Vector2 d = Vector2.sub(circleCenter, poly.position);
-             if (d.dot(smallestAxis) < 0) smallestAxis.scl(-1f);
-         }
-     }
+        public void setRotation(float deg) {
+            rotationDeg = deg;
+            recomputeWorldVerts();
+        }
 
-     // Also test axis from the nearest polygon vertex to circle center
-     // find closest vertex
-     List<Vector2> verts = poly.getWorldVertices();
-     float bestDist2 = Float.POSITIVE_INFINITY;
-     Vector2 closest = null;
-     for (Vector2 v : verts) {
-         float dx = circleCenter.x - v.x;
-         float dy = circleCenter.y - v.y;
-         float d2 = dx*dx + dy*dy;
-         if (d2 < bestDist2) { bestDist2 = d2; closest = v; }
-     }
-     if (closest != null) {
-         Vector2 axis = Vector2.sub(circleCenter, closest);
-         if (axis.len2() == 0) {
-             // circle center exactly on vertex: choose any axis (use first edge normal)
-             axis = poly.getAxes().get(0).cpy();
-         } else axis.nor();
-         HtiboxProjection pPoly = poly.projectOntoAxis(axis);
-         float cProj = axis.dot(circleCenter);
-         HtiboxProjection pCircle = new HtiboxProjection(cProj - radius, cProj + radius);
-         if (!pPoly.overlaps(pCircle)) return new Collision(false, new Vector2(0,0));
-         float overlap = pPoly.getOverlap(pCircle);
-         if (overlap < minOverlap) {
-             minOverlap = overlap;
-             smallestAxis = axis.cpy();
-             Vector2 d = Vector2.sub(circleCenter, poly.position);
-             if (d.dot(smallestAxis) < 0) smallestAxis.scl(-1f);
-         }
-     }
+        /** Recompute transformed vertices into world space */
+        public void recomputeWorldVerts() {
+            float rad = (float) Math.toRadians(rotationDeg);
+            float cos = (float) Math.cos(rad);
+            float sin = (float) Math.sin(rad);
 
-     Vector2 mtv = smallestAxis.scl(minOverlap + EPS);
-     return new Collision(true, mtv);
- }
+            for (int i = 0; i < localVerts.size(); i++) {
+                Vector2f lv = localVerts.get(i);
+                // Apply scale -> rotation -> translation
+                float sx = lv.x * scale;
+                float sy = lv.y * scale;
 
- // helper: concat two lists (cheap)
- private static <T> List<T> concat(List<T> a, List<T> b) {
-     java.util.ArrayList<T> res = new java.util.ArrayList<>(a.size() + b.size());
-     res.addAll(a); res.addAll(b); return res;
- }
+                float wx = sx * cos - sy * sin + position.x;
+                float wy = sx * sin + sy * cos + position.y;
+
+                worldVerts.get(i).set(wx, wy);
+            }
+        }
+
+        public List<Vector2f> getAxes() {
+            List<Vector2f> axes = new ArrayList<>();
+            int n = worldVerts.size();
+            for (int i = 0; i < n; i++) {
+                Vector2f a = worldVerts.get(i);
+                Vector2f b = worldVerts.get((i + 1) % n);
+                Vector2f edge = new Vector2f(b).sub(a);
+                if (edge.lengthSquared() < 1e-6f) continue; // skip degenerate
+                Vector2f normal = new Vector2f(-edge.y, edge.x).normalize(); // perpendicular
+                axes.add(normal);
+            }
+            return axes;
+        }
+
+        public Projection projectOnto(Vector2f axis) {
+            float min = axis.dot(worldVerts.get(0));
+            float max = min;
+            for (int i = 1; i < worldVerts.size(); i++) {
+                float p = axis.dot(worldVerts.get(i));
+                if (p < min) min = p;
+                if (p > max) max = p;
+            }
+            return new Projection(min, max);
+        }
+    }
+
+    private static class Projection {
+        float min, max;
+        Projection(float min, float max) { this.min = min; this.max = max; }
+        boolean overlaps(Projection other) { return !(this.max < other.min || other.max < this.min); }
+        float getOverlap(Projection other) {
+            return Math.min(this.max, other.max) - Math.max(this.min, other.min);
+        }
+    }
+
+    // --- POLYGON vs POLYGON ---
+    public static Collision polygonPolygon(ConvexPolygon a, ConvexPolygon b) {
+        List<Vector2f> axes = new ArrayList<>();
+        axes.addAll(a.getAxes());
+        axes.addAll(b.getAxes());
+
+        float minOverlap = Float.POSITIVE_INFINITY;
+        Vector2f smallestAxis = new Vector2f();
+
+        for (Vector2f axis : axes) {
+            Projection pA = a.projectOnto(axis);
+            Projection pB = b.projectOnto(axis);
+
+            if (!pA.overlaps(pB)) {
+                return new Collision(false, new Vector2f()); // no collision
+            }
+
+            float overlap = pA.getOverlap(pB);
+            if (overlap < minOverlap) {
+                minOverlap = overlap;
+                smallestAxis.set(axis);
+                // Ensure MTV points from A to B
+                Vector2f direction = new Vector2f(b.position).sub(a.position);
+                if (direction.dot(smallestAxis) < 0) smallestAxis.negate();
+            }
+        }
+
+        // Multiply by overlap to get MTV
+        Vector2f mtv = new Vector2f(smallestAxis).mul(minOverlap);
+        return new Collision(true, mtv);
+    }
+
+    // --- POLYGON vs CIRCLE (optional) ---
+    public static Collision polygonCircle(ConvexPolygon poly, Vector2f center, float radius) {
+        List<Vector2f> axes = new ArrayList<>(poly.getAxes());
+
+        // Find the closest polygon vertex to circle center
+        Vector2f closest = null;
+        float minDist2 = Float.POSITIVE_INFINITY;
+        for (Vector2f v : poly.worldVerts) {
+            float d2 = v.distanceSquared(center);
+            if (d2 < minDist2) {
+                minDist2 = d2;
+                closest = v;
+            }
+        }
+        if (closest != null) {
+            Vector2f axisToCenter = new Vector2f(center).sub(closest);
+            if (axisToCenter.lengthSquared() > 1e-6f) axes.add(axisToCenter.normalize());
+        }
+
+        float minOverlap = Float.POSITIVE_INFINITY;
+        Vector2f smallestAxis = new Vector2f();
+
+        for (Vector2f axis : axes) {
+            Projection pPoly = poly.projectOnto(axis);
+            float cProj = axis.dot(center);
+            Projection pCircle = new Projection(cProj - radius, cProj + radius);
+
+            if (!pPoly.overlaps(pCircle)) return new Collision(false, new Vector2f());
+            float overlap = pPoly.getOverlap(pCircle);
+            if (overlap < minOverlap) {
+                minOverlap = overlap;
+                smallestAxis.set(axis);
+                Vector2f d = new Vector2f(center).sub(poly.position);
+                if (d.dot(smallestAxis) < 0) smallestAxis.negate();
+            }
+        }
+
+        Vector2f mtv = new Vector2f(smallestAxis).mul(minOverlap);
+        return new Collision(true, mtv);
+    }
 }

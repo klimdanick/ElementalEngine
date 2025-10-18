@@ -1,4 +1,5 @@
 # ElementalEngine V4!
+
 Welcome to ElementalEngine! a lightweight and extensible Java game engine designed for creating 2D games with ease.
 
 This engine is designed with the goal of making game development about programming again. A lot of modern engines use a lot of UI to create a game, To us this takes away the creative freedom of a programmer.
@@ -7,48 +8,54 @@ Whenever you look at a game made with unity, you instantly know it is made with 
 ## Features
 
 ### 1 Sprites / Textures
-- [x] Draw single image
-- [x] Draw sub-region / sprite sheet
-- [x] Flipping / mirroring
-- [x] Rotation
-- [x] Scaling
+
+* \[x] Draw single image
+* \[x] Draw sub-region / sprite sheet
+* \[x] Flipping / mirroring
+* \[x] Rotation
+* \[x] Scaling
 
 ### 2 Primitive shapes
-- [x] Rectangles (filled or outline)
-- [x] Lines
-- [x] Circles
-- [x] Polygons / triangles
-- [x] Outlines
+
+* \[x] Rectangles (filled or outline)
+* \[x] Lines
+* \[x] Circles
+* \[x] Polygons / triangles
+* \[x] Outlines
 
 ### 3 Colors / Transparency
-- [x] Support tinting textures with a color multiplier
-- [x] Set alpha per sprite for fade in/out or effects
-- [ ] Support blend modes (normal, additive, multiply)
+
+* \[x] Support tinting textures with a color multiplier
+* \[x] Set alpha per sprite for fade in/out or effects
+* \[ ] Optional: Support blend modes (normal, additive, multiply)
 
 ### 4 Text / Fonts
-- [x] Font rendering
-- [x] Draw strings with scaling, color, and alignment
-- [ ] Optional: kerning and multi-line support
 
-### 5 Batch Rendering
-- [ ] For performance: group multiple sprites into a single VAO/VBO draw call
+* \[x] Font rendering
+* \[x] Draw strings with scaling, color, and alignment
+* \[ ] Optional: kerning and multi-line support
 
-### 6 Camera / View Transformations
-- [ ] Translation
-- [ ] Rotation
-- [ ] Scaling
+### 5 Camera / View Transformations
 
-### 7 Debug / Utility Draws
-- [ ] Draw collision boxes
-- [ ] Draw coordinate axes or grids
-- [x] Draw FPS / stats overlays
+* \[x] Translation
+* \[x] Rotation
+* \[x] Scaling
 
-### 8 Optional Advanced
-- [ ] Shaders: support for post-processing effects (grayscale, palette swap, CRT scanlines)
-- [ ] Layering / Z-index: draw order for overlapping sprites
-- [ ] Tilemaps: optimized grid-based rendering for backgrounds
+### 6 Debug / Utility Draws
+
+* \[x] Draw collision boxes
+* \[ ] Draw coordinate axes or grids
+* \[x] Draw FPS / stats overlays
+
+### 7 Optional Advanced
+
+* \[ ] Shaders: support for post-processing effects (grayscale, palette swap, CRT scanlines)
+* \[ ] Layering / Z-index: draw order for overlapping sprites
+* \[ ] Tilemaps: optimized grid-based rendering for backgrounds
+* \[ ] Batch rendering: group multiple sprites into a single VAO/VBO draw call
 
 ### License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 Contact
@@ -56,3 +63,4 @@ For questions or support, please make a new issue on github, send an email to gi
 
 for more information about the lead developer:
 https://klimdanick.nl
+

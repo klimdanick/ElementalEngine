@@ -5,7 +5,9 @@ import static org.lwjgl.opengl.GL20.*;
 import java.nio.FloatBuffer;
 import java.nio.file.*;
 
+import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.lwjgl.system.MemoryStack;
 
 import java.io.IOException;
@@ -92,5 +94,15 @@ public class Shader {
             glUniformMatrix4fv(loc, false, fb);
         }
     }
+
+	public void setUniformMat3(String name, Matrix3f matrix) {
+		int loc = glGetUniformLocation(programId, name);
+        if (loc == -1) return;
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            FloatBuffer fb = stack.mallocFloat(9);
+            matrix.get(fb);
+            glUniformMatrix3fv(loc, false, fb);
+        }
+	}
 
 }

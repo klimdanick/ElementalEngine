@@ -33,9 +33,9 @@ import static org.lwjgl.opengl.GL30.glGenVertexArrays;
 
 import java.awt.Color;
 import java.awt.Font;
-import java.beans.VetoableChangeListener;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 
 import nl.klimdanick.E2.Core.GameLoop;
 
@@ -43,6 +43,7 @@ public class Renderer {
 	
 	private Shader textureShader, shapeShader;
     private Matrix4f projection;
+    public Camera activeCam, renderCam;
     public int screenWidth, screenHeight;
     public boolean renderingScreen = true;
     public DrawingMode drawMode = DrawingMode.FILL;
@@ -50,6 +51,8 @@ public class Renderer {
     public Renderer(int screenWidth, int screenHeight) {
     	this.screenHeight = screenHeight;
     	this.screenWidth = screenWidth;
+    	activeCam = new Camera();
+    	renderCam = new Camera();
     	
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -90,6 +93,9 @@ public class Renderer {
         textureShader.setUniform2f("uScale", width, height);
         textureShader.setUniform4f("uTint", texture.tint.r, texture.tint.g, texture.tint.b, texture.tint.a);
         textureShader.setUniform1f("uRotation", rotation);
+        if (renderingScreen) {
+        	setCameraUniforms(new Camera());
+        } else setCameraUniforms();
 
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
@@ -208,6 +214,24 @@ public class Renderer {
         shapeShader.setUniform2f("uScale", scale, scale);
         shapeShader.setUniform4f("uColor", c.r, c.g, c.b, c.a);
         shapeShader.setUniform1f("uRotation", rotation);
+        setCameraUniforms();
+    }
+    private void setCameraUniforms() {
+    	setCameraUniforms(renderCam);
+    }
+    private void setCameraUniforms(Camera c) {
+    	Vector2f translation = new Vector2f(-screenWidth/2, -screenHeight/2).add(c.translation);
+    	if (c != activeCam) translation = new Vector2f(0, 0);
+    	
+    	shapeShader.setUniform1f("uCamRotation", c.rotation);
+    	shapeShader.setUniformMat3("uCamProjection", c.projection);
+    	shapeShader.setUniform2f("uCamScale", c.scale.x, c.scale.y);
+    	shapeShader.setUniform2f("uCamTranslation", translation.x, translation.y);
+    	
+    	textureShader.setUniform1f("uCamRotation", c.rotation);
+    	textureShader.setUniformMat3("uCamProjection", c.projection);
+    	textureShader.setUniform2f("uCamScale", c.scale.x, c.scale.y);
+    	textureShader.setUniform2f("uCamTranslation", translation.x, translation.y);
     }
 
     

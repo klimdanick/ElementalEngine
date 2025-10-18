@@ -1,5 +1,7 @@
 package planes;
 
+import org.joml.Vector2f;
+
 import nl.klimdanick.E2.Core.Rendering.DrawingMode;
 import nl.klimdanick.E2.Core.Rendering.Renderer;
 import nl.klimdanick.E2.Core.Scenes.Scene;
@@ -7,12 +9,12 @@ import nl.klimdanick.E2.Core.Scenes.Scene;
 public class MainScene extends Scene {
 	
 	Plane p;
-	Missile[] m = new Missile[100];
+	Missile[] m = new Missile[5];
 	
 	public MainScene() {
-		p = new Plane(1920/6, 1080/6);
+		p = new Plane(0, 0);
 		for (int i = 0; i < m.length; i++) {
-			m[i] = new Missile(100+i*20, 100, 0);
+			m[i] = new Missile(-100+i*20, -100, 0);
 			this.addObject(m[i]);
 		}
 		this.addObject(p);
@@ -26,16 +28,17 @@ public class MainScene extends Scene {
 	@Override
 	public void preRender(Renderer r) {
 		r.drawMode = DrawingMode.FILL;
+		camera.translation.x = p.x;
+		camera.translation.y = p.y;
 	}
 
 	@Override
 	public void postRender(Renderer r) {
-
 	}
 
 	public void reset() {
-		p.x = 1920/6;
-		p.y = 1080/6;
+		p.x = 0;
+		p.y = 0;
 		p.rotation = (float)Math.PI;
 	}
 

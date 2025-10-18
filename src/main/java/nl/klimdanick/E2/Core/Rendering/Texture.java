@@ -21,6 +21,7 @@ public class Texture {
 	 private Matrix4f previousProjection;
 	 private int previousBuffer;
 	 private IntBuffer previousViewport;
+	 private Camera previousCam;
 	 public Quad quad;
 	 public E2Color tint = new E2Color(1.0f, 1.0f, 1.0f, 1.0f);
 	 
@@ -131,6 +132,8 @@ public class Texture {
 		 previousProjection = GameLoop.renderer.getProjection();
 		 GameLoop.renderer.setProjection(new Matrix4f().ortho2D(0, width, 0, height));
 		 GameLoop.renderer.renderingScreen = false;
+		 previousCam = GameLoop.renderer.renderCam;
+		 GameLoop.renderer.renderCam = new Camera();
 	 }
 
 	 public void end() {
@@ -138,6 +141,7 @@ public class Texture {
 		 glBindFramebuffer(GL_FRAMEBUFFER, previousBuffer);
 		 glViewport(previousViewport.get(0), previousViewport.get(1), previousViewport.get(2), previousViewport.get(3));
 		 GameLoop.renderer.setProjection(previousProjection);
+		 GameLoop.renderer.renderCam = previousCam;
 	 }
 		 
 	 public void bind() {

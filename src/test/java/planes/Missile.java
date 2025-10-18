@@ -16,8 +16,7 @@ public class Missile extends GameObject {
 	
 	@Override
 	public void render(Renderer r) {
-		r.clear(new E2Color(0f, 0f, 0f, 0f));
-		r.drawShape(w/2, h/2, shape, E2Color.STRAWBERRY_MAGENTA, w/2, 0);
+		r.clear(E2Color.STRAWBERRY_MAGENTA);
 	}
 
 }

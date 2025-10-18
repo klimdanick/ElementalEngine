@@ -15,8 +15,8 @@ import nl.klimdanick.E2.Core.Scenes.Hitboxes.Hitbox;
 public class Plane extends GameObject {
 	
 	private static final float[][] shape = new float[][] {
-		{0, 1}, {-0.1f, 0.9f}, {-0.1f, 0.5f}, {-1f, 0.5f}, {-0.8f, 0.1f}, {-0.2f, 0f}, {-0.1f, -0.8f}, {-0.3f, -0.8f}, {-0.3f, -0.9f}, {-0.1f, -0.9f}, {0, -1},
-		{0, -1}, {0.1f, -0.9f}, {0.3f, -0.9f}, {0.3f, -0.8f}, {0.1f, -0.8f}, {0.2f, 0f}, {0.8f, 0.1f}, {1f, 0.5f}, {0.1f, 0.5f}, {0.1f, 0.9f}, {0, 1}
+		{0, 0.5f}, {-0.1f, 0.5f}, {-1f, 0.4f}, {-0.8f, 0.1f}, {-0.2f, -0.1f}, {-0.1f, -0.8f}, {-0.3f, -0.8f}, {-0.3f, -0.9f}, {-0.1f, -0.9f}, {0, -1},
+		{0, -1}, {0.1f, -0.9f}, {0.3f, -0.9f}, {0.3f, -0.8f}, {0.1f, -0.8f}, {0.2f, 0f}, {0.8f, 0.1f}, {1f, 0.5f}, {0.1f, 0.5f}, {0, 0.5f}
 	};
 	
 	private static final float[][] noseShape = new float[][] {
@@ -61,21 +61,23 @@ public class Plane extends GameObject {
 		if (Input.isKeyDown(GLFW_KEY_D)) rotation -= 3*dt;
 		
 		if (Input.isKeyDown(GLFW_KEY_R)) {
-			rotation = 0;
-			x = 1920/6;
-			y = 1080/6;
+			if (scene instanceof MainScene) {
+				((MainScene)scene).reset();
+			}
 		}
 		
-		double speed = 100*dt;
-		x+=Math.sin(rotation)*speed;
-		y+=Math.cos(rotation)*speed;
-		
 		if (this.scene instanceof MainScene) {
-			MainScene s = (MainScene)this.scene;
+			MainScene s = (MainScene)scene;
 			Collision c = hitbox.getCollision(s.m);
 			if (c.collided) {
-				System.out.println(c);
-				s.reset();
+//				System.out.println(c);
+//				s.reset();
+				x-=c.mtv.x;
+				y-=c.mtv.y;
+			} else {
+				double speed = 100*dt;
+				x+=Math.sin(rotation)*speed;
+				y+=Math.cos(rotation)*speed;
 			}
 		}
 		

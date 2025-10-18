@@ -10,6 +10,7 @@ import static org.lwjgl.opengl.GL11.glViewport;
 
 import nl.klimdanick.E2.Core.Debugging.DebugGraph;
 import nl.klimdanick.E2.Core.Debugging.DebugPanel;
+import nl.klimdanick.E2.Core.Rendering.Camera;
 import nl.klimdanick.E2.Core.Rendering.DrawingMode;
 import nl.klimdanick.E2.Core.Rendering.E2Color;
 import nl.klimdanick.E2.Core.Rendering.Renderer;
@@ -123,7 +124,9 @@ public abstract class GameLoop {
             renderer.drawMode = DrawingMode.FILL;
             renderer.clear(E2Color.CINDER_BLACK);
             screenTexture.begin();
+            renderer.renderCam = renderer.activeCam;
             render();
+            renderer.renderCam = new Camera();
             if (debugGraph != null) debugGraph.render();
             if (debugPanel != null) debugPanel.render();
             screenTexture.end();

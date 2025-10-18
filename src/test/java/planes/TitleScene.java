@@ -28,7 +28,7 @@ public class TitleScene extends Scene {
 	int[] maxSelect = {2, 3}; 
 	
 	public TitleScene() {
-		p = new Plane(1920/6, 1080/6);
+		p = new Plane(0, 0);
 		objs.add(p);
 	}
 	
@@ -110,42 +110,42 @@ public class TitleScene extends Scene {
 		
 		Font font = new Font("Monospaced", Font.BOLD, 30);
 		Font font2 = new Font("Monospaced", Font.BOLD, 15);
-		r.drawText(title, font, 1920/6, 1080/12, E2Color.DEBIAN_RED);
+		r.drawText(title, font, 0, -80, E2Color.DEBIAN_RED);
 		
 		if (page == 0) {
 			font = new Font("Monospaced", Font.PLAIN, 20);
 			if (selected == 0) font = new Font("Monospaced", Font.BOLD, 20);
-			r.drawRect(1920/6-125, 1080/6+100, 100, 50, E2Color.WHITE);
-			r.drawText("Options", font, 1920/6-125-1, 1080/6+100-4, E2Color.WHITE);
+			r.drawRect(-125, 100, 100, 50, E2Color.WHITE);
+			r.drawText("Options", font, -125-1, 100-4, E2Color.WHITE);
 			
 			font = new Font("Monospaced", Font.PLAIN, 20);
 			if (selected == 1) font = new Font("Monospaced", Font.BOLD, 20);
-			r.drawRect(1920/6, 1080/6+100, 100, 50, E2Color.WHITE);
-			r.drawText("Play", font, 1920/6-1, 1080/6+100-4, E2Color.WHITE);
+			r.drawRect(0, 100, 100, 50, E2Color.WHITE);
+			r.drawText("Play", font, -1, 100-4, E2Color.WHITE);
 			
 			font = new Font("Monospaced", Font.PLAIN, 14);
 			if (selected == 2) font = new Font("Monospaced", Font.BOLD, 14);
-			r.drawRect(1920/6+125, 1080/6+100, 100, 50, E2Color.WHITE);
-			r.drawText("Multiplayer", font, 1920/6+125-1, 1080/6+100-4, E2Color.WHITE);
+			r.drawRect(125, 100, 100, 50, E2Color.WHITE);
+			r.drawText("Multiplayer", font, 125-1, 100-4, E2Color.WHITE);
 		}
 		
 		if (page == 1) {
 			font = new Font("Monospaced", Font.PLAIN, 20);
 			if (selected == 0) font = new Font("Monospaced", Font.BOLD, 20);
-			r.drawRect(1920/6-125, 1080/6+100, 100, 50, E2Color.WHITE);
-			r.drawText("Back", font, 1920/6-125-1, 1080/6+100-4, E2Color.WHITE);
+			r.drawRect(-125, 100, 100, 50, E2Color.WHITE);
+			r.drawText("Back", font, -125-1, 100-4, E2Color.WHITE);
 			
 			font = new Font("Monospaced", Font.PLAIN, 20);
 			if (selected == 1) font = new Font("Monospaced", Font.BOLD, 20);
-			r.drawRect(1920/6, 1080/6+100, 100, 50, E2Color.WHITE);
-			r.drawText("maxFps", font2, 1920/6-1, 1080/6+100-40, E2Color.WHITE);
-			r.drawText(EngineSettings.maxFps+"", font, 1920/6-1, 1080/6+100-4, E2Color.WHITE);
+			r.drawRect(0, 100, 100, 50, E2Color.WHITE);
+			r.drawText("maxFps", font2, -1, 100-40, E2Color.WHITE);
+			r.drawText(EngineSettings.maxFps+"", font, -1, 100-4, E2Color.WHITE);
 			
 			font = new Font("Monospaced", Font.PLAIN, 20);
 			if (selected == 2) font = new Font("Monospaced", Font.BOLD, 20);
-			r.drawRect(1920/6+125, 1080/6+100, 100, 50, E2Color.WHITE);
-			r.drawText("maxTps", font2, 1920/6+125-1, 1080/6+100-40, E2Color.WHITE);
-			r.drawText(EngineSettings.maxTps+"", font, 1920/6+125-1, 1080/6+100-4, E2Color.WHITE);
+			r.drawRect(125, 100, 100, 50, E2Color.WHITE);
+			r.drawText("maxTps", font2, 125-1, 100-40, E2Color.WHITE);
+			r.drawText(EngineSettings.maxTps+"", font, 125-1, 100-4, E2Color.WHITE);
 		}
 	}
 

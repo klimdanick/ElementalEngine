@@ -1,16 +1,18 @@
 package nl.klimdanick.E2.Core.Scenes;
 
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_F4;
+
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import nl.klimdanick.E2.Core.Input;
+import nl.klimdanick.E2.Core.Rendering.Camera;
 import nl.klimdanick.E2.Core.Rendering.Renderer;
-
-import static org.lwjgl.glfw.GLFW.GLFW_KEY_F4;
 
 public abstract class Scene {
 	
 	public CopyOnWriteArrayList<GameObject> objs = new CopyOnWriteArrayList<>();
 	public boolean drawHitboxes = false;
+	public Camera camera = new Camera();
 	
 	public void addObject(GameObject obj) {
 		objs.add(obj);
@@ -27,6 +29,7 @@ public abstract class Scene {
 	}
 	
 	public void render_(Renderer r) {
+		r.activeCam = camera;
 		preRender(r);
 		for (GameObject obj : objs) {
 			obj.render_(r);
