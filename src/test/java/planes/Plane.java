@@ -5,6 +5,7 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
 
 import nl.klimdanick.E2.Core.Input;
+import nl.klimdanick.E2.Core.Debugging.DebugGraph;
 import nl.klimdanick.E2.Core.Debugging.DebugPanel;
 import nl.klimdanick.E2.Core.Rendering.E2Color;
 import nl.klimdanick.E2.Core.Rendering.Renderer;
@@ -45,14 +46,16 @@ public class Plane extends GameObject {
 	@Override
 	public void render(Renderer r) {
 		r.clear(new E2Color(0f, 0f, 0f, 0f));
+		r.drawShape(w/2, h/2, tailShape, E2Color.DEBIAN_RED, w/2, 0);
 		r.drawShape(w/2, h/2, noseShape, E2Color.DEBIAN_RED, w/2, 0);
 		r.drawShape(w/2, h/2, wingsShape, E2Color.DEBIAN_RED, w/2, 0);
 		r.drawShape(w/2, h/2, bodyShape, E2Color.DEBIAN_RED, w/2, 0);
-		r.drawShape(w/2, h/2, tailShape, E2Color.DEBIAN_RED, w/2, 0);
 	}
 
 	@Override
 	public void update(double dt) {
+		if (!(this.scene instanceof MainScene)) return;
+		DebugGraph.addPointToGraph("rotation", (int)(rotation*360/(Math.PI*2)), E2Color.STRAWBERRY_MAGENTA);
 		DebugPanel.rows.put("rotation", (int)(rotation*360/(Math.PI*2)));
 		DebugPanel.rows.put("x", (int)(x));
 		DebugPanel.rows.put("y", (int)(y));

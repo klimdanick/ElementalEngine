@@ -2,6 +2,7 @@ package planes;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_A;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_D;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_F5;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_SPACE;
 
 import java.awt.Font;
@@ -33,7 +34,7 @@ public class TitleScene extends Scene {
 	}
 	
 	@Override
-	public void update_(double dt) {
+	public void update(double dt) {
 		if (time < 3.75) time += dt;
 		if (time >= 2.80) title = "Planes!";
 		else if (time >= 2.70) title = "Planes";
@@ -92,14 +93,11 @@ public class TitleScene extends Scene {
 				}
 			}
 		}
-		
-	}
-	@Override
-	public void update(double dt) {}
-	
+	}	
 
 	@Override
 	public void preRender(Renderer r) {
+		r.clear(E2Color.CURIOS_BLUE);
 		r.drawMode = DrawingMode.FILL;
 		
 	}
@@ -126,7 +124,7 @@ public class TitleScene extends Scene {
 			font = new Font("Monospaced", Font.PLAIN, 14);
 			if (selected == 2) font = new Font("Monospaced", Font.BOLD, 14);
 			r.drawRect(125, 100, 100, 50, E2Color.WHITE);
-			r.drawText("Multiplayer", font, 125-1, 100-4, E2Color.WHITE);
+			r.drawText("Multiplayer", font, 125-1, 100-2, E2Color.WHITE);
 		}
 		
 		if (page == 1) {

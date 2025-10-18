@@ -27,13 +27,12 @@ Whenever you look at a game made with unity, you instantly know it is made with 
 
 * \[x] Support tinting textures with a color multiplier
 * \[x] Set alpha per sprite for fade in/out or effects
-* \[ ] Optional: Support blend modes (normal, additive, multiply)
+* \[x] Optional: Support blend modes (normal, additive, multiply)
 
 ### 4 Text / Fonts
 
 * \[x] Font rendering
 * \[x] Draw strings with scaling, color, and alignment
-* \[ ] Optional: kerning and multi-line support
 
 ### 5 Camera / View Transformations
 
@@ -44,7 +43,7 @@ Whenever you look at a game made with unity, you instantly know it is made with 
 ### 6 Debug / Utility Draws
 
 * \[x] Draw collision boxes
-* \[ ] Draw coordinate axes or grids
+* \[x] Draw coordinate axes or grids
 * \[x] Draw FPS / stats overlays
 
 ### 7 Optional Advanced

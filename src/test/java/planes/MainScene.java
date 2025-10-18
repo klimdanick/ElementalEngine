@@ -3,6 +3,7 @@ package planes;
 import org.joml.Vector2f;
 
 import nl.klimdanick.E2.Core.Rendering.DrawingMode;
+import nl.klimdanick.E2.Core.Rendering.E2Color;
 import nl.klimdanick.E2.Core.Rendering.Renderer;
 import nl.klimdanick.E2.Core.Scenes.Scene;
 
@@ -27,6 +28,7 @@ public class MainScene extends Scene {
 
 	@Override
 	public void preRender(Renderer r) {
+		r.clear(E2Color.CURIOS_BLUE);
 		r.drawMode = DrawingMode.FILL;
 		camera.translation.x = p.x;
 		camera.translation.y = p.y;

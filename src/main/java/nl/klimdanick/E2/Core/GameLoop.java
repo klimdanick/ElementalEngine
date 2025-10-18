@@ -3,6 +3,8 @@ package nl.klimdanick.E2.Core;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_ENTER;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_F11;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_F3;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_F4;
+import static org.lwjgl.glfw.GLFW.GLFW_KEY_F5;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_ALT;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_LEFT_CONTROL;
 import static org.lwjgl.glfw.GLFW.glfwGetFramebufferSize;
@@ -15,6 +17,8 @@ import nl.klimdanick.E2.Core.Rendering.DrawingMode;
 import nl.klimdanick.E2.Core.Rendering.E2Color;
 import nl.klimdanick.E2.Core.Rendering.Renderer;
 import nl.klimdanick.E2.Core.Rendering.Texture;
+import nl.klimdanick.E2.Core.Scenes.GameObject;
+import nl.klimdanick.E2.Core.Scenes.Scene;
 
 public abstract class GameLoop {
     public static Window window;
@@ -24,6 +28,9 @@ public abstract class GameLoop {
     public Texture screenTexture;
     public DebugGraph debugGraph;
     public DebugPanel debugPanel;
+    public boolean drawHitboxes = false;
+	public boolean drawAxes = false, drawGrid = false;
+	public Scene activeScene = null;
 
     public void start(String title, int width, int height, int scale) {    	
         window = new Window(title, width, height, scale);
@@ -66,7 +73,7 @@ public abstract class GameLoop {
                 DebugGraph.addPointToGraph("tps", (int)tps, E2Color.CURIOS_BLUE);
                 lastTime = now;
                 
-    			update(dt/1_000_000_000.0);
+                update_(dt/1_000_000_000.0);
     			Input.update();
     			
     			if (Input.isKeyPressed(GLFW_KEY_F11) || (Input.isKeyPressed(GLFW_KEY_ENTER) && input.isKeyDown(GLFW_KEY_LEFT_ALT))) {
@@ -80,6 +87,12 @@ public abstract class GameLoop {
 	    				if (!debugPanel.show) debugGraph.show = false;
 	    				else if (Input.isKeyDown(GLFW_KEY_LEFT_CONTROL)) debugGraph.show = true;
     				}
+    			}
+    			if (Input.isKeyPressed(GLFW_KEY_F4)) drawHitboxes = !drawHitboxes;
+    			if (Input.isKeyPressed(GLFW_KEY_F5)) {
+    				drawAxes = !drawAxes;
+	    			if (!drawAxes) drawGrid = false;
+	    			else if (Input.isKeyDown(GLFW_KEY_LEFT_CONTROL)) drawGrid = true;
     			}
     			
     			now = System.nanoTime();
@@ -125,7 +138,14 @@ public abstract class GameLoop {
             renderer.clear(E2Color.CINDER_BLACK);
             screenTexture.begin();
             renderer.renderCam = renderer.activeCam;
-            render();
+            render_();
+            if (activeScene != null) {
+            	 if (drawHitboxes)for (GameObject obj : activeScene.objs) {
+            		obj.hitbox.render(renderer);
+            	 }
+            	 if (drawAxes) activeScene.drawAxes(renderer);
+            	 if (drawGrid) activeScene.drawGrid(renderer);
+            }
             renderer.renderCam = new Camera();
             if (debugGraph != null) debugGraph.render();
             if (debugPanel != null) debugPanel.render();
@@ -166,6 +186,16 @@ public abstract class GameLoop {
         int offsetX = (windowWidth - drawWidth) / 2;
         int offsetY = (windowHeight - drawHeight) / 2;
         glViewport(offsetX, offsetY, drawWidth, drawHeight);
+    }
+    
+    private void render_() {
+    	if (activeScene != null) activeScene.render_(renderer);
+    	render();
+    }
+    
+    private void update_(double dt) {
+    	if (activeScene != null) activeScene.update_(dt);
+    	update(dt);
     }
 
     protected abstract void init();
