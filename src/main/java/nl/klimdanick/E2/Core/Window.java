@@ -35,6 +35,11 @@ public class Window {
     }
 
     public void update() {
+    	int[] w = new int[1];
+    	int[] h = new int[1];
+    	GLFW.glfwGetWindowSize(handle, w, h);
+    	this.width = w[0];
+    	this.height = h[0];
         GLFW.glfwSwapBuffers(handle);
         GLFW.glfwPollEvents();
     }
@@ -50,5 +55,39 @@ public class Window {
     public void destroy() {
         GLFW.glfwDestroyWindow(handle);
         GLFW.glfwTerminate();
+    }
+    
+    public int getWidth() {
+    	return this.width;
+    }
+    
+    public int getHeight() {
+    	return this.width;
+    }
+    
+    public long getHandle() {
+    	return handle;
+    }
+    
+    public int[] calculate(int virtualW, int virtualH) {
+    	
+    	int[] w = new int[1];
+    	int[] h = new int[1];
+    	GLFW.glfwGetWindowSize(handle, w, h);
+    	this.width = w[0];
+    	this.height = h[0];
+
+        double scale = Math.min((double)this.width / virtualW, (double)this.height / virtualH);
+
+        // prevent scale = 0
+        if (scale < 1) scale = 1;
+
+        int width = (int)(virtualW * scale);
+        int height = (int)(virtualH * scale);
+
+        int x = (this.width - width) / 2;
+        int y = (this.height - height) / 2;
+
+        return new int[]{x, y, width, height};
     }
 }

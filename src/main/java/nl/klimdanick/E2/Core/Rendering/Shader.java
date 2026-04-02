@@ -1,6 +1,10 @@
-package nl.klimdanick.E2.CoreRendering;
+package nl.klimdanick.E2.Core.Rendering;
 
+import java.nio.FloatBuffer;
+
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL20;
+import org.lwjgl.system.MemoryStack;
 
 public class Shader {
 
@@ -31,5 +35,15 @@ public class Shader {
     
     public int getProgram() {
     	return program;
+    }
+    
+    public void setMatrix4(String name, Matrix4f matrix) {
+        int location = GL20.glGetUniformLocation(program, name);
+
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            FloatBuffer fb = stack.mallocFloat(16);
+            matrix.get(fb);
+            GL20.glUniformMatrix4fv(location, false, fb);
+        }
     }
 }

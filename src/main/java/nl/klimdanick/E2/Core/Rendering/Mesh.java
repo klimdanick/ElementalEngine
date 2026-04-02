@@ -1,4 +1,4 @@
-package nl.klimdanick.E2.CoreRendering;
+package nl.klimdanick.E2.Core.Rendering;
 
 import org.lwjgl.opengl.*;
 
