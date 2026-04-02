@@ -5,11 +5,12 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 
 import nl.klimdanick.E2.Core.E2;
+import nl.klimdanick.E2.Utils.Debug.DebugGraph;
 
 public class Renderer {
 	public SpriteBatch sprite;
 	public ShapeBatch shape;
-	protected ShapeBatch debugBatch;
+	public ShapeBatch debugBatch;
 	public Camera2D camera;
 	private E2 engine;
 	public ArrayList<Batch> batches;
@@ -35,6 +36,8 @@ public class Renderer {
 		for (Batch b : batchQueue) {
 			b.begin();
 		}
+		
+		DebugGraph.render(this);
     	
     	engine.getGame().render();
     	

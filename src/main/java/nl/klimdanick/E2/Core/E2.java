@@ -6,6 +6,7 @@ import nl.klimdanick.E2.Core.Input.Input;
 import nl.klimdanick.E2.Core.Rendering.Framebuffer;
 import nl.klimdanick.E2.Core.Rendering.Renderer;
 import nl.klimdanick.E2.Core.Rendering.ScreenRenderer;
+import nl.klimdanick.E2.Utils.Debug.DebugGraph;
 
 public class E2 {
 
@@ -48,6 +49,8 @@ public class E2 {
             float currentTime = window.getTime();
             float dt = currentTime - lastTime;
             lastTime = currentTime;
+            
+            DebugGraph.addPoint("fps", (int)(1/dt));
 
             Input.update(width, height, window.getWidth(), window.getHeight());
             

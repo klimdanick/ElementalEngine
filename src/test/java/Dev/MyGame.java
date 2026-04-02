@@ -29,11 +29,6 @@ public class MyGame extends Game {
 
     @Override
     public void update(float dt) {
-    	if (dt < 0.02)
-    		System.out.println((1/dt));
-//    	else
-//    		System.err.append((1/dt)+"\n");
-    	
     	
     	if (Input.pressed("left")) world.selected[0]--;
     	if (Input.pressed("right")) world.selected[0]++;
