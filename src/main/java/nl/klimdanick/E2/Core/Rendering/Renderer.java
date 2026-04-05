@@ -14,6 +14,7 @@ public class Renderer {
 	public Camera2D camera;
 	private E2 engine;
 	public ArrayList<Batch> batches;
+	public float dt = 0;
 	
 	public Renderer(E2 engine) {
 		this.engine = engine;
@@ -37,6 +38,7 @@ public class Renderer {
 			b.begin();
 		}
 		
+		if (engine.debug)
 		DebugGraph.render(this);
     	
     	engine.getGame().render();

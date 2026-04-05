@@ -16,6 +16,7 @@ public class E2 {
     private ScreenRenderer screenRenderer;
     private int width, height;
     public Renderer renderer;
+    public boolean debug = false;
 
     public E2(Game game, int width, int height) {
     	this.width = width;
@@ -50,6 +51,7 @@ public class E2 {
             float dt = currentTime - lastTime;
             lastTime = currentTime;
             
+            renderer.dt = dt;
             DebugGraph.addPoint("fps", (int)(1/dt));
 
             Input.update(width, height, window.getWidth(), window.getHeight());
