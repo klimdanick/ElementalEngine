@@ -18,8 +18,11 @@ public class Texture {
         ByteBuffer data = STBImage.stbi_load(path, w, h, c, 4);
 
         if (data == null) {
+        	data = STBImage.stbi_load("src/main/"+path, w, h, c, 4);
+        	if (data == null) {
             throw new RuntimeException("Failed to load texture: " + path +
                 "\nReason: " + STBImage.stbi_failure_reason());
+        	}
         }
 
         id = GL11.glGenTextures();

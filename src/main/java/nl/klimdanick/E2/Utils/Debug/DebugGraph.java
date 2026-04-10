@@ -40,5 +40,6 @@ public class DebugGraph {
 				x++;
 			}			
 		}
+		r.debugBatch.line(0, 40, 100, 40, new E2Color(0.5, 0.5, 0.5, 0.8));
 	}
 }
