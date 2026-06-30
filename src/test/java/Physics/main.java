@@ -68,8 +68,8 @@ public class main extends Game {
 			ship.applyForce(new Vector3f(0f, -0.125f, 0f).mul(RotationMatrix).mul(force), Rudderlocation2);
 		}
 		
-		ship.update(dt);
-		ship2.update(dt);
+		ship.updatePhysics(dt);
+		ship2.updatePhysics(dt);
         
         cs.update();
 	}

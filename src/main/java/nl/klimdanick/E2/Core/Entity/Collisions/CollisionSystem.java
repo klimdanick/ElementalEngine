@@ -69,7 +69,7 @@ public class CollisionSystem {
         if (!a.isStatic() && !b.isStatic()) {
         	return new Vector2f(-pushX/2, -pushY/2); 
         } else {
-        	return new Vector2f(-pushX, -pushY);
+        	return new Vector2f(-pushX/2, -pushY/2);
         }
     }
 }

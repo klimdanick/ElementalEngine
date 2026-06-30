@@ -10,7 +10,7 @@ import nl.klimdanick.E2.Core.Entity.Collisions.SAT;
 
 public class PhysicsEntity extends Entity implements Collider{
 	private Vector3f velocity = new Vector3f();
-	private Vector3f accumulatedForce = new Vector3f();
+	protected Vector3f accumulatedForce = new Vector3f();
 	public Vector3f rotation = new Vector3f();
 	private Vector3f angularVelocity = new Vector3f();
 	private Vector3f accumulatedTorque = new Vector3f();
@@ -19,8 +19,8 @@ public class PhysicsEntity extends Entity implements Collider{
 	public float inverseMass = 1.0f/mass; // 1/mass
 	public float inertia = calcInertia(mass);
 	
-	private float linearDamping = 0.995f;
-	private float angularDamping = 0.995f;
+	private float linearDamping = 0.965f;
+	private float angularDamping = 0.96f;
 	private boolean useGravity = true;
 	
 	public float HBsize = 1;
@@ -63,7 +63,7 @@ public class PhysicsEntity extends Entity implements Collider{
 		return I;
 	}
 	
-	public void update(float deltaTime) {
+	public void updatePhysics(float deltaTime) {
 
         // F = ma  -> a = F / m
         Vector3f acceleration = new Vector3f(accumulatedForce)
@@ -97,6 +97,14 @@ public class PhysicsEntity extends Entity implements Collider{
 		
 		velocity.mul(linearDamping);
 		angularVelocity.mul(angularDamping);
+		
+		rotation.x %= 360;
+		rotation.y %= 360;
+		rotation.z %= 360;
+		
+		if (rotation.x < 0) rotation.x = 360 - rotation.x;
+		if (rotation.y < 0) rotation.y = 360 - rotation.y;
+		if (rotation.z < 0) rotation.z = 360 - rotation.z;
 	}
 	
 	@Override
@@ -106,8 +114,14 @@ public class PhysicsEntity extends Entity implements Collider{
 
 	@Override
 	public void onCollision(Collider other, Vector2f push, Vector2f location) {
-		this.position.x += push.x/2;
-		this.position.y += push.y/2;
+		float factor = 2;
+//		if (other instanceof PhysicsEntity) factor *= this.mass / ((PhysicsEntity) other).mass;
+		
+		if (!(other instanceof PhysicsEntity)) {
+			this.position.x += push.x/factor;
+			this.position.y += push.y/factor;			
+		}
+		
 		applyForce(new Vector3f(push, 0).mul(50), new Vector3f(location, 0));
 	}
 

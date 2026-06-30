@@ -15,7 +15,7 @@ public class CircleCollider implements Collider {
 
 	@Override
 	public AABB getAABB() {
-		return new AABB(x, y, radius, radius);
+		return new AABB(x, y, radius*2, radius*2);
 	}
 
 	@Override
