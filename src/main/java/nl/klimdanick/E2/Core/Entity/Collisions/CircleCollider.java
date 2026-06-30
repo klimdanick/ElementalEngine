@@ -24,7 +24,7 @@ public class CircleCollider implements Collider {
 	}
 
 	@Override
-	public void onCollision(Collider other, Vector2f push) {
+	public void onCollision(Collider other, Vector2f push, Vector2f location) {
 	}
 
 	@Override

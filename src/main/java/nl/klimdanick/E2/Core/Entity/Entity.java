@@ -3,5 +3,5 @@ package nl.klimdanick.E2.Core.Entity;
 import org.joml.Vector3f;
 
 public class Entity {
-	Vector3f position;
+	public Vector3f position = new Vector3f();
 }

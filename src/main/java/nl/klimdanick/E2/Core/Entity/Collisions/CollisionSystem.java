@@ -37,12 +37,12 @@ public class CollisionSystem {
                 // skip static-static
                 if (a.isStatic() && b.isStatic()) continue;
 
-                // ---- BROAD PHASE ----
+                // ---- BROAD PHASE (AABB) ----
                 if (!a.getAABB().intersects(b.getAABB()))
                     continue;
                 
                 
-                // ---- NARROW PHASE (AABB for now) ----
+                // ---- NARROW PHASE (SAT) ----
                 Manifold m;
                 if ((m = SAT.sat(a.getSAT(), b.getSAT())) != null) {
 
@@ -54,8 +54,8 @@ public class CollisionSystem {
                     if (a.isStatic()) push.mul(0);
                     if (b.isStatic()) pushB.mul(0);
 
-                    a.onCollision(b, push);
-                    b.onCollision(a, pushB);
+                    a.onCollision(b, push, new Vector2f(m.contactX, m.contactY));
+                    b.onCollision(a, pushB, new Vector2f(m.contactX, m.contactY));
                 }
             }
         }

@@ -32,6 +32,16 @@ public class SAT {
 	    m.normalX = result.axisX;
 	    m.normalY = result.axisY;
 	    m.depth = result.depth;
+	    
+	    // point on A furthest toward B
+	    float[] pointA = getSupportPoint(a, result.axisX, result.axisY);
+
+	    // point on B furthest toward A
+	    float[] pointB = getSupportPoint(b, -result.axisX, -result.axisY);
+
+	    // midpoint as approximate contact location
+	    m.contactX = (pointA[0] + pointB[0]) * 0.5f;
+	    m.contactY = (pointA[1] + pointB[1]) * 0.5f;
 
 	    return m;
 	}
@@ -116,4 +126,27 @@ public class SAT {
 	    return new float[]{min, max};
 	}
 	
+	
+	private static float[] getSupportPoint(SAT poly, float dirX, float dirY) {
+
+	    float bestProjection = -Float.MAX_VALUE;
+	    float bestX = 0;
+	    float bestY = 0;
+
+	    for (int i = 0; i < poly.vertices.length; i += 2) {
+
+	        float vx = poly.vertices[i] + poly.x;
+	        float vy = poly.vertices[i + 1] + poly.y;
+
+	        float projection = vx * dirX + vy * dirY;
+
+	        if (projection > bestProjection) {
+	            bestProjection = projection;
+	            bestX = vx;
+	            bestY = vy;
+	        }
+	    }
+
+	    return new float[]{bestX, bestY};
+	}
 }
