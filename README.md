@@ -49,9 +49,8 @@ Whenever you look at a game made with unity, you instantly know it is made with 
 ### 7 Optional Advanced
 
 * \[ ] Shaders: support for post-processing effects (grayscale, palette swap, CRT scanlines)
-* \[ ] Layering / Z-index: draw order for overlapping sprites
 * \[ ] Tilemaps: optimized grid-based rendering for backgrounds
-* \[ ] Batch rendering: group multiple sprites into a single VAO/VBO draw call
+* \[x] Batch rendering: group multiple sprites into a single VAO/VBO draw call
 
 ### License
 
