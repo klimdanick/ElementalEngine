@@ -9,7 +9,7 @@ import nl.klimdanick.E2.Core.Entity.Collisions.Collider;
 import nl.klimdanick.E2.Core.Entity.Collisions.SAT;
 
 public class PhysicsEntity extends Entity implements Collider{
-	private Vector3f velocity = new Vector3f();
+	protected Vector3f velocity = new Vector3f();
 	protected Vector3f accumulatedForce = new Vector3f();
 	public Vector3f rotation = new Vector3f();
 	private Vector3f angularVelocity = new Vector3f();
@@ -19,8 +19,8 @@ public class PhysicsEntity extends Entity implements Collider{
 	public float inverseMass = 1.0f/mass; // 1/mass
 	public float inertia = calcInertia(mass);
 	
-	private float linearDamping = 0.965f;
-	private float angularDamping = 0.96f;
+	protected float linearDamping = 0.965f;
+	protected float angularDamping = 0.96f;
 	private boolean useGravity = true;
 	
 	public float HBsize = 1;
@@ -119,10 +119,12 @@ public class PhysicsEntity extends Entity implements Collider{
 		
 		if (!(other instanceof PhysicsEntity)) {
 			this.position.x += push.x/factor;
-			this.position.y += push.y/factor;			
+			this.position.y += push.y/factor;
+			this.velocity.x += push.x/factor;
+			this.velocity.y += push.y/factor;
 		}
 		
-		applyForce(new Vector3f(push, 0).mul(50), new Vector3f(location, 0));
+		applyForce(new Vector3f(push, 0).mul(100), new Vector3f(location, 0));
 	}
 
 	@Override
