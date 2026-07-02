@@ -4,8 +4,8 @@
 	<artifactId>Elemental_Engine</artifactId>
 	<version>4.0.0</version>
     <properties>
-        <maven.compiler.source>1.21</maven.compiler.source>
-        <maven.compiler.target>1.21</maven.compiler.target>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <lwjgl.version>3.3.6</lwjgl.version>
         <steamworks4j.version>1.9.0</steamworks4j.version>
         <joml.version>1.10.8</joml.version>
@@ -28,13 +28,6 @@
 	<description>Java Game Engine</description>
 	<dependencyManagement>
 		<dependencies>
-			<dependency>
-				<groupId>org.lwjgl</groupId>
-				<artifactId>lwjgl-bom</artifactId>
-				<version>${lwjgl.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
 			<dependency>
 				<groupId>org.lwjgl</groupId>
 				<artifactId>lwjgl-bom</artifactId>

@@ -1,128 +1,93 @@
 package nl.klimdanick.E2.Core;
 
-import static org.lwjgl.glfw.GLFW.GLFW_FALSE;
-import static org.lwjgl.glfw.GLFW.GLFW_RESIZABLE;
-import static org.lwjgl.glfw.GLFW.GLFW_TRUE;
-import static org.lwjgl.glfw.GLFW.GLFW_VISIBLE;
-import static org.lwjgl.glfw.GLFW.glfwCreateWindow;
-import static org.lwjgl.glfw.GLFW.glfwDefaultWindowHints;
-import static org.lwjgl.glfw.GLFW.glfwDestroyWindow;
-import static org.lwjgl.glfw.GLFW.glfwGetPrimaryMonitor;
-import static org.lwjgl.glfw.GLFW.glfwGetVideoMode;
-import static org.lwjgl.glfw.GLFW.glfwGetWindowPos;
-import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
-import static org.lwjgl.glfw.GLFW.glfwInit;
-import static org.lwjgl.glfw.GLFW.glfwMakeContextCurrent;
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowMonitor;
-import static org.lwjgl.glfw.GLFW.glfwSetWindowShouldClose;
-import static org.lwjgl.glfw.GLFW.glfwShowWindow;
-import static org.lwjgl.glfw.GLFW.glfwSwapBuffers;
-import static org.lwjgl.glfw.GLFW.glfwSwapInterval;
-import static org.lwjgl.glfw.GLFW.glfwTerminate;
-import static org.lwjgl.glfw.GLFW.glfwWindowHint;
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
-import static org.lwjgl.system.MemoryUtil.NULL;
-import static org.lwjgl.opengl.GL30.*;
-
-import org.lwjgl.glfw.GLFWVidMode;
-import org.lwjgl.opengl.GL;
-
-import nl.klimdanick.E2.Core.Debugging.DebugPanel;
+import org.lwjgl.glfw.*;
+import org.lwjgl.opengl.*;
 
 public class Window {
-	private boolean fullscreen = false;
-	private int windowedX, windowedY, windowedWidth, windowedHeight;
-    private long handle;
-    public int width, height, scale;
-    private String title;
-    public boolean VSync;
 
-    public Window(String title, int width, int height, int scale) {
-        this.title = title;
+    private long handle;
+    private int width, height;
+    private String title;
+
+    public Window(int width, int height, String title) {
         this.width = width;
-        this.scale = scale;
         this.height = height;
+        this.title = title;
     }
 
     public void create() {
-        if (!glfwInit())
-            throw new IllegalStateException("Failed to init GLFW");
+        if (!GLFW.glfwInit())
+            throw new IllegalStateException("GLFW failed");
 
-        glfwDefaultWindowHints();
-        glfwWindowHint(GLFW_VISIBLE, GLFW_FALSE);
-        glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+        handle = GLFW.glfwCreateWindow(width, height, title, 0, 0);
 
-        handle = glfwCreateWindow(width*scale, height*scale, title, NULL, NULL);
-        if (handle == NULL)
-            throw new RuntimeException("Failed to create window");
+        GLFW.glfwMakeContextCurrent(handle);
+        GLFW.glfwSwapInterval(1);
 
-        glfwMakeContextCurrent(handle);
-        glfwSwapInterval(0);
-        VSync = false;
-        glfwShowWindow(handle);
+        GLFW.glfwShowWindow(handle);
 
         GL.createCapabilities();
-        DebugPanel.rows.put("Opengl", glGetString(GL_VERSION));
-        DebugPanel.rows.put("Renderer", glGetString(GL_RENDERER));
     }
-    
-    public void toggleVSync() {
-    	if (VSync) glfwSwapInterval(0);
-    	else glfwSwapInterval(1);
-    	VSync = !VSync;
+
+    public void clear() {
+        GL11.glClearColor(0.1f, 0.1f, 0.15f, 1f);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
     }
 
     public void update() {
-        glfwSwapBuffers(handle);
-        glfwPollEvents();
+    	int[] w = new int[1];
+    	int[] h = new int[1];
+    	GLFW.glfwGetWindowSize(handle, w, h);
+    	this.width = w[0];
+    	this.height = h[0];
+        GLFW.glfwSwapBuffers(handle);
+        GLFW.glfwPollEvents();
     }
 
-    public boolean isOpen() {
-        return !glfwWindowShouldClose(handle);
+    public boolean shouldClose() {
+        return GLFW.glfwWindowShouldClose(handle);
     }
 
-    public void close() {
-        glfwSetWindowShouldClose(handle, true);
+    public float getTime() {
+        return (float) GLFW.glfwGetTime();
     }
 
     public void destroy() {
-        glfwDestroyWindow(handle);
-        glfwTerminate();
-    }
-
-    public long getHandle() {
-        return handle;
+        GLFW.glfwDestroyWindow(handle);
+        GLFW.glfwTerminate();
     }
     
-    public void toggleFullscreen() {
-        fullscreen = !fullscreen;
+    public int getWidth() {
+    	return this.width;
+    }
+    
+    public int getHeight() {
+    	return this.width;
+    }
+    
+    public long getHandle() {
+    	return handle;
+    }
+    
+    public int[] calculate(int virtualW, int virtualH) {
+    	
+    	int[] w = new int[1];
+    	int[] h = new int[1];
+    	GLFW.glfwGetWindowSize(handle, w, h);
+    	this.width = w[0];
+    	this.height = h[0];
 
-        long monitor = glfwGetPrimaryMonitor();
-        GLFWVidMode vidMode = glfwGetVideoMode(monitor);
+        double scale = Math.min((double)this.width / virtualW, (double)this.height / virtualH);
 
-        if (fullscreen) {
-            // Save current window position and size
-            int[] x = new int[1], y = new int[1];
-            glfwGetWindowPos(handle, x, y);
-            windowedX = x[0];
-            windowedY = y[0];
+        // prevent scale = 0
+        if (scale < 1) scale = 1;
 
-            int[] w = new int[1], h = new int[1];
-            glfwGetWindowSize(handle, w, h);
-            windowedWidth = w[0];
-            windowedHeight = h[0];
+        int width = (int)(virtualW * scale);
+        int height = (int)(virtualH * scale);
 
-            // Go fullscreen
-            glfwSetWindowMonitor(handle, monitor, 0, 0,
-                vidMode.width(), vidMode.height(),
-                vidMode.refreshRate());
-        } else {
-            // Go back to windowed mode
-            glfwSetWindowMonitor(handle, 0,
-                windowedX, windowedY,
-                windowedWidth, windowedHeight,
-                0);
-        }
+        int x = (this.width - width) / 2;
+        int y = (this.height - height) / 2;
+
+        return new int[]{x, y, width, height};
     }
 }

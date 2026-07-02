@@ -1,108 +1,49 @@
 package nl.klimdanick.E2.Core.Rendering;
 
-import static org.lwjgl.opengl.GL20.*;
-
 import java.nio.FloatBuffer;
-import java.nio.file.*;
 
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
-import org.joml.Vector2f;
+import org.lwjgl.opengl.GL20;
 import org.lwjgl.system.MemoryStack;
 
-import java.io.IOException;
-
 public class Shader {
-    private int programId;
 
-    public Shader(String vertexPath, String fragmentPath) {
-        try {
-            String vertexCode = Files.readString(Path.of(vertexPath));
-            String fragmentCode = Files.readString(Path.of(fragmentPath));
+    private int program;
 
-            int vertex = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertex, vertexCode);
-            glCompileShader(vertex);
-            checkCompileErrors(vertex, "VERTEX");
+    public Shader(String vertexSrc, String fragmentSrc) {
 
-            int fragment = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragment, fragmentCode);
-            glCompileShader(fragment);
-            checkCompileErrors(fragment, "FRAGMENT");
+        int vs = GL20.glCreateShader(GL20.GL_VERTEX_SHADER);
+        GL20.glShaderSource(vs, vertexSrc);
+        GL20.glCompileShader(vs);
 
-            programId = glCreateProgram();
-            glAttachShader(programId, vertex);
-            glAttachShader(programId, fragment);
-            glLinkProgram(programId);
-            checkLinkErrors(programId);
+        int fs = GL20.glCreateShader(GL20.GL_FRAGMENT_SHADER);
+        GL20.glShaderSource(fs, fragmentSrc);
+        GL20.glCompileShader(fs);
 
-            glDeleteShader(vertex);
-            glDeleteShader(fragment);
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to load shader files", e);
-        }
+        program = GL20.glCreateProgram();
+        GL20.glAttachShader(program, vs);
+        GL20.glAttachShader(program, fs);
+        GL20.glLinkProgram(program);
+
+        GL20.glDeleteShader(vs);
+        GL20.glDeleteShader(fs);
     }
 
-    private void checkCompileErrors(int shader, String type) {
-        if (glGetShaderi(shader, GL_COMPILE_STATUS) == GL_FALSE)
-            throw new RuntimeException(type + " compile error:\n" + glGetShaderInfoLog(shader));
-    }
-
-    private void checkLinkErrors(int program) {
-        if (glGetProgrami(program, GL_LINK_STATUS) == GL_FALSE)
-            throw new RuntimeException("Program link error:\n" + glGetProgramInfoLog(program));
-    }
-
-    public void use() {
-        glUseProgram(programId);
-    }
-
-    public void destroy() {
-        glDeleteProgram(programId);
+    public void bind() {
+        GL20.glUseProgram(program);
     }
     
-    public int getProgramId() {
-    	return this.programId;
+    public int getProgram() {
+    	return program;
     }
-	
-	public void setUniform1i(String name, int value) {
-        int loc = glGetUniformLocation(programId, name);
-        if (loc != -1) glUniform1i(loc, value);
-    }
+    
+    public void setMatrix4(String name, Matrix4f matrix) {
+        int location = GL20.glGetUniformLocation(program, name);
 
-    public void setUniform1f(String name, float value) {
-        int loc = glGetUniformLocation(programId, name);
-        if (loc != -1) glUniform1f(loc, value);
-    }
-
-    public void setUniform2f(String name, float x, float y) {
-        int loc = glGetUniformLocation(programId, name);
-        if (loc != -1) glUniform2f(loc, x, y);
-    }
-
-    public void setUniform4f(String name, float x, float y, float z, float w) {
-        int loc = glGetUniformLocation(programId, name);
-        if (loc != -1) glUniform4f(loc, x, y, z, w);
-    }
-
-    public void setUniformMat4(String name, Matrix4f matrix) {
-        int loc = glGetUniformLocation(programId, name);
-        if (loc == -1) return;
         try (MemoryStack stack = MemoryStack.stackPush()) {
             FloatBuffer fb = stack.mallocFloat(16);
             matrix.get(fb);
-            glUniformMatrix4fv(loc, false, fb);
+            GL20.glUniformMatrix4fv(location, false, fb);
         }
     }
-
-	public void setUniformMat3(String name, Matrix3f matrix) {
-		int loc = glGetUniformLocation(programId, name);
-        if (loc == -1) return;
-        try (MemoryStack stack = MemoryStack.stackPush()) {
-            FloatBuffer fb = stack.mallocFloat(9);
-            matrix.get(fb);
-            glUniformMatrix3fv(loc, false, fb);
-        }
-	}
-
 }
