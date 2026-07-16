@@ -24,6 +24,7 @@ public abstract class ParticleSystem {
         }
         
         batch = new ShapeBatch(r.camera);
+        batch.priority = Integer.MAX_VALUE;
         
         r.batches.add(batch);
     }
@@ -59,11 +60,12 @@ public abstract class ParticleSystem {
     public void renderAll() {
     	for (Particle p : particles) {
             if (!p.active) continue;
-            renderParticle(p);
+            float t = p.life/p.maxLife;
+            renderParticle(p, t);
         }
     }
 
-	public abstract void renderParticle(Particle p);
+	public abstract void renderParticle(Particle p, float t);
 	
 	public void addEmitter(ParticleEmitter pe) {
 		this.emitters.add(pe);

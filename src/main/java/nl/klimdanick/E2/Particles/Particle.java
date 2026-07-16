@@ -1,11 +1,12 @@
 package nl.klimdanick.E2.Particles;
 
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 
 public class Particle {
 
-    public Vector2f position;
-    public Vector2f velocity;
+    public Vector3f position;
+    public Vector3f velocity;
 
     public float rotation;
     public float angularVelocity;
@@ -18,15 +19,15 @@ public class Particle {
     public boolean active;
     
     public Particle(float maxLife) {
-		this.position = new Vector2f();
-		this.velocity = new Vector2f();
+		this.position = new Vector3f();
+		this.velocity = new Vector3f();
 		this.rotation = 0;
 		this.angularVelocity = 0;
 		this.size = 1;
 		this.maxLife = maxLife;
 	}
     
-    public Particle(Vector2f position, Vector2f velocity, float rotation, float angularVelocity, float size, float maxLife) {
+    public Particle(Vector3f position, Vector3f velocity, float rotation, float angularVelocity, float size, float maxLife) {
 		this.position = position;
 		this.velocity = velocity;
 		this.rotation = rotation;
@@ -42,7 +43,7 @@ public class Particle {
     	
     	if (this.life <= 0) active = false;
     	
-    	Vector2f speed = new Vector2f();
+    	Vector3f speed = new Vector3f();
     	velocity.mul((float)dt, speed);
     	this.position.add(speed);
     }
