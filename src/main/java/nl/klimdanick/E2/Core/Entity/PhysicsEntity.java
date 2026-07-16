@@ -95,8 +95,8 @@ public class PhysicsEntity extends Entity implements Collider{
 
 		accumulatedTorque.zero();
 		
-		velocity.mul(linearDamping);
-		angularVelocity.mul(angularDamping);
+		velocity.mul(1-linearDamping);
+		angularVelocity.mul(1-angularDamping);
 		
 		rotation.x %= 360;
 		rotation.y %= 360;
