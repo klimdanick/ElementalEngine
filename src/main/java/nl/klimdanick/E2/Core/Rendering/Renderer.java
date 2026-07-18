@@ -24,6 +24,9 @@ public class Renderer {
 		debugBatch = new ShapeBatch(new Camera2D(engine.getWidth(), engine.getHeight()));
 		debugBatch.priority = Integer.MAX_VALUE;
 		
+		shape.priority = 1;
+		sprite.priority = 2;
+		
 		batches = new ArrayList<>();
 		batches.add(sprite);
 		batches.add(shape);

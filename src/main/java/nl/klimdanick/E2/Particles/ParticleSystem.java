@@ -24,7 +24,6 @@ public abstract class ParticleSystem {
         }
         
         batch = new ShapeBatch(r.camera);
-        batch.priority = Integer.MAX_VALUE;
         
         r.batches.add(batch);
     }
