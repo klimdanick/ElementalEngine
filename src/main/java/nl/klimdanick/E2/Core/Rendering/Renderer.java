@@ -1,8 +1,11 @@
 package nl.klimdanick.E2.Core.Rendering;
 
+
 import java.util.ArrayList;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.Comparator;
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
 
 import nl.klimdanick.E2.Core.E2;
 import nl.klimdanick.E2.Utils.Debug.DebugGraph;
@@ -24,7 +27,7 @@ public class Renderer {
 		debugBatch = new ShapeBatch(new Camera2D(engine.getWidth(), engine.getHeight()));
 		debugBatch.priority = Integer.MAX_VALUE;
 		
-		shape.priority = 1;
+		shape.priority = 0;
 		sprite.priority = 2;
 		
 		batches = new ArrayList<>();
@@ -33,11 +36,10 @@ public class Renderer {
 		batches.add(debugBatch);
 	}
 	
-	public void render() {
-		
-		Queue<Batch> batchQueue = new PriorityQueue<>((a, b) -> a.priority - b.priority);
-		batchQueue.addAll(batches);
-		for (Batch b : batchQueue) {
+	public void render() {		
+		List<Batch> sorted = new ArrayList<>(batches);
+		sorted.sort(Comparator.comparingInt(b -> b.priority));
+		for (Batch b : sorted) {
 			b.begin();
 		}
 		
@@ -46,9 +48,8 @@ public class Renderer {
     	
     	engine.getGame().render();
     	
-    	Batch b;
-    	while((b = batchQueue.poll()) != null) {
-    		b.end();
-    	}
+    	for (Batch b : sorted) {
+			b.end();
+		}
 	}
 }

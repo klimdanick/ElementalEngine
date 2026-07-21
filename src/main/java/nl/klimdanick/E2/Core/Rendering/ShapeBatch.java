@@ -6,7 +6,7 @@ import nl.klimdanick.E2.Utils.E2Color;
 
 public class ShapeBatch extends Batch{
 
-    private static final int MAX_VERTICES = 10000;
+    private static final int MAX_VERTICES = 100000;
     private static final int VERTEX_SIZE = 6; // x, y, r, g, b, a
 
     private float[] vertices = new float[MAX_VERTICES * VERTEX_SIZE];
@@ -59,6 +59,7 @@ public class ShapeBatch extends Batch{
     private void addVertex(float x, float y, E2Color c) {
         vertices[index++] = x;
         vertices[index++] = y;
+//        vertices[index++] = this.priority;
         vertices[index++] = c.r;
         vertices[index++] = c.g;
         vertices[index++] = c.b;
@@ -66,6 +67,7 @@ public class ShapeBatch extends Batch{
     }
 
     protected void flush() {
+//    	System.out.println(priority);
         if (index == 0) return;
 
         shader.bind();

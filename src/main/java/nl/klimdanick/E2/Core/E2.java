@@ -36,6 +36,7 @@ public class E2 {
         game.engine = this;
         game.renderer = renderer;
         
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         
@@ -73,6 +74,7 @@ public class E2 {
             int[] vp = window.calculate(width, height);
             
             // 3. Clear full screen (black bars)
+//            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
             GL11.glClearColor(0f, 0f, 0f, 1f);
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
             

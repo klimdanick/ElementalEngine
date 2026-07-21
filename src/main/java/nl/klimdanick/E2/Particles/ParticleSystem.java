@@ -14,7 +14,7 @@ public abstract class ParticleSystem {
 
     private List<ParticleEmitter> emitters = new ArrayList<>();
     
-    protected ShapeBatch batch;
+    public ShapeBatch batch;
 
     public ParticleSystem(int maxParticles, Renderer r) {
         particles = new Particle[maxParticles];
@@ -24,8 +24,9 @@ public abstract class ParticleSystem {
         }
         
         batch = new ShapeBatch(r.camera);
+        batch.priority = 1;
         
-        r.batches.add(batch);
+//        r.batches.add(batch);
     }
 
     public Particle spawn(float x, float y) {

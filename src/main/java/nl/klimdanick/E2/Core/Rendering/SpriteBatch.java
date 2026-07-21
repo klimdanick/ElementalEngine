@@ -41,7 +41,7 @@ public class SpriteBatch extends Batch {
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, vertices.length * Float.BYTES, GL15.GL_DYNAMIC_DRAW);
 
 		// position
-		GL20.glVertexAttribPointer(0, 3, GL11.GL_FLOAT, false, VERTEX_SIZE * Float.BYTES, 0);
+		GL20.glVertexAttribPointer(0, 2, GL11.GL_FLOAT, false, VERTEX_SIZE * Float.BYTES, 0);
 		GL20.glEnableVertexAttribArray(0);
 
 		// UV
@@ -160,6 +160,7 @@ public class SpriteBatch extends Batch {
 	private void addVertex(float x, float y, float u, float v, E2Color c) {
 		vertices[index++] = x;
 		vertices[index++] = y;
+//		vertices[index++] = this.priority;
 		vertices[index++] = u;
 		vertices[index++] = v;
 
@@ -174,6 +175,7 @@ public class SpriteBatch extends Batch {
 	}
 
 	protected void flush() {
+//		System.out.println(priority);
 		if (index == 0)
 			return;
 
@@ -191,6 +193,7 @@ public class SpriteBatch extends Batch {
 		GL11.glDrawArrays(GL11.GL_TRIANGLES, 0, index / VERTEX_SIZE);
 
 		index = 0;
+		
 	}
 
 	private Shader createDefaultShader() {
