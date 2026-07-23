@@ -12,7 +12,7 @@ public class PhysicsEntity extends Entity implements Collider{
 	protected Vector3f velocity = new Vector3f();
 	protected Vector3f accumulatedForce = new Vector3f();
 	public Vector3f rotation = new Vector3f();
-	private Vector3f angularVelocity = new Vector3f();
+	protected Vector3f angularVelocity = new Vector3f();
 	private Vector3f accumulatedTorque = new Vector3f();
 	
 	public float mass = 1.0f;

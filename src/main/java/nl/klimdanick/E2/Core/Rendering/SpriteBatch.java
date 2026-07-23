@@ -61,6 +61,10 @@ public class SpriteBatch extends Batch {
 		draw(tex, x, y, w, h, 0, 0, 0, 1, 1, E2Color.WHITE);
 	}
 	
+	public void draw(Texture tex, float x, float y, float w, float h, E2Color c) {
+		draw(tex, x, y, w, h, 0, 0, 0, 1, 1, c);
+	}
+	
 	public void draw(Texture tex, float x, float y, float w, float h, float rotation) {
 	    draw(tex, x, y, w, h, w/2f, h/2f, rotation, 1, 1, E2Color.WHITE);
 	}
