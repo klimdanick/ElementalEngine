@@ -14,7 +14,7 @@ public class SpriteBatch extends Batch {
 	private int index = 0;
 
 	private int vao, vbo;
-	private Shader shader;
+	protected Shader shader;
 	private Texture currentTexture;
 
 	private Camera2D camera;
@@ -185,6 +185,7 @@ public class SpriteBatch extends Batch {
 
 		shader.bind();
 		shader.setMatrix4("uMatrix", camera.getMatrix());
+		setUniforms();
 		GL30.glBindVertexArray(vao);
 
 		if (currentTexture != null) {
@@ -199,8 +200,12 @@ public class SpriteBatch extends Batch {
 		index = 0;
 		
 	}
+	
+	protected void setUniforms() {
+		
+	}
 
-	private Shader createDefaultShader() {
+	protected Shader createDefaultShader() {
 		String vs = """
 				       #version 330 core
 				layout (location = 0) in vec3 aPos;

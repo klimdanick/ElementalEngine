@@ -18,6 +18,8 @@ public class E2 {
     private int width, height;
     public Renderer renderer;
     public boolean debug = false;
+    
+    public String title = "Elemental Engine";
 
     public E2(Game game, int width, int height) {
     	this.width = width;
@@ -26,7 +28,7 @@ public class E2 {
     }
 
     public void run() {
-        window = new Window(width, height, "My Engine");
+        window = new Window(width, height, title);
         window.create();
         System.out.println(GL11.glGetString(GL11.GL_VERSION));
         

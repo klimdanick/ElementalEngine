@@ -46,4 +46,12 @@ public class Shader {
             GL20.glUniformMatrix4fv(location, false, fb);
         }
     }
+    
+    public void setFloat(String name, float f) {
+        int location = GL20.glGetUniformLocation(program, name);
+
+        try (MemoryStack stack = MemoryStack.stackPush()) {
+            GL20.glUniform1f(location, f);
+        }
+    }
 }

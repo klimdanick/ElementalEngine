@@ -40,7 +40,7 @@ public class PhysicsEntity extends Entity implements Collider{
 
 	    Vector3f torque = r.cross(force, new Vector3f());
 
-	    accumulatedTorque.add(torque.mul(-10));
+	    accumulatedTorque.add(torque.mul(-15));
 	}
 	
 	public void setMass(float mass) {
