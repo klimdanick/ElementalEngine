@@ -1,7 +1,8 @@
 package nl.klimdanick.E2.Particles;
 
-import org.joml.Vector2f;
 import org.joml.Vector3f;
+
+import nl.klimdanick.E2.Utils.E2Color;
 
 public class Particle {
 
@@ -16,7 +17,9 @@ public class Particle {
     public float life;
     public float maxLife;
 
-    public boolean active;
+    public boolean active, forcedActive;
+    
+    public E2Color color;
     
     public Particle(float maxLife) {
 		this.position = new Vector3f();
@@ -41,7 +44,7 @@ public class Particle {
     	
     	life-=dt;
     	
-    	if (this.life <= 0) active = false;
+    	if (this.life <= 0 && !forcedActive) active = false;
     	
     	Vector3f speed = new Vector3f();
     	velocity.mul((float)dt, speed);

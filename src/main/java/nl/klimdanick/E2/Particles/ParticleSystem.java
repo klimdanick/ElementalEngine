@@ -5,7 +5,6 @@ import java.util.List;
 
 import nl.klimdanick.E2.Core.Rendering.Renderer;
 import nl.klimdanick.E2.Core.Rendering.ShapeBatch;
-import nl.klimdanick.E2.Utils.E2Color;
 
 public abstract class ParticleSystem {
 
@@ -43,6 +42,8 @@ public abstract class ParticleSystem {
     }
 
     public void update(float dt) {
+    	
+    	updateSystem(dt);
 
         for (ParticleEmitter e : emitters)
             e.update(dt, this);
@@ -56,6 +57,8 @@ public abstract class ParticleSystem {
 //                p.active = false;
         }
     }
+    
+    public void updateSystem(float dt) {}
     
     public void renderAll() {
     	for (Particle p : particles) {
